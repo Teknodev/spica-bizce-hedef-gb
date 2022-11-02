@@ -9,19 +9,19 @@ triggers:
       timezone: Europe/Istanbul
       frequency: 0 7 * * *
     type: schedule
-    active: false
+    active: true
   executeReportWeekly:
     options:
       timezone: Europe/Istanbul
       frequency: 5 7 * * 1
     type: schedule
-    active: false
+    active: true
   executeReportMonthly:
     options:
       timezone: Europe/Istanbul
       frequency: 5 7 1 * *
     type: schedule
-    active: false
+    active: true
   executeReportMan:
     options:
       method: Get

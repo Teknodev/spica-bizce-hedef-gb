@@ -168,74 +168,113 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
     const chargesCollection = db.collection(`bucket_${TRANSACTION_BUCKET}`);
     const chargeReportCollection = db.collection(`bucket_${CHARGE_REPORT_BUCKET_ID}`);
 
-    const PRODUCT_DAILY_FIRST = 261063;
-    const PRODUCT_DAILY_SECOND = 261083;
+    const PRODUCT_DAILY_FIRST = 'first';
+    const PRODUCT_DAILY_SECOND = 'second';
 
     const chargesSuccessfulFirst = await chargesCollection
-        .find({ date: { $gte: dateFrom, $lt: dateTo }, status: true, item_id: PRODUCT_DAILY_FIRST })
+        .find({ date: { $gte: dateFrom, $lt: dateTo }, status: true, type: PRODUCT_DAILY_FIRST })
+        .toArray()
+        .catch(err => console.log("ERROR 41: ", err));
+    const chargesSuccessfulSecond = await chargesCollection
+        .find({ date: { $gte: dateFrom, $lt: dateTo }, status: true, type: PRODUCT_DAILY_SECOND })
         .toArray()
         .catch(err => console.log("ERROR 41: ", err));
 
-    const chargesSuccessfulSecond = await chargesCollection
-        .find({ date: { $gte: dateFrom, $lt: dateTo }, status: true, item_id: PRODUCT_DAILY_SECOND })
-        .toArray()
-        .catch(err => console.log("ERROR 41: ", err));
 
     const error1 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
             status: false,
-            user_text: "CONSENT_DENIED"
+            user_text:
+                "Devam eden diğer işlemlerden dolayı GNC Oyun aboneliği gerçekleştirilememektedir."
         })
         .toArray()
         .catch(err => console.log("ERROR 42: ", err));
-
-    const error1Chance = error1.filter(el => el.item_id == PRODUCT_DAILY_SECOND)
+    const error1Chance = error1.filter(el => el.type == PRODUCT_DAILY_SECOND)
 
     const error2 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
             status: false,
-            user_text: "F01, DIAMETER_END_USER_SERVICE_DENIED"
+            user_text: "Abone kredisi(bakiyesi) yetersiz."
         })
         .toArray()
         .catch(err => console.log("ERROR 43: ", err));
-
-    const error2Chance = error2.filter(el => el.item_id == PRODUCT_DAILY_SECOND)
+    const error2Chance = error2.filter(el => el.type == PRODUCT_DAILY_SECOND)
 
     const error3 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
             status: false,
-            user_text: "F01, SUBSCRIBER_NOT_FOUND"
+            user_text: "Abone bulunamadi."
         })
         .toArray()
         .catch(err => console.log("ERROR 44: ", err));
-
-    const error3Chance = error3.filter(el => el.item_id == PRODUCT_DAILY_SECOND)
+    const error3Chance = error3.filter(el => el.type == PRODUCT_DAILY_SECOND)
 
     const error4 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
             status: false,
-            user_text: { "$exists": false }
+            user_text: "Abone kara listede islem yapilamaz."
         })
         .toArray()
-        .catch(err => console.log("ERROR 44: ", err));
+        .catch(err => console.log("ERROR 45: ", err));
+    const error4Chance = error4.filter(el => el.type == PRODUCT_DAILY_SECOND)
 
-    const error4Chance = error4.filter(el => el.item_id == PRODUCT_DAILY_SECOND)
+    const error5 = await chargesCollection
+        .find({
+            date: { $gte: dateFrom, $lt: dateTo },
+            status: false,
+            user_text:
+                "Hattiniz Katma Degerli Servis aboneligine kapali oldugu icin GNC Oyun servisine abonelik talebiniz gerceklestirilememistir. Abonelik izninizi 532?yi arayarak actirabilirsiniz."
+        })
+        .toArray()
+        .catch(err => console.log("ERROR 46: ", err));
+    const error5Chance = error5.filter(el => el.type == PRODUCT_DAILY_SECOND)
+
+    const error6 = await chargesCollection
+        .find({
+            date: { $gte: dateFrom, $lt: dateTo },
+            status: false,
+            user_text: "Rahat Hatlar bu servisten yararlanamazlar."
+        })
+
+        .toArray()
+        .catch(err => console.log("ERROR 47: ", err));
+    const error6Chance = error6.filter(el => el.type == PRODUCT_DAILY_SECOND)
+
+    const error7 = await chargesCollection
+        .find({
+            date: { $gte: dateFrom, $lt: dateTo },
+            status: false,
+            user_text:
+                "Sistemlerde oluşan hata sebebi ile işleminiz yapılamıyor. İşleminiz tekrar denenmek üzere kuyruğa atılmıştır."
+        })
+
+        .toArray()
+        .catch(err => console.log("ERROR 48: ", err));
+    const error7Chance = error7.filter(el => el.type == PRODUCT_DAILY_SECOND)
+
+
 
     let totalQuantityFirst = chargesSuccessfulFirst.length +
         error1.length +
         error2.length +
         error3.length +
-        error4.length;
+        error4.length +
+        error5.length +
+        error6.length +
+        error7.length;
 
     let totalQuantitySecond = chargesSuccessfulSecond.length +
         error1Chance.length +
         error2Chance.length +
         error3Chance.length +
-        error4Chance.length;
+        error4Chance.length +
+        error5Chance.length +
+        error6Chance.length +
+        error7Chance.length;
 
     const datas = [
         {
@@ -256,8 +295,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
             chance_daily_ratio: error1Chance.length ? Number(((error1Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             play_count: "-",
-            error:
-                "CONSENT_DENIED",
+            error: "Devam eden diğer işlemlerden dolayı GNC Oyun aboneliği gerçekleştirilememektedir.",
             report_type: reportType
         },
         {
@@ -268,7 +306,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
             chance_daily_ratio: error2Chance.length ? Number(((error2Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             play_count: "-",
-            error: "F01, DIAMETER_END_USER_SERVICE_DENIED",
+            error: "Abone kredisi(bakiyesi) yetersiz.",
             report_type: reportType
         },
         {
@@ -279,7 +317,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
             chance_daily_ratio: error3Chance.length ? Number(((error3Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             play_count: "-",
-            error: "F01, SUBSCRIBER_NOT_FOUND",
+            error: "Abone bulunamadi.",
             report_type: reportType
         },
         {
@@ -290,7 +328,40 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
             chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             play_count: "-",
-            error: "Onay ve Red butonlara basmayan kullanıcılar",
+            error: "Abone kara listede islem yapilamaz.",
+            report_type: reportType
+        },
+        {
+            date: new Date(reportDate),
+            daily_qty: error5.length - error4Chance.length,
+            chance_daily_qty: error4Chance.length,
+            daily_ratio: error5.length ? Number(((error5.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
+            chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
+            status: "Başarısız",
+            play_count: "-",
+            error: "Hattiniz Katma Degerli Servis aboneligine kapali oldugu icin GNC Oyun servisine abonelik talebiniz gerceklestirilememistir. Abonelik izninizi 532?yi arayarak actirabilirsiniz.",
+            report_type: reportType
+        },
+        {
+            date: new Date(reportDate),
+            daily_qty: error6.length - error4Chance.length,
+            chance_daily_qty: error4Chance.length,
+            daily_ratio: error6.length ? Number(((error6.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
+            chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
+            status: "Başarısız",
+            play_count: "-",
+            error: "Rahat Hatlar bu servisten yararlanamazlar.",
+            report_type: reportType
+        },
+        {
+            date: new Date(reportDate),
+            daily_qty: error7.length - error4Chance.length,
+            chance_daily_qty: error4Chance.length,
+            daily_ratio: error7.length ? Number(((error7.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
+            chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
+            status: "Başarısız",
+            play_count: "-",
+            error: "Sistemlerde oluşan hata sebebi ile işleminiz yapılamıyor. İşleminiz tekrar denenmek üzere kuyruğa atılmıştır.",
             report_type: reportType
         },
     ];
@@ -560,6 +631,20 @@ export async function executeReportMan(req, res) {
     // await reportExportSend("Aylık Toplam Rapor Güncel", 2).catch(err =>
     //     console.log("ERROR: 163", err)
     // );
+
+    let date = new Date();
+    let dateFrom = new Date(date).setHours(0, 0, 0);
+    let dateTo = new Date(date).setHours(23, 59, 59);
+
+    // await userReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 4", err));
+    // await playedMatchCount(0, dateFrom, dateTo).catch(err => console.log("ERROR: 49", err));
+    // await matchReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 2", err));
+    // await matchWinLoseCount(0, dateFrom, dateTo).catch(err => console.log("ERROR: 55", err));
+    await chargeReportExport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 3", err));
+    // await retryReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: ", err));
+    // await getFailedRewards(0, dateFrom, dateTo).catch(err => console.log("ERROR: ", err));
+
+    // await reportExportSend("Günlük Rapor", 0).catch(err => console.log("ERROR: 5", err));
 
     return res.status(200).send({ message: 'ok' });
 }

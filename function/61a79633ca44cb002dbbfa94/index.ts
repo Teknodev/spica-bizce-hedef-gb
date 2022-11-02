@@ -1259,15 +1259,12 @@ export async function chargeStatistics(req, res) {
 
             const total = await chargesCollection.find({ "date": dateFilter }).count().catch(err => console.log("ERROR ", err))
             const success = await chargesCollection.find({ "date": dateFilter, "status": true }).count().catch(err => console.log("ERROR ", err))
-            const unanswered = await chargesCollection.find({ "date": dateFilter, "listener_result": { "$exists": false } }).count().catch(err => console.log("ERROR ", err))
-            const rejected = await chargesCollection.find({ "date": dateFilter, "user_text": "CONSENT_DENIED" }).count().catch(err => console.log("ERROR ", err))
+            
 
             result.push({
                 total: numberWithDot(total),
                 success: numberWithDot(success),
-                unanswered: numberWithDot(unanswered),
-                rejected: numberWithDot(rejected),
-                error: numberWithDot(total - success - unanswered - rejected)
+                error: numberWithDot(total - success)
             })
         }
 
@@ -1275,7 +1272,7 @@ export async function chargeStatistics(req, res) {
         return {
             title: "Charge Statistics",
             data: result,
-            displayedColumns: ["total", "success", "unanswered", "rejected", "error"],
+            displayedColumns: ["total", "success", "error"],
             filters: [
                 { key: "begin", type: "date", value: begin },
                 { key: "end", type: "date", value: end }
