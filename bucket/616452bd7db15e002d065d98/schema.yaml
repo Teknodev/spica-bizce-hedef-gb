@@ -1,0 +1,70 @@
+_id: 616452bd7db15e002d065d98
+title: Deleted Matches
+description: Describe your new bucket
+icon: view_stream
+primary: name
+readOnly: false
+history: false
+properties:
+  name:
+    type: string
+    title: name
+    description: Description of the name input
+    options:
+      position: bottom
+  user1:
+    type: relation
+    title: user1
+    description: Description of the user1 input
+    options:
+      position: bottom
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+  user2:
+    type: relation
+    title: user2
+    description: Description of the user2 input
+    options:
+      position: bottom
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+  questions:
+    type: array
+    title: questions
+    description: Description of the questions input
+    options:
+      position: bottom
+    items:
+      title: Title of the items
+      type: textarea
+  winner:
+    type: number
+    title: winner
+    description: Description of the winner input
+    options:
+      position: bottom
+  start_time:
+    type: date
+    title: start_time
+    description: Description of the start_time input
+    options:
+      position: bottom
+  end_time:
+    type: date
+    title: end_time
+    description: Description of the end_time input
+    options:
+      position: bottom
+  duel_id:
+    type: string
+    title: duel_id
+    description: Description of the duel_id input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 3
+category: Match

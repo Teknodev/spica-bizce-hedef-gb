@@ -1,0 +1,16 @@
+_id: 61a795fdca44cb002dbbfa68
+name: Clear Server Info
+description: ""
+language: javascript
+timeout: 51.4
+triggers:
+  clearServerInfoBucket:
+    options:
+      timezone: Europe/Istanbul
+      frequency: "*/10 * * * * *"
+    type: schedule
+    active: true
+env:
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  SERVERS_INFO_BUCKET: "{SERVERS_INFO_BUCKET}"
+memoryLimit: 100

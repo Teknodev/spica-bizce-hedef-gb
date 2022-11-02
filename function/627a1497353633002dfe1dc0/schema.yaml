@@ -1,0 +1,40 @@
+_id: 627a1497353633002dfe1dc0
+name: Server Management
+language: javascript
+timeout: 47
+triggers:
+  checkAvailability:
+    options:
+      method: Post
+      path: /checkAvailability
+      preflight: true
+    type: http
+    active: true
+  setReady:
+    options:
+      method: Post
+      path: /setReady
+      preflight: true
+    type: http
+    active: true
+  decreasePlayCount:
+    options:
+      method: Post
+      path: /decreasePlayCount
+      preflight: true
+    type: http
+    active: true
+  clearIdentity:
+    options:
+      timezone: UTC
+      frequency: "*/5 * * * *"
+    type: schedule
+    active: true
+env:
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  CONFIGURATION_BUCKET_ID: "{CONFIGURATION_BUCKET_ID}"
+  DUEL_BUCKET_ID: "{DUEL_BUCKET_ID}"
+  PASSWORD_SALT: "{PASSWORD_SALT}"
+  USER_POLICY: "{USER_POLICY}"
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+memoryLimit: 100

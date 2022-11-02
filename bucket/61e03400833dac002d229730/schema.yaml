@@ -1,0 +1,61 @@
+_id: 61e03400833dac002d229730
+title: Charge Logs
+description: Describe your new bucket
+icon: line_style
+primary: order_id
+readOnly: false
+history: false
+properties:
+  order_id:
+    type: number
+    title: order_id
+    description: Description of the order_id input
+    options:
+      position: bottom
+  msisdn:
+    type: string
+    title: msisdn
+    description: Description of the msisdn input
+    options:
+      position: bottom
+  user_text:
+    type: string
+    title: user_text
+    description: Description of the user_text input
+    options:
+      position: bottom
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+    default: :created_at
+  status:
+    type: boolean
+    title: status
+    description: Description of the status input
+    options:
+      position: bottom
+    default: false
+  result:
+    type: textarea
+    title: result
+    description: Description of the result input
+    options:
+      position: bottom
+  type:
+    type: string
+    title: type
+    description: Description of the type input
+    options:
+      position: bottom
+acl:
+  write: |-
+    auth.attributes.role == "admin" ||
+    auth.key == "406bus18l2yiufdq"
+  read: |-
+    auth._id==document.identity || 
+    auth.attributes.role == "admin"
+order: 5
+category: Logs

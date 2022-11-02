@@ -1,0 +1,31 @@
+_id: 6343c73de0b12f002b09a726
+name: Marketing Services
+language: javascript
+timeout: 30.5
+triggers:
+  onInsertedMatch:
+    options:
+      collection: bucket_60742ed3f95e39002c4917ae
+      type: INSERT
+    type: database
+    active: false
+  onChargeUpdated:
+    options:
+      collection: bucket_61e03400833dac002d229730
+      type: UPDATE
+    type: database
+    active: false
+  sendMarketingServiceData:
+    options:
+      method: Get
+      path: /sendMarketingServiceData
+      preflight: true
+    type: http
+    active: false
+env:
+  USER_BUCKET: "{USER_BUCKET}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  PAST_MATCHES_BUCKET: "{PAST_MATCHES_BUCKET}"
+  CHARGE_LOGS_BUCKET: "{CHARGE_LOGS_BUCKET}"
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+memoryLimit: 100

@@ -1,0 +1,29 @@
+_id: 61a79605ca44cb002dbbfa70
+name: User Point Cleaner
+description: Cleans users' weekly points
+language: javascript
+timeout: 20
+triggers:
+  clearUserPoint:
+    options:
+      timezone: Europe/Istanbul
+      frequency: 0 0 1 * *
+    type: schedule
+    active: true
+  clearBotPoint:
+    options:
+      timezone: UTC
+      frequency: "* * * * *"
+    type: schedule
+    active: true
+  updateConfirmCode:
+    options:
+      frequency: "* * * * *"
+      timezone: UTC
+    type: schedule
+    active: true
+env:
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  CONFIRMATION_CODE_BUCKET_ID: "{CONFIRMATION_CODE_BUCKET_ID}"
+memoryLimit: 100

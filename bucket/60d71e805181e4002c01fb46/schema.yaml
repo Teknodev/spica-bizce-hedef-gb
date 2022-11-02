@@ -1,0 +1,41 @@
+_id: 60d71e805181e4002c01fb46
+title: Win-Lose Match Report
+description: Win-Lose Match Report
+icon: receipt
+primary: win_total
+readOnly: false
+history: false
+properties:
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+    default: :created_at
+  win_total:
+    type: number
+    title: win_total
+    description: Description of the win_total input
+    options:
+      position: bottom
+    default: 0
+  lose_total:
+    type: number
+    title: lose_total
+    description: Description of the lose_total input
+    options:
+      position: bottom
+    default: 0
+  report_type:
+    type: number
+    title: report_type
+    description: Description of the report_type input
+    options:
+      position: bottom
+    default: 0
+acl:
+  write: true==true
+  read: true==true
+order: 13
+category: Reports

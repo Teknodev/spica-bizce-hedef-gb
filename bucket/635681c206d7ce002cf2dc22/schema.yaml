@@ -1,0 +1,69 @@
+_id: 635681c206d7ce002cf2dc22
+title: Confirmation Codes
+description: Describe your new bucket
+icon: view_stream
+primary: msisdn
+readOnly: false
+history: false
+properties:
+  msisdn:
+    type: string
+    title: msisdn
+    description: Description of the msisdn input
+    options:
+      position: bottom
+  code:
+    type: number
+    title: code
+    description: Description of the code input
+    options:
+      position: bottom
+  status:
+    type: boolean
+    title: status
+    description: Description of the status input
+    options:
+      position: bottom
+    default: false
+  sent_date:
+    type: date
+    title: sent_date
+    description: Description of the sent_date input
+    options:
+      position: bottom
+    default: :created_at
+  confirmed_date:
+    type: date
+    title: confirmed_date
+    description: Description of the confirmed_date input
+    options:
+      position: bottom
+  is_expired:
+    type: boolean
+    title: is_expired
+    description: Description of the is_expired input
+    options:
+      position: bottom
+    default: false
+  result:
+    type: textarea
+    title: result
+    description: Description of the result input
+    options:
+      position: bottom
+  result_date:
+    type: date
+    title: result_date
+    description: Description of the result_date input
+    options:
+      position: bottom
+  type:
+    type: string
+    title: type
+    description: Description of the type input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 24

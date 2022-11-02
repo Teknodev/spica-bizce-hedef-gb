@@ -1,0 +1,49 @@
+_id: 61a7961aca44cb002dbbfa7f
+name: Report
+description: Report
+language: javascript
+timeout: 120
+triggers:
+  executeReportDaily:
+    options:
+      timezone: Europe/Istanbul
+      frequency: 0 7 * * *
+    type: schedule
+    active: false
+  executeReportWeekly:
+    options:
+      timezone: Europe/Istanbul
+      frequency: 5 7 * * 1
+    type: schedule
+    active: false
+  executeReportMonthly:
+    options:
+      timezone: Europe/Istanbul
+      frequency: 5 7 1 * *
+    type: schedule
+    active: false
+  executeReportMan:
+    options:
+      method: Get
+      path: /executeReportMan
+      preflight: true
+    type: http
+    active: false
+env:
+  PAST_MATCHES_BUCKET_ID: "{PAST_MATCHES_BUCKET_ID}"
+  MATCH_REPORT_BUCKET_ID: "{MATCH_REPORT_BUCKET_ID}"
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+  MAILER_BUCKET_ID: "{MAILER_BUCKET_ID}"
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
+  USER_REPORT_BUCKET_ID: "{USER_REPORT_BUCKET_ID}"
+  CHARGE_REPORT_BUCKET_ID: "{CHARGE_REPORT_BUCKET_ID}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  USERS_MATCH_REPORT_BUCKET_ID: "{USERS_MATCH_REPORT_BUCKET_ID}"
+  WIN_LOSE_MATCHES_BUCKET_ID: "{WIN_LOSE_MATCHES_BUCKET_ID}"
+  MANUALLY_REWARD_BUCKET_ID: "{MANUALLY_REWARD_BUCKET_ID}"
+  PLAY_COUNT_LOGS_BUCKET_ID: "{PLAY_COUNT_LOGS_BUCKET_ID}"
+  RETRY_REPORT_BUCKET_ID: "{RETRY_REPORT_BUCKET_ID}"
+  REWARD_REPORT_BUCKET_ID: "{REWARD_REPORT_BUCKET_ID}"
+  BUGGED_REWARD_BUCKET_ID: "{BUGGED_REWARD_BUCKET_ID}"
+  TRANSACTION_BUCKET: "{TRANSACTION_BUCKET}"
+memoryLimit: 100

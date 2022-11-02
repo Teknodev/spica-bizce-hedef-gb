@@ -1,0 +1,35 @@
+_id: 6356a59b06d7ce002cf2e6c5
+name: Fast Login & Register
+language: javascript
+timeout: 47.4
+triggers:
+  login:
+    type: http
+    active: true
+    options:
+      method: Post
+      path: /fast-login
+      preflight: true
+  register:
+    options:
+      method: Post
+      path: /fast-register
+      preflight: true
+    type: http
+    active: true
+  changePassword:
+    options:
+      method: Get
+      path: /changePassword
+      preflight: true
+    type: http
+    active: true
+env:
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+  USER_POLICY: "{USER_POLICY}"
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
+  PASSWORD_SALT: "{PASSWORD_SALT}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  FASTLOGIN_SECRET_KEY: "{FASTLOGIN_SECRET_KEY}"
+  FASTLOGIN_SERVICE_ID: "{FASTLOGIN_SERVICE_ID}"
+memoryLimit: 100

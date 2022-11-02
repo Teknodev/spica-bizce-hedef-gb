@@ -1,0 +1,53 @@
+_id: 60c071bbb04bcc002c40f5c9
+title: Mailer - Requests
+description: The system will send a mail automatically when you add new entry to
+  this bucket.
+acl:
+  write: true==true
+  read: true==true
+properties:
+  title:
+    type: string
+    description: Title of your mail request
+    options:
+      position: left
+    title: title
+  emails:
+    type: array
+    description: Mail subject
+    items:
+      type: string
+      title: emails
+    options:
+      position: left
+    title: emails
+  template:
+    type: string
+    description: You mail template name
+    options:
+      position: left
+    title: template
+  variables:
+    type: textarea
+    description: Mail variables
+    options:
+      position: right
+    title: variables
+  created_at:
+    type: date
+    description: Mail request date
+    options:
+      position: left
+    default: :created_at
+    title: created_at
+  report_type:
+    type: number
+    title: report_type
+    description: Description of the report_type input
+    options:
+      position: bottom
+    default: 0
+primary: created_at
+icon: outbond
+order: 20
+history: false

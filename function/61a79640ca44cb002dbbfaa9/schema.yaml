@@ -1,0 +1,17 @@
+_id: 61a79640ca44cb002dbbfaa9
+name: Alerts
+description: Alert Function
+language: javascript
+timeout: 54.8
+triggers:
+  checkPastMatch:
+    options:
+      timezone: Europe/Istanbul
+      frequency: "*/5 * * * *"
+    type: schedule
+    active: false
+env:
+  ALERT_BUCKET_ID: "{ALERT_BUCKET_ID}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  PAST_MATCHES_BUCKET_ID: "{PAST_MATCHES_BUCKET_ID}"
+memoryLimit: 100

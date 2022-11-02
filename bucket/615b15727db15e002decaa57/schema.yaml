@@ -1,0 +1,55 @@
+_id: 615b15727db15e002decaa57
+title: Retry Report
+description: Describe your new bucket
+icon: receipt
+primary: report_type
+readOnly: false
+history: false
+properties:
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+    default: :created_at
+  report_type:
+    type: number
+    title: report_type
+    description: Description of the report_type input
+    options:
+      position: bottom
+    default: 0
+  gunluk_false:
+    type: number
+    title: gunluk_false
+    description: Description of the gunluk_false input
+    options:
+      position: bottom
+    default: 0
+  gunluk_true:
+    type: number
+    title: gunluk_true
+    description: Description of the gunluk_true input
+    options:
+      position: bottom
+    default: 0
+  firsat_gunluk_false:
+    type: number
+    title: firsat_gunluk_false
+    description: Description of the firsat_gunluk_false input
+    options:
+      position: bottom
+    default: 0
+  firsat_gunluk_true:
+    type: number
+    title: firsat_gunluk_true
+    description: Description of the firsat_gunluk_true input
+    options:
+      position: bottom
+    default: 0
+acl:
+  write: true==true
+  read: true==true
+order: 15
+category: Reports

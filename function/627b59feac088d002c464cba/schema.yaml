@@ -1,0 +1,16 @@
+_id: 627b59feac088d002c464cba
+name: Server Check Finished Duels
+language: javascript
+timeout: 6
+triggers:
+  checkFinishedDuels:
+    type: schedule
+    active: true
+    options:
+      timezone: Europe/Istanbul
+      frequency: "*/10 * * * * *"
+env:
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  DUEL_BUCKET_ID: "{DUEL_BUCKET_ID}"
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+memoryLimit: 100

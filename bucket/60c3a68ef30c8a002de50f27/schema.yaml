@@ -1,0 +1,65 @@
+_id: 60c3a68ef30c8a002de50f27
+title: Charge Report
+description: Charge Report
+icon: receipt
+primary: status
+readOnly: false
+history: false
+properties:
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+    default: :created_at
+  status:
+    type: string
+    title: status
+    description: Description of the status input
+    options:
+      position: bottom
+  error:
+    type: string
+    title: error
+    description: Description of the error input
+    options:
+      position: bottom
+  report_type:
+    type: number
+    title: report_type
+    description: Description of the report_type input
+    options:
+      position: bottom
+    default: 0
+  daily_qty:
+    type: number
+    title: daily_qty
+    description: Description of the daily_qty input
+    options:
+      position: bottom
+    default: 0
+  chance_daily_qty:
+    type: number
+    title: chance_daily_qty
+    description: Description of the chance_daily_qty input
+    options:
+      position: bottom
+    default: 0
+  daily_ratio:
+    type: number
+    title: daily_ratio
+    description: Description of the daily_ratio input
+    options:
+      position: bottom
+  chance_daily_ratio:
+    type: number
+    title: chance_daily_ratio
+    description: Description of the chance_daily_ratio input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 11
+category: Reports

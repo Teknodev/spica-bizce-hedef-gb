@@ -1,0 +1,69 @@
+_id: 616e7b1a7db15e002d1e2278
+title: Bugged Rewards
+description: Describe your new bucket
+icon: line_style
+primary: offer_id
+readOnly: false
+history: false
+properties:
+  offer_id:
+    type: number
+    title: offer_id
+    description: Description of the offer_id input
+    options:
+      position: bottom
+  order_id:
+    type: number
+    title: order_id
+    description: Description of the order_id input
+    options:
+      position: bottom
+  msisdn:
+    type: string
+    title: msisdn
+    description: Description of the msisdn input
+    options:
+      position: bottom
+  error_id:
+    type: string
+    title: error_id
+    description: Description of the error_id input
+    options:
+      position: bottom
+  user_text:
+    type: string
+    title: user_text
+    description: Description of the user_text input
+    options:
+      position: bottom
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+    default: :created_at
+  status:
+    type: boolean
+    title: status
+    description: Description of the status input
+    options:
+      position: bottom
+    default: false
+  result:
+    type: textarea
+    title: result
+    description: Description of the result input
+    options:
+      position: bottom
+  match_id:
+    type: string
+    title: match_id
+    description: Description of the match_id input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 7
+category: Logs

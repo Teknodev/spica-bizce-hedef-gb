@@ -1,0 +1,33 @@
+_id: 61a89bdfca44cb002dbc0029
+name: Past Matches Operations
+language: javascript
+timeout: 53.7
+triggers:
+  insertPastMatchFromServer:
+    type: http
+    active: true
+    options:
+      method: Post
+      path: /insertPastMatchFromServer
+      preflight: true
+  insertDeletedMatch:
+    options:
+      method: Post
+      path: /insertDeletedMatch
+      preflight: true
+    type: http
+    active: true
+  removeServerInfoExternal:
+    options:
+      method: Post
+      path: /removeServerInfoExternal
+      preflight: true
+    type: http
+    active: true
+env:
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
+  PAST_DUELS_BUCKET_ID: "{PAST_DUELS_BUCKET_ID}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  SERVER_INFO_BUCKET_ID: "{SERVER_INFO_BUCKET_ID}"
+  DELETED_MATCHES_BUCKET: "{DELETED_MATCHES_BUCKET}"
+memoryLimit: 100

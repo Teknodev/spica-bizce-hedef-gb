@@ -1,0 +1,45 @@
+_id: 608ac3061c4a8c002cba02a5
+title: User Report
+description: Describe your new bucket
+icon: receipt
+primary: total_user
+readOnly: false
+history: false
+properties:
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+    default: :created_at
+  total_user:
+    type: number
+    title: total_user
+    description: Description of the total_user input
+    options:
+      position: bottom
+  new_user:
+    type: number
+    title: new_user
+    description: Description of the new_user input
+    options:
+      position: bottom
+  report_type:
+    type: number
+    title: report_type
+    description: Description of the report_type input
+    options:
+      position: bottom
+    default: 0
+  note:
+    type: textarea
+    title: note
+    description: Description of the note input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 10
+category: Reports

@@ -1,0 +1,46 @@
+_id: 606c138f6b2647002c2fc497
+title: Matchmaking
+description: Matchmaking Ultra new desc
+icon: record_voice_over
+primary: title
+readOnly: false
+history: false
+properties:
+  title:
+    type: string
+    title: title
+    description: Description of the title input
+    options:
+      position: bottom
+    default: Matchmaking
+  user:
+    type: relation
+    title: user
+    description: Description of the user input
+    options:
+      position: bottom
+      index: true
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+    primary: name
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+    default: :created_at
+acl:
+  write: |-
+    auth._id == document.user.identity ||
+    auth.attributes.role == "admin" ||
+    auth.key == "406bus18l2yiufdq"
+  read: |-
+    auth._id == document.user.identity ||
+    auth.attributes.role == "admin" ||
+    auth.key == "406bus18l2yiufdq"
+required:
+  - user
+order: 2
+category: Match

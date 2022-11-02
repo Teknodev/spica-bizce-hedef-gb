@@ -1,0 +1,99 @@
+_id: 6192623db1a304002e9faeac
+title: Servers Info
+description: Describe your new bucket
+icon: view_stream
+primary: duel_id
+readOnly: false
+history: false
+properties:
+  duel_id:
+    type: string
+    title: duel_id
+    description: Description of the duel_id input
+    options:
+      position: bottom
+      index: true
+  match_server:
+    type: string
+    title: match_server
+    description: Description of the match_server input
+    options:
+      position: bottom
+  user1:
+    type: relation
+    title: user1
+    description: Description of the user1 input
+    options:
+      position: bottom
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+    primary: name
+  user1_token:
+    type: string
+    title: user1_token
+    description: Description of the user1_token input
+    options:
+      position: bottom
+  user2:
+    type: relation
+    title: user2
+    description: Description of the user2 input
+    options:
+      position: bottom
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+    primary: name
+  user2_token:
+    type: string
+    title: user2_token
+    description: Description of the user2_token input
+    options:
+      position: bottom
+  created_at:
+    type: date
+    title: created_at
+    description: Description of the created_at input
+    options:
+      position: bottom
+    default: :created_at
+  available_to_user_1:
+    type: boolean
+    title: available_to_user_1
+    description: Description of the available_to_user_1 input
+    options:
+      position: bottom
+    default: true
+  available_to_user_2:
+    type: boolean
+    title: available_to_user_2
+    description: Description of the available_to_user_2 input
+    options:
+      position: bottom
+    default: true
+  user1_ready:
+    type: boolean
+    title: user1_ready
+    description: Description of the user1_ready input
+    options:
+      position: bottom
+    default: false
+  user2_ready:
+    type: boolean
+    title: user2_ready
+    description: Description of the user2_ready input
+    options:
+      position: bottom
+    default: false
+  last_food_eat_date:
+    type: date
+    title: last_food_eat_date
+    description: Description of the last_food_eat_date input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 4
+category: Match

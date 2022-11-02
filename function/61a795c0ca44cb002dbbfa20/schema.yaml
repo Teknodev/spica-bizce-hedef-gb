@@ -1,0 +1,25 @@
+_id: 61a795c0ca44cb002dbbfa20
+name: Test Login & Register
+description: login and register operations
+language: javascript
+timeout: 60
+triggers:
+  register:
+    options:
+      method: Post
+      path: /register
+      preflight: true
+    type: http
+    active: true
+  login:
+    options:
+      method: Post
+      path: /login
+      preflight: true
+    type: http
+    active: true
+env:
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+  USER_POLICY: "{USER_POLICY}"
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
+memoryLimit: 100

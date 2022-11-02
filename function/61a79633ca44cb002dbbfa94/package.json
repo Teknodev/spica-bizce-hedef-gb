@@ -1,0 +1,1 @@
+{"dependencies":{"@spica-devkit/bucket":"^0.9.25","@spica-devkit/database":"^0.9.25","axios":"^0.26.1","crypto-js":"^4.1.1","json2csv":"^5.0.6"}}

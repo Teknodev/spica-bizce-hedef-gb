@@ -1,0 +1,114 @@
+_id: 605c9480e9960e002c278191
+title: User
+description: User of an app
+icon: account_circle
+primary: name
+readOnly: false
+history: false
+properties:
+  identity:
+    type: string
+    title: identity
+    description: Identity id of an user
+    options:
+      position: bottom
+      index: true
+  name:
+    type: string
+    title: name
+    description: Description of the name input
+    options:
+      position: bottom
+  perm_accept:
+    type: boolean
+    title: perm_accept
+    description: perm_accept of an user
+    options:
+      position: bottom
+    default: false
+  bot:
+    type: boolean
+    title: bot
+    description: if this user is bot or not
+    options:
+      position: bottom
+    default: false
+  total_point:
+    type: number
+    title: total_point
+    description: Description of the total_point input
+    options:
+      position: bottom
+    default: 0
+  weekly_point:
+    type: number
+    title: weekly_point
+    description: Description of the weekly_point input
+    options:
+      position: bottom
+      index: true
+    default: 0
+  win_count:
+    type: number
+    title: win_count
+    description: Description of the win_count input
+    options:
+      position: bottom
+    default: 0
+  lose_count:
+    type: number
+    title: lose_count
+    description: Description of the lose_count input
+    options:
+      position: bottom
+    default: 0
+  available_play_count:
+    type: number
+    title: available_play_count
+    description: Description of the available_play_count input
+    options:
+      position: bottom
+    minimum: 0
+    default: 0
+  created_at:
+    type: date
+    title: created_at
+    description: Description of the created_at input
+    options:
+      position: bottom
+    default: :created_at
+  total_award:
+    type: number
+    title: total_award
+    description: Description of the total_award input
+    options:
+      position: bottom
+    default: 0
+    minimum: 0
+  note:
+    type: textarea
+    title: note
+    description: Description of the note input
+    options:
+      position: bottom
+  weekly_award:
+    type: number
+    title: weekly_award
+    description: Description of the weekly_award input
+    options:
+      position: bottom
+    default: 0
+  avatar_id:
+    type: number
+    title: avatar_id
+    description: Description of the avatar_id input
+    options:
+      position: bottom
+    default: 0
+acl:
+  write: |-
+    auth.attributes.role == "admin" ||
+    auth.key == "406bus18l2yiufdq"
+  read: true==true
+required: []
+order: 18

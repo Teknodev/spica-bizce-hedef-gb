@@ -1,0 +1,20 @@
+_id: 61a7964fca44cb002dbbfab7
+name: Retry Reward
+description: Retry Reward  Function
+language: javascript
+timeout: 60
+triggers:
+  checkReward:
+    options:
+      timezone: Europe/Istanbul
+      frequency: "*/10 * * * *"
+    type: schedule
+    active: false
+env:
+  REWARD_BUCKET_ID: "{REWARD_BUCKET_ID}"
+  MANUALLY_REWARD_BUCKET_ID: "{MANUALLY_REWARD_BUCKET_ID}"
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  DELETED_MATCHES_BUCKET: "{DELETED_MATCHES_BUCKET}"
+  BUGGED_REWARDS_BUCKET_ID: "{BUGGED_REWARDS_BUCKET_ID}"
+memoryLimit: 100

@@ -1,0 +1,40 @@
+_id: 61a7965bca44cb002dbbfac8
+name: In Game
+language: javascript
+timeout: 53.7
+triggers:
+  changeName:
+    type: http
+    active: true
+    options:
+      method: Post
+      path: /changeName
+      preflight: true
+  changeAvatar:
+    options:
+      method: Post
+      path: /changeAvatar
+      preflight: true
+    type: http
+    active: true
+  playCountDecrease:
+    options:
+      method: Post
+      path: /playCountDecrease
+      preflight: true
+    type: http
+    active: true
+  setReadyMainServer:
+    options:
+      method: Post
+      path: /setReadyMainServer
+      preflight: true
+    type: http
+    active: true
+env:
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
+  SERVER_INFO_BUCKET_ID: "{SERVER_INFO_BUCKET_ID}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+memoryLimit: 100
+description: In Game operations

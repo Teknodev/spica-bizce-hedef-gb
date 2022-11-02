@@ -1,0 +1,202 @@
+_id: 61a79633ca44cb002dbbfa94
+name: Dashboards
+description: Match Chart
+language: javascript
+timeout: 60
+triggers:
+  matchChart:
+    options:
+      method: Get
+      path: /matchChart
+      preflight: true
+    type: http
+    active: true
+  totalMatchChart:
+    options:
+      method: Get
+      path: /getTotalMatchesChart
+      preflight: true
+    type: http
+    active: true
+  dashboardPastMatches:
+    options:
+      method: Get
+      path: /dashboardPastMatches
+      preflight: true
+    type: http
+    active: true
+  dashboardUserRewards:
+    options:
+      method: Get
+      path: /dashboardUserRewards
+      preflight: true
+    type: http
+    active: true
+  dashboardDuelAnswers:
+    options:
+      method: Get
+      path: /dashboardDuelAnswers
+      preflight: true
+    type: http
+    active: true
+  userDashboardCharges:
+    options:
+      method: Get
+      path: /userDashboardCharges
+      preflight: true
+    type: http
+    active: true
+  playedUsersCount:
+    options:
+      method: Get
+      path: /playedUsersCount
+      preflight: true
+    type: http
+    active: true
+  dashboardManuallyReward:
+    options:
+      method: Get
+      path: /dashboardManuallyReward
+      preflight: true
+    type: http
+    active: true
+  msisdnsByAvailableCount:
+    options:
+      method: Get
+      path: /msisdnsByAvailableCount
+      preflight: true
+    type: http
+    active: true
+  exportUsersByAvailable:
+    options:
+      method: Get
+      path: /exportUsersByAvailable
+      preflight: true
+    type: http
+    active: true
+  dashboardGetContacts:
+    options:
+      method: Get
+      path: /dashboardGetContacts
+      preflight: true
+    type: http
+    active: true
+  updateContact:
+    options:
+      method: Post
+      path: /updateContact
+      preflight: true
+    type: http
+    active: true
+  getManuallyRewardDashboard:
+    options:
+      method: Get
+      path: /getManuallyRewardDashboard
+      preflight: true
+    type: http
+    active: true
+  generateDashboardKey:
+    options:
+      timezone: Europe/Istanbul
+      frequency: "*/15 * * * *"
+    type: schedule
+    active: true
+  getDashboarKey:
+    options:
+      method: Get
+      path: /getDashboarKey
+      preflight: true
+    type: http
+    active: true
+  getLeaderUsersDashboard:
+    options:
+      method: Get
+      path: /getLeaderUsersDashboard
+      preflight: true
+    type: http
+    active: true
+  dahsboardBuggedRewards:
+    options:
+      method: Get
+      path: /dahsboardBuggedRewards
+      preflight: true
+    type: http
+    active: true
+  dashboardUserAnalysisReport:
+    options:
+      method: Get
+      path: /dashboardUserAnalysisReport
+      preflight: true
+    type: http
+    active: true
+  downloadUserAnalysisReport:
+    options:
+      method: Get
+      path: /downloadUserAnalysisReport
+      preflight: true
+    type: http
+    active: true
+  dahsboardUserPoints:
+    options:
+      method: Get
+      path: /dahsboardUserPoints
+      preflight: true
+    type: http
+    active: true
+  dashboardDeletedMatches:
+    options:
+      method: Get
+      path: /dashboardDeletedMatches
+      preflight: true
+    type: http
+    active: true
+  chargeStatistics:
+    options:
+      method: Get
+      path: /chargeStatistics
+      preflight: true
+    type: http
+    active: true
+  autoSentMessageManagement:
+    options:
+      method: Get
+      path: /autoSentMessageManagement
+      preflight: true
+    type: http
+    active: true
+  pushManagementPanel:
+    options:
+      method: Get
+      path: /pushManagementPanel
+      preflight: true
+    type: http
+    active: true
+  getPushTemplateById:
+    options:
+      method: Get
+      path: /getPushTemplateById
+      preflight: true
+    type: http
+    active: true
+  pushStatisticsByListId:
+    options:
+      method: Get
+      path: /pushStatisticsByListId
+      preflight: true
+    type: http
+    active: true
+env:
+  PAST_MATCHES_BUCKET_ID: "{PAST_MATCHES_BUCKET_ID}"
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
+  REWARD_LOGS_BUCKET_ID: "{REWARD_LOGS_BUCKET_ID}"
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+  TRANSACTIONS_BUCKET: "{TRANSACTIONS_BUCKET}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  MANUALLY_REWARD_BUCKET_ID: "{MANUALLY_REWARD_BUCKET_ID}"
+  CONTACT_BUCKET_ID: "{CONTACT_BUCKET_ID}"
+  CONFIGURATION_BUCKET_ID: "{CONFIGURATION_BUCKET_ID}"
+  BUGGED_REWARDS_BUCKET_ID: "{BUGGED_REWARDS_BUCKET_ID}"
+  PUSH_TEMPLATES_BUCKET: "{PUSH_TEMPLATES_BUCKET}"
+  NOTIFICATOIN_LAST_ID: "{NOTIFICATOIN_LAST_ID}"
+  PUSH_LOGS_BUCKET: "{PUSH_LOGS_BUCKET}"
+memoryLimit: 100

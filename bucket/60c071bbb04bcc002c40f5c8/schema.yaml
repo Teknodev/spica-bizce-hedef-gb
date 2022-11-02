@@ -1,0 +1,41 @@
+_id: 60c071bbb04bcc002c40f5c8
+title: Mailer - Templates
+description: You can add your mail templates here
+acl:
+  write: true==true
+  read: true==true
+properties:
+  title:
+    type: string
+    description: Title of your mail template
+    options:
+      position: left
+    title: title
+  description:
+    type: textarea
+    description: Describe you mail template
+    options:
+      position: right
+    title: description
+  subject:
+    type: string
+    description: Mail subject
+    options:
+      position: left
+    title: subject
+  template:
+    type: string
+    description: You mail template name
+    options:
+      position: left
+    title: template
+  content:
+    type: richtext
+    description: Mail content
+    options:
+      position: bottom
+    title: content
+primary: content
+icon: outbond
+order: 19
+history: false

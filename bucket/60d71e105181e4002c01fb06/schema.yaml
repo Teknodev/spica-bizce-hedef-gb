@@ -1,0 +1,41 @@
+_id: 60d71e105181e4002c01fb06
+title: User-Match Report
+description: User-Match Report
+icon: receipt
+primary: play_total
+readOnly: false
+history: false
+properties:
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+    default: :created_at
+  report_type:
+    type: number
+    title: report_type
+    description: Description of the report_type input
+    options:
+      position: bottom
+    default: 0
+  player:
+    type: number
+    title: player
+    description: Description of the player input
+    options:
+      position: bottom
+    default: 0
+  play_total:
+    type: number
+    title: play_total
+    description: Description of the play_total input
+    options:
+      position: bottom
+    default: 0
+acl:
+  write: true==true
+  read: true==true
+order: 12
+category: Reports

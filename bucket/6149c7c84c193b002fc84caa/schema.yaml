@@ -1,0 +1,32 @@
+_id: 6149c7c84c193b002fc84caa
+title: Bots
+description: Describe your new bucket
+icon: view_stream
+primary: name
+readOnly: false
+history: false
+properties:
+  name:
+    type: string
+    title: name
+    description: Description of the name input
+    options:
+      position: bottom
+  bot:
+    type: boolean
+    title: bot
+    description: Description of the bot input
+    options:
+      position: bottom
+    default: true
+  avatar_id:
+    type: number
+    title: avatar_id
+    description: Description of the avatar_id input
+    options:
+      position: bottom
+    default: 1
+acl:
+  write: true==true
+  read: true==true
+order: 21

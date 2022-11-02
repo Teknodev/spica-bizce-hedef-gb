@@ -1,0 +1,35 @@
+_id: 61a795fdca44cb002dbbfa6b
+name: Charge & Reward
+description: Adds new available play for the user
+language: javascript
+timeout: 56.5
+triggers:
+  applyRewardManually:
+    options:
+      bucket: 60aa13679835cd002c1c9a1a
+      type: INSERT
+    type: bucket
+    active: true
+  chargeRequest:
+    options:
+      method: Post
+      path: /chargeRequest
+      preflight: true
+    type: http
+    active: true
+  checkSMSCode:
+    options:
+      method: Post
+      path: /checkSMSCode
+      preflight: true
+    type: http
+    active: true
+env:
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
+  SECRET_API_KEY: "{SECRET_API_KEY}"
+  REWARDS_BUCKET_ID: "{REWARDS_BUCKET_ID}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  BUGGED_REWARDS_BUCKET_ID: "{BUGGED_REWARDS_BUCKET_ID}"
+  TRANSACTIONS_BUCKET: "{TRANSACTIONS_BUCKET}"
+  CONFIRMATION_CODE_BUCKET_ID: "{CONFIRMATION_CODE_BUCKET_ID}"
+memoryLimit: 100

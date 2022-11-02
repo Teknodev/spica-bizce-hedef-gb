@@ -1,0 +1,31 @@
+_id: 6067935ee9960e002c27877f
+title: Configuration
+description: Configuration bucket for changeable metrics
+icon: settings_applications
+primary: key
+readOnly: false
+history: false
+properties:
+  key:
+    type: string
+    title: key
+    description: Description of the key input
+    options:
+      position: bottom
+      unique: true
+  value:
+    type: string
+    title: value
+    description: Description of the value input
+    options:
+      position: bottom
+acl:
+  write: |-
+    auth.attributes.role == "admin" ||
+    auth.key == "406bus18l2yiufdq"
+  read: |-
+    auth.attributes.role == "admin" ||
+    document.key != "dashboard_key"
+required:
+  - key
+order: 17

@@ -1,0 +1,46 @@
+_id: 615b15be7db15e002decab69
+title: Reward Report
+description: Describe your new bucket
+icon: receipt
+primary: count
+readOnly: false
+history: false
+properties:
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+    default: :created_at
+  count:
+    type: number
+    title: count
+    description: Description of the count input
+    options:
+      position: bottom
+    default: 0
+  error_text:
+    type: string
+    title: error_text
+    description: Description of the error_text input
+    options:
+      position: bottom
+  report_type:
+    type: number
+    title: report_type
+    description: Description of the report_type input
+    options:
+      position: bottom
+    default: 0
+  ratio:
+    type: number
+    title: ratio
+    description: Description of the ratio input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 14
+category: Reports

@@ -1,0 +1,61 @@
+_id: 60aa13679835cd002c1c9a1a
+title: Manually Reward
+description: Whenever you add an entry to bucket, user will get internet reward
+icon: view_stream
+primary: msisdn
+readOnly: false
+history: false
+properties:
+  msisdn:
+    type: number
+    title: msisdn
+    description: Description of the msisdn input
+    options:
+      position: bottom
+  reward:
+    type: string
+    title: reward
+    description: Description of the reward input
+    options:
+      position: bottom
+    enum:
+      - gunluk_1
+      - firsat_gunluk_1
+  created_at:
+    type: date
+    title: created_at
+    description: Description of the created_at input
+    options:
+      position: bottom
+    default: :created_at
+  process_completed:
+    type: boolean
+    title: process_completed
+    description: Description of the process_completed input
+    options:
+      position: bottom
+    default: false
+  result:
+    type: textarea
+    title: result
+    description: Description of the result input
+    options:
+      position: bottom
+  system:
+    type: boolean
+    title: system
+    description: Description of the system input
+    options:
+      position: bottom
+    default: false
+  retry_id:
+    type: string
+    title: retry_id
+    description: Description of the retry_id input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 8
+category: Logs

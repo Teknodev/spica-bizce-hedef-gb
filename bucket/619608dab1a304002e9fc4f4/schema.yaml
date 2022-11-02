@@ -1,0 +1,39 @@
+_id: 619608dab1a304002e9fc4f4
+title: Leader Users
+description: Describe your new bucket
+icon: view_stream
+primary: name
+readOnly: false
+history: false
+properties:
+  name:
+    type: string
+    title: name
+    description: Description of the name input
+    options:
+      position: bottom
+  avatar_id:
+    type: number
+    title: avatar_id
+    description: Description of the avatar_id input
+    options:
+      position: bottom
+    default: 0
+  total_point:
+    type: number
+    title: total_point
+    description: Description of the total_point input
+    options:
+      position: bottom
+    default: 0
+  weekly_point:
+    type: number
+    title: weekly_point
+    description: Description of the weekly_point input
+    options:
+      position: bottom
+    default: 0
+acl:
+  write: true==true
+  read: true==true
+order: 23

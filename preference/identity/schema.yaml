@@ -1,0 +1,23 @@
+attributes:
+  type: object
+  properties:
+    msisdn:
+      type: string
+      title: msisdn
+      description: Description of 'msisdn'
+      options: {}
+    role:
+      type: string
+      title: role
+      description: Description of 'role'
+      options: {}
+    user_id:
+      type: string
+      title: user_id
+      description: Description of 'user_id'
+      options: {}
+    duel_id:
+      type: string
+      title: duel_id
+      description: Description of 'duel_id'
+      options: {}
