@@ -105,6 +105,20 @@ properties:
     options:
       position: bottom
     default: 0
+  elo:
+    type: number
+    title: elo
+    description: Description of the elo input
+    options:
+      position: bottom
+    default: 0
+  free_play:
+    type: boolean
+    title: free_play
+    description: Description of the free_play input
+    options:
+      position: bottom
+    default: false
 acl:
   write: |-
     auth.attributes.role == "admin" ||

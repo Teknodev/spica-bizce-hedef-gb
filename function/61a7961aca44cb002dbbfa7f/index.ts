@@ -289,78 +289,71 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         },
         {
             date: new Date(reportDate),
-            daily_qty: error1.length - error1Chance.length,
+            daily_qty: Math.max((error1.length - error1Chance.length), 0),
             chance_daily_qty: error1Chance.length,
             daily_ratio: error1.length ? Number(((error1.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
             chance_daily_ratio: error1Chance.length ? Number(((error1Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
-            play_count: "-",
             error: "Devam eden diğer işlemlerden dolayı GNC Oyun aboneliği gerçekleştirilememektedir.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: error2.length - error2Chance.length,
+            daily_qty: Math.max((error2.length - error2Chance.length), 0),
             chance_daily_qty: error2Chance.length,
             daily_ratio: error2.length ? Number(((error2.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
             chance_daily_ratio: error2Chance.length ? Number(((error2Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
-            play_count: "-",
             error: "Abone kredisi(bakiyesi) yetersiz.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: error3.length - error3Chance.length,
+            daily_qty: Math.max((error3.length - error3Chance.length), 0),
             chance_daily_qty: error3Chance.length,
             daily_ratio: error3.length ? Number(((error3.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
             chance_daily_ratio: error3Chance.length ? Number(((error3Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
-            play_count: "-",
             error: "Abone bulunamadi.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: error4.length - error4Chance.length,
+            daily_qty: Math.max((error4.length - error4Chance.length), 0),
             chance_daily_qty: error4Chance.length,
             daily_ratio: error4.length ? Number(((error4.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
             chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
-            play_count: "-",
             error: "Abone kara listede islem yapilamaz.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: error5.length - error4Chance.length,
+            daily_qty: Math.max((error5.length - error4Chance.length), 0),
             chance_daily_qty: error4Chance.length,
             daily_ratio: error5.length ? Number(((error5.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
             chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
-            play_count: "-",
             error: "Hattiniz Katma Degerli Servis aboneligine kapali oldugu icin GNC Oyun servisine abonelik talebiniz gerceklestirilememistir. Abonelik izninizi 532?yi arayarak actirabilirsiniz.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: error6.length - error4Chance.length,
+            daily_qty: Math.max((error6.length - error4Chance.length), 0),
             chance_daily_qty: error4Chance.length,
             daily_ratio: error6.length ? Number(((error6.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
             chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
-            play_count: "-",
             error: "Rahat Hatlar bu servisten yararlanamazlar.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: error7.length - error4Chance.length,
+            daily_qty: Math.max((error7.length - error4Chance.length), 0),
             chance_daily_qty: error4Chance.length,
             daily_ratio: error7.length ? Number(((error7.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
             chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
-            play_count: "-",
             error: "Sistemlerde oluşan hata sebebi ile işleminiz yapılamıyor. İşleminiz tekrar denenmek üzere kuyruğa atılmıştır.",
             report_type: reportType
         },
@@ -517,8 +510,10 @@ export async function reportExportSend(title, reportType) {
             template: "report-mail",
             variables: `{"title": "${title}"}`,
             emails: [
-                "serdar@polyhagency.com",
                 "idriskaribov@gmail.com",
+                "serdar@polyhagency.com",
+                "caglar@polyhagency.com",
+                "murat.malci@turkcell.com.tr"
             ],
             report_type: reportType
         })
@@ -619,32 +614,10 @@ export async function getFailedRewards(reportType, dateFrom, dateTo) {
 }
 
 export async function executeReportMan(req, res) {
-    console.log("@mounthly-report")
-    // let dateFrom = new Date().setMinutes(new Date().getMinutes() - 3);
-    // let dateTo = new Date().setMinutes(new Date().getMinutes() - 1);
-    // await matchReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 2", err));
-    // await reportExportSend("Haftalık Toplam Rapor GÜncel", 1).catch(err => console.log("ERROR: 63", err));
-
-    // await reportExportSend("Aylık Gün Bazlı Rapor Güncel", 22).catch(err =>
-    //     console.log("ERROR: 163", err)
+    // await reportExportSend("Haftalık Gün Bazlı Rapor", 11).catch(err =>
+    //     console.log("ERROR: 63", err)
     // );
-    // await reportExportSend("Aylık Toplam Rapor Güncel", 2).catch(err =>
-    //     console.log("ERROR: 163", err)
-    // );
+    await reportExportSend("Haftalık Toplam Rapor", 1).catch(err => console.log("ERROR: 63", err));
 
-    let date = new Date();
-    let dateFrom = new Date(date).setHours(0, 0, 0);
-    let dateTo = new Date(date).setHours(23, 59, 59);
-
-    // await userReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 4", err));
-    // await playedMatchCount(0, dateFrom, dateTo).catch(err => console.log("ERROR: 49", err));
-    // await matchReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 2", err));
-    // await matchWinLoseCount(0, dateFrom, dateTo).catch(err => console.log("ERROR: 55", err));
-    await chargeReportExport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 3", err));
-    // await retryReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: ", err));
-    // await getFailedRewards(0, dateFrom, dateTo).catch(err => console.log("ERROR: ", err));
-
-    // await reportExportSend("Günlük Rapor", 0).catch(err => console.log("ERROR: 5", err));
-
-    return res.status(200).send({ message: 'ok' });
+    return true;
 }

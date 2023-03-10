@@ -79,9 +79,12 @@ export async function checkFinishedDuels() {
     const t2 = new Date();
     t2.setSeconds(t2.getSeconds() - 60);
 
+    const t3 = new Date();
+    t3.setMinutes(t3.getMinutes() - 20);
+
     await db
         .collection(`bucket_${DUEL_BUCKET_ID}`)
-        .deleteMany({ created_at: { $lt: t2 }, last_food_eat_date: { $exists: false } })
+        .deleteMany({ $or: [{ created_at: { $lt: t2 }, last_food_eat_date: { $exists: false } }, { created_at: { $lt: t3 } }] })
         .catch(err => console.log("ERROR 10", err));
 }
 

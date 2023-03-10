@@ -23,3 +23,4 @@ env:
   USER_POLICY: "{USER_POLICY}"
   USER_BUCKET_ID: "{USER_BUCKET_ID}"
 memoryLimit: 100
+order: 4

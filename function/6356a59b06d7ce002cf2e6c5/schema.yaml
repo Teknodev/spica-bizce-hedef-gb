@@ -24,6 +24,13 @@ triggers:
       preflight: true
     type: http
     active: true
+  getMyIp:
+    options:
+      method: Get
+      path: /getMyIp
+      preflight: true
+    type: http
+    active: true
 env:
   SECRET_API_KEY: "{SECRET_API_KEY}"
   USER_POLICY: "{USER_POLICY}"
@@ -33,3 +40,4 @@ env:
   FASTLOGIN_SECRET_KEY: "{FASTLOGIN_SECRET_KEY}"
   FASTLOGIN_SERVICE_ID: "{FASTLOGIN_SERVICE_ID}"
 memoryLimit: 100
+order: 18

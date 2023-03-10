@@ -19,8 +19,7 @@ properties:
     options:
       position: bottom
     enum:
-      - gunluk_1
-      - firsat_gunluk_1
+      - daily_1
   created_at:
     type: date
     title: created_at

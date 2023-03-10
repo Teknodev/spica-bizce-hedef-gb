@@ -1,0 +1,36 @@
+_id: 637c820006d7ce002c2e4445
+title: Draw Logs
+description: Describe your new bucket
+icon: view_stream
+primary: msisdn
+readOnly: false
+history: false
+properties:
+  msisdn:
+    type: string
+    title: msisdn
+    description: Description of the msisdn input
+    options:
+      position: bottom
+  body:
+    type: textarea
+    title: body
+    description: Description of the body input
+    options:
+      position: bottom
+  response:
+    type: textarea
+    title: response
+    description: Description of the response input
+    options:
+      position: bottom
+  date:
+    type: date
+    title: date
+    description: Description of the date input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 25

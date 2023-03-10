@@ -13,17 +13,27 @@ const USER_BUCKET_ID = process.env.USER_BUCKET_ID;
 
 let db;
 
-
+const loginType = {
+    seamless: "seamless"
+}
 export async function login(req, res) {
     if (!db) db = await database().catch(err => console.log("ERROR 1", err));
     const users_collection = db.collection(`bucket_${USER_BUCKET_ID}`);
 
-    const { token } = req.body;
+    const { token, type } = req.body;
     
     // 1-check token is defined
     if (token) {
         // 2-send token to get user information from Turkcell
-        let fastlogin_response = await fastLogin(token).catch(err => console.log("ERROR 1", err));
+        let fastlogin_response;
+        if (type == loginType.seamless) {
+            console.log("LOG: seamless: ", token)
+            fastlogin_response = await seamlessTokenValidate(token).catch(err => console.log("ERROR 1", err));
+            console.log("fastlogin_response", fastlogin_response)
+        } else {
+            fastlogin_response = await fastLogin(token).catch(err => console.log("ERROR 1", err));
+        }
+
         // let fastlogin_response = MOCK_RES;
         // 3-if response is error(node fetch send error as data)
         if (isResponseValid(fastlogin_response)) {
@@ -184,6 +194,24 @@ async function fastLogin(token) {
         .catch(err => console.log("ERROR 5", err));
 }
 
+async function seamlessTokenValidate(token) {
+    let body = {
+        serviceId: FASTLOGIN_SERVICE_ID,
+        secretKey: "0c0b8b96-38cb-4791-a2a8-e8470bf5dd4b",
+        // secretKey: "e8da3fc8-e876-4b5e-bbf3-e59ed441da2e",
+        loginToken: token
+    };
+    console.log("Seamless: ", body)
+
+    return await fetch("https://fastlogin.com.tr/fastlogin_app/secure/validateSeamlessLoginToken.json", {
+        method: "post",
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" }
+    })
+        .then(res => res.json())
+        .catch(err => console.log("ERROR 5", err));
+}
+
 // get identity token(login to spica) with identifier and password
 function getIdentityToken(identifier, password) {
     Identity.initialize({ apikey: `${SECRET_API_KEY}` });
@@ -241,4 +269,17 @@ function getPassword(response) {
 
     return unique_password;
     // return "abcde";
+}
+
+export async function getMyIp(req, res) {
+    console.log("TEST")
+    // const test = await fetch("https://api.ipify.org?format=json", {
+    //     method: "get"
+    // })
+    //     .then(res => res.json())
+    //     .catch(err => console.log("ERROR 5", err));
+
+    // console.log("test", test)
+
+    return res.status(200).send({ message: 'ok' })
 }

@@ -36,7 +36,7 @@ export async function checkPastMatch() {
         ) {
             await alertCollection
                 .insertOne({
-                    title: "Retro Yılan: WARNING!",
+                    title: "GNC Snake: WARNING!",
                     message: "There have been no matches in 25 minutes!",
                     date: new Date()
                 })

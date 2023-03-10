@@ -7,7 +7,7 @@ timeout: 51.4
 triggers:
   matchmaker:
     options:
-      timezone: Europe/Istanbul
+      timezone: UTC
       frequency: "*/5 * * * * *"
     type: schedule
     active: true
@@ -18,3 +18,4 @@ env:
   BOT_BUCKET_ID: "{BOT_BUCKET_ID}"
   SERVERS_INFO_BUCKET: "{SERVERS_INFO_BUCKET}"
 memoryLimit: 100
+order: 3

@@ -38,3 +38,4 @@ env:
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
 memoryLimit: 100
 description: In Game operations
+order: 7

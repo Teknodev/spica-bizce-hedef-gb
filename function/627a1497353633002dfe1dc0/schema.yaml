@@ -38,3 +38,4 @@ env:
   USER_POLICY: "{USER_POLICY}"
   SECRET_API_KEY: "{SECRET_API_KEY}"
 memoryLimit: 100
+order: 1

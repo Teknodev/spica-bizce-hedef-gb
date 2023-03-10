@@ -9,9 +9,10 @@ triggers:
       timezone: Europe/Istanbul
       frequency: "*/5 * * * *"
     type: schedule
-    active: false
+    active: true
 env:
   ALERT_BUCKET_ID: "{ALERT_BUCKET_ID}"
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
   PAST_MATCHES_BUCKET_ID: "{PAST_MATCHES_BUCKET_ID}"
 memoryLimit: 100
+order: 8

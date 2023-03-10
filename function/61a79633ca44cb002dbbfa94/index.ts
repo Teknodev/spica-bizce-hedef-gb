@@ -404,7 +404,7 @@ export async function userDashboardCharges(req, res) {
 
                 charges = charges.map(data => {
                     let date = new Date(data.date);
-                    let amount = data.type == 'first' ? '7TL' : '5TL'
+                    let amount = data.type == 'first' ? '9TL' : '7TL'
                     date.setHours(date.getHours() + 3);
                     return {
                         _id: data._id,
@@ -521,16 +521,10 @@ export async function getManuallyRewardDashboard(req, res) {
             "Tek seferde hem saatlik hemde günlük yükleyebilirsiniz.",
         inputs: [
             {
-                key: "gunluk_1",
+                key: "daily_1",
                 type: "string",
                 value: "",
                 title: "Gunluk Reward MSISDNS"
-            },
-            {
-                key: "firsat_gunluk_1",
-                type: "string",
-                value: "",
-                title: "Fırsat Gülük Reward MSISDNS"
             },
             {
                 key: "key",
@@ -555,29 +549,15 @@ export async function dashboardManuallyReward(req, res) {
 
     if (req.query.key == dashboard_key.value) {
         Bucket.initialize({ apikey: `${SECRET_API_KEY}` });
-        let dailyMsisdns = req.query.gunluk_1;
-        let chanceMsisdns = req.query.firsat_gunluk_1;
+        let dailyMsisdns = req.query.daily_1;
         dailyMsisdns = dailyMsisdns ? dailyMsisdns.split(",") : [];
-        chanceMsisdns = chanceMsisdns ? chanceMsisdns.split(",") : [];
 
         if (dailyMsisdns[0]) {
             for (let msisdn of dailyMsisdns) {
                 await Bucket.data
                     .insert(MANUALLY_REWARD_BUCKET_ID, {
                         msisdn: Number(msisdn),
-                        reward: "gunluk_1"
-                    })
-                    .catch(error => {
-                        console.log("ERROR 14", error);
-                    });
-            }
-        }
-        if (chanceMsisdns[0]) {
-            for (let msisdn of chanceMsisdns) {
-                await Bucket.data
-                    .insert(MANUALLY_REWARD_BUCKET_ID, {
-                        msisdn: Number(msisdn),
-                        reward: "firsat_gunluk_1"
+                        reward: "daily_1"
                     })
                     .catch(error => {
                         console.log("ERROR 14", error);
@@ -1086,7 +1066,7 @@ export async function downloadUserAnalysisReport(req, res) {
                             msisdn: userIdentity,
                             services_name: "Bilgi Duellosu",
                             fee_type: "paid",
-                            charge_amount: "5TL",
+                            charge_amount: "7TL",
                             winner: data.winner,
                             opponent: opponent
                         };

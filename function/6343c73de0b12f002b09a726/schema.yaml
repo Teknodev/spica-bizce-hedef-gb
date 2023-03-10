@@ -29,3 +29,4 @@ env:
   CHARGE_LOGS_BUCKET: "{CHARGE_LOGS_BUCKET}"
   SECRET_API_KEY: "{SECRET_API_KEY}"
 memoryLimit: 100
+order: 16

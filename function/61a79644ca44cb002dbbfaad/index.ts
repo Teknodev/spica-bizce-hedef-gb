@@ -339,10 +339,10 @@ async function matchGeneralReport(reportType, dateFilter) {
             p2pPlayPointsEarned += data.p2p_play_points_earned;
             p2mPlay += data.p2m_play;
             p2mPlayPointsEarned += data.p2m_play_points_earned;
-            p2pDurationAverage += data.p2p_duration_average;
-            p2mDurationAverage += data.p2m_duration_average;
-            p2pPointAverage += data.p2p_point_average;
-            p2mPointAverage += data.p2m_point_average;
+            p2pDurationAverage += Number(data.p2p_duration_average || 0);
+            p2mDurationAverage += Number(data.p2m_duration_average || 0);
+            p2pPointAverage += Number(data.p2p_point_average || 0);
+            p2mPointAverage += Number(data.p2m_point_average || 0);
             p2pFirstMatch += data.p2p_first_match;
             p2mFirstMatch += data.p2m_first_match;
             p2pSecondMatch += data.p2p_second_match;
@@ -354,10 +354,10 @@ async function matchGeneralReport(reportType, dateFilter) {
                 p2p_play_points_earned: p2pPlayPointsEarned,
                 p2m_play: p2mPlay,
                 p2m_play_points_earned: p2mPlayPointsEarned,
-                p2p_duration_average: p2pDurationAverage / dayCounter,
-                p2m_duration_average: p2mDurationAverage / dayCounter,
-                p2p_point_average: p2pPointAverage / dayCounter,
-                p2m_point_average: p2mPointAverage / dayCounter,
+                p2p_duration_average: Number((p2pDurationAverage / dayCounter).toFixed(1)),
+                p2m_duration_average: Number((p2mDurationAverage / dayCounter).toFixed(1)),
+                p2p_point_average: Number((p2pPointAverage / dayCounter).toFixed(1)),
+                p2m_point_average: Number((p2mPointAverage / dayCounter).toFixed(1)),
                 p2p_first_match: p2pFirstMatch,
                 p2m_first_match: p2mFirstMatch,
                 p2p_second_match: p2pSecondMatch,
@@ -375,14 +375,14 @@ async function matchGeneralReport(reportType, dateFilter) {
              <td style="width: 7.6%;">${new Date(data.date).toLocaleDateString()}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2p_play)}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2p_play_points_earned)}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2p_duration_average)}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2p_point_average)}</td>
+             <td style="width: 7.6%;">${data.p2p_duration_average}</td>
+             <td style="width: 7.6%;">${data.p2p_point_average}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2p_first_match)}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2p_second_match)}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2m_play)}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2m_play_points_earned)}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2m_duration_average)}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2m_point_average)}</td>
+             <td style="width: 7.6%;">${data.p2m_duration_average}</td>
+             <td style="width: 7.6%;">${data.p2m_point_average}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2m_first_match)}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2m_second_match)}</td>
             </tr>`;
@@ -397,14 +397,14 @@ async function matchGeneralReport(reportType, dateFilter) {
             <th style="width: 9%; text-align:left">P2P Kazanılan Puan</th>
             <th style="width: 9%; text-align:left">P2P Ortalama Oyun Süresi (saniye)</th>
             <th style="width: 9%; text-align:left">P2P Ortalama Puan</th>
-            <th style="width: 9%; text-align:left">P2P Gösterilen Gunluk (7 TL)</th>
-            <th style="width: 9%; text-align:left">P2P Gösterilen Fırsat Gunluk (5 TL)</th>
+            <th style="width: 9%; text-align:left">P2P Gösterilen Gunluk (9 TL)</th>
+            <th style="width: 9%; text-align:left">P2P Gösterilen Fırsat Gunluk (7 TL)</th>
             <th style="width: 9%; text-align:left">P2M Oyun</th>
             <th style="width: 9%; text-align:left">P2M Kazanılan Puan</th>
             <th style="width: 9%; text-align:left">P2M Ortalama Oyun Süresi (saniye)</th>
             <th style="width: 9%; text-align:left">P2M Ortalama Puan</th>
-            <th style="width: 9%; text-align:left">P2M Gösterilen Gunluk (7 TL)</th>
-            <th style="width: 9%; text-align:left">P2M Gösterilen Fırsat Gunluk (5 TL)</th>
+            <th style="width: 9%; text-align:left">P2M Gösterilen Gunluk (9 TL)</th>
+            <th style="width: 9%; text-align:left">P2M Gösterilen Fırsat Gunluk (7 TL)</th>
             </tr>
            ${tableBody}
             </tbody>
@@ -420,15 +420,15 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%; font-weight: bold;">Kazanılan Puan</td>
                 <td style="width: 14.2%; font-weight: bold;">Ortalama Oyun Süresi (saniye)</td>
                 <td style="width: 14.2%; font-weight: bold;">Ortalama Puan</td>
-                <td style="width: 14.2%; font-weight: bold;">Gösterilen Gunluk (7 TL)</td>
-                <td style="width: 14.2%; font-weight: bold;">Gösterilen Fırsat Gunluk (5 TL)</td>
+                <td style="width: 14.2%; font-weight: bold;">Gösterilen Gunluk (9 TL)</td>
+                <td style="width: 14.2%; font-weight: bold;">Gösterilen Fırsat Gunluk (7 TL)</td>
             </tr>
              <tr>
                 <td style="width: 14.2%; font-weight: bold;">P2P</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_play)}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_play_points_earned)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_duration_average)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_point_average)}</td>
+                <td style="width: 14.2%;">${matchData[0].p2p_duration_average}</td>
+                <td style="width: 14.2%;">${matchData[0].p2p_point_average}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_first_match)}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_second_match)}</td>
             </tr>
@@ -436,8 +436,8 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%; font-weight: bold;">P2M</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_play)}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_play_points_earned)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_duration_average)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_point_average)}</td>
+                <td style="width: 14.2%;">${matchData[0].p2m_duration_average}</td>
+                <td style="width: 14.2%;">${matchData[0].p2m_point_average}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_first_match)}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_second_match)}</td>
             </tr>
@@ -609,7 +609,7 @@ async function chargeReport(reportType, dateFilter) {
                     <td style="width: 40%;">${charge.error}</td>
                     </tr>
                     `;
-        (index + 1) % 5 == 0
+        (index + 1) % 8 == 0
             ? (chargeBody += `
         <tr>
             <td style="width: 10%;">---</td>
@@ -629,9 +629,9 @@ async function chargeReport(reportType, dateFilter) {
             <tbody>
             <tr>
             <th style="width: 10%; text-align:left">Tarih</th>
-            <th style="width: 10%; text-align:left">Gunluk (7 TL)</th>
+            <th style="width: 10%; text-align:left">Gunluk (9 TL)</th>
             <th style="width: 10%; text-align:left">Gunluk Oran</th>
-            <th style="width: 10%; text-align:left">Fırsat Gunluk (5 TL)</th>
+            <th style="width: 10%; text-align:left">Fırsat Gunluk (7 TL)</th>
             <th style="width: 10%; text-align:left">Fırsat Oran</th>
             <th style="width: 10%; text-align:left">Sonu&ccedil;</th>
             <th style="width: 50%; text-align:left">Hata Detayı</th>

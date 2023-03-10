@@ -9,7 +9,7 @@ triggers:
       timezone: Europe/Istanbul
       frequency: "*/10 * * * *"
     type: schedule
-    active: false
+    active: true
 env:
   REWARD_BUCKET_ID: "{REWARD_BUCKET_ID}"
   MANUALLY_REWARD_BUCKET_ID: "{MANUALLY_REWARD_BUCKET_ID}"
@@ -18,3 +18,4 @@ env:
   DELETED_MATCHES_BUCKET: "{DELETED_MATCHES_BUCKET}"
   BUGGED_REWARDS_BUCKET_ID: "{BUGGED_REWARDS_BUCKET_ID}"
 memoryLimit: 100
+order: 9

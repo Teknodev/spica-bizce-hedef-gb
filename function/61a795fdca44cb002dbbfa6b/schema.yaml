@@ -24,6 +24,13 @@ triggers:
       preflight: true
     type: http
     active: true
+  testManuallyReqard:
+    options:
+      method: Get
+      path: /testManuallyReqard
+      preflight: true
+    type: http
+    active: false
 env:
   USER_BUCKET_ID: "{USER_BUCKET_ID}"
   SECRET_API_KEY: "{SECRET_API_KEY}"
@@ -33,3 +40,4 @@ env:
   TRANSACTIONS_BUCKET: "{TRANSACTIONS_BUCKET}"
   CONFIRMATION_CODE_BUCKET_ID: "{CONFIRMATION_CODE_BUCKET_ID}"
 memoryLimit: 100
+order: 0

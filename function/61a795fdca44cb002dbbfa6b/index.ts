@@ -19,8 +19,8 @@ const SMS_VARIANT_ID = 130524;
 const PRODUCT_DAILY_FIRST = 457412;
 const PRODUCT_DAILY_SECOND = 453036;
 
-const CHARGE_AMOUNT_FIRST = 7;
-const CHARGE_AMOUNT_SECOND = 5;
+const CHARGE_AMOUNT_FIRST = 9;
+const CHARGE_AMOUNT_SECOND = 7;
 
 const VARIANT_ID_FIRST = 132985;
 const VARIANT_ID_SECOND = 130522;
@@ -349,8 +349,9 @@ async function setAwardSOAP(sessionID, msisdn, offerId, campaignId, matchId = ""
         })
         .then(async res => {
             let content = JSON.parse(convert.xml2json(res.data, { compact: true, spaces: 4 }));
-            // console.log("content", content["S:Envelope"]["S:Body"]["S:Fault"])
-            if (content["S:Envelope"]["S:Body"]["ns1:ServiceOrderManagementResponse"]) {
+            if (!content["S:Envelope"]) {
+                console.log("Envelope: ", content["soapenv:Envelope"]["soapenv:Body"]["soapenv:Fault"])
+            } else if(content["S:Envelope"]["S:Body"]["ns1:ServiceOrderManagementResponse"]) {
                 let result = content["S:Envelope"]["S:Body"]["ns1:ServiceOrderManagementResponse"];
                 let status = result["line"]["lineItem"]["businessInteraction"];
                 let rewardData = {
@@ -380,7 +381,7 @@ async function setAwardSOAP(sessionID, msisdn, offerId, campaignId, matchId = ""
             return res.data;
         })
         .catch(err => {
-            console.log("ERROR 29", err);
+            // console.log("ERROR 29", err);
             return err;
         });
 }
@@ -506,7 +507,7 @@ async function offerTransactionSOAP(sessionID, msisdn, offerId) {
 }
 
 export async function applyRewardManually(change) {
-    const sessionId = await sessionSOAP().catch(err =>
+    const sessionId = await sessionSOAP(VARIANT_ID_FIRST).catch(err =>
         console.log("ERROR 35", err)
     );
     let result;
@@ -560,3 +561,20 @@ async function tokenVerified(token) {
     Identity.initialize({ apikey: SECRET_API_KEY });
     return Identity.verifyToken(token)
 }
+
+// export async function testManuallyReqard(req, res) {
+//     const sessionId = await sessionSOAP(158963).catch(err =>
+//         console.log("ERROR 32", err)
+//     );
+
+//     await setAwardSOAP(sessionId, '5317828001', 501400, 1236).catch(err =>
+//         console.log("ERROR 20", err)
+//     );
+
+//     //  const sessionId = await sessionSOAP(variantId).catch(err =>
+//     //     console.log("ERROR 32", err)
+//     // );
+//     // await offerTransactionSOAP(sessionId, '5317828001', 501423)
+
+//     return res.status(200).send({ message: 'ok' })
+// }
