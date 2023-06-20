@@ -24,3 +24,134 @@ export async function replaceAbusiveName() {
             .catch(err => console.log("ERROR 2", err));
     }
 }
+
+// export async function getLast3MonthsPlayUser(req, res) {
+//     const db = await database();
+
+//     const pastMatchescollection = db.collection(`bucket_60742ed3f95e39002c4917ae`);
+
+//     // const userCollection = db.collection(`bucket_605c9480e9960e002c278191`);
+//     // const identityCollection = db.collection(`identity`);
+
+    
+//     // const usersObjectArr = Array.from(LAST_30, el => ObjectId(el))
+//     // const users = await userCollection.find({ _id: { $in: usersObjectArr } }).limit(75000).toArray().catch(console.error)
+
+//     // const identites = Array.from(users, el => ObjectId(el.identity));
+//     // const identitiesDatas = await identityCollection.find({ _id: { $in: identites } }).limit(75000).toArray().catch(console.error)
+
+//     // const msisdns = Array.from(identitiesDatas, el => el.attributes.msisdn)
+
+//     // console.log("RESULT_ARR", msisdns.length)
+   
+
+//     let dateFilter1 = {
+//         $gte: new Date("03-15-2023 21:00:0"),
+//         $lt: new Date("04-15-2023 21:00:0")
+//     };
+
+//     let dateFilter2 = {
+//         $gte: new Date("04-24-2023 21:00:0"),
+//         $lt: new Date("05-24-2023 21:00:0")
+//     };
+
+//     const users1 = [];
+//     const users2 = [];
+
+//     const matches1 = await pastMatchescollection.find({
+//         end_time: dateFilter1
+//     }).toArray().catch(console.error)
+
+//     const matches2 = await pastMatchescollection.find({
+//         end_time: dateFilter2
+//     }).toArray().catch(console.error)
+
+//     matches1.forEach(el => {
+//         users1.push(el.user1)
+//         if (el.duel_type == 0) {
+//             users1.push(el.user2)
+//         }
+//     })
+
+//     matches2.forEach(el => {
+//         users2.push(el.user1)
+//         if (el.duel_type == 0) {
+//             users2.push(el.user2)
+//         }
+//     })
+
+//     const uniqueUsers1 = [...new Set(users1)];
+//     const uniqueUsers2 = [...new Set(users2)];
+
+//     const resultArr = []
+//     uniqueUsers1.forEach(el => {
+//         if (!users2.includes(el)) {
+//             resultArr.push(el)
+//         }
+//     })
+
+//     console.log("users1", users1.length)
+//     console.log("users2", users2.length)
+//     console.log("uniqueUsers1", uniqueUsers1.length)
+//     console.log("uniqueUsers2", uniqueUsers2.length)
+//     console.log("resultArr", resultArr.length)
+
+
+//     return res.status(200).send({ message: resultArr })
+// }
+
+export async function getLast3MonthsPlayUser1(req, res) {
+    const db = await database();
+
+    const chargeCollection = db.collection(`bucket_61e03400833dac002d229730`);
+
+    let dateFilter1 = {
+        $gte: new Date("02-15-2023 21:00:0"),
+        $lt: new Date("04-15-2023 21:00:0")
+    };
+
+    let dateFilter2 = {
+        $gte: new Date("04-24-2023 21:00:0"),
+        $lt: new Date("05-24-2023 21:00:0")
+    };
+
+    const users1 = [];
+    const users2 = [];
+
+    const charge1 = await chargeCollection.find({
+        date: dateFilter1,
+        status: true
+    }).toArray().catch(console.error)
+
+    const charge2 = await chargeCollection.find({
+        date: dateFilter2,
+        status: true
+    }).toArray().catch(console.error)
+
+    charge1.forEach(el => {
+        users1.push(el.msisdn)
+    })
+
+    charge2.forEach(el => {
+        users2.push(el.msisdn)
+    })
+
+    const uniqueUsers1 = [...new Set(users1)];
+    const uniqueUsers2 = [...new Set(users2)];
+
+    const resultArr = []
+    uniqueUsers1.forEach(el => {
+        if (!users2.includes(el)) {
+            resultArr.push(el)
+        }
+    })
+
+    console.log("users1", users1.length)
+    console.log("users2", users2.length)
+    console.log("uniqueUsers1", uniqueUsers1.length)
+    console.log("uniqueUsers2", uniqueUsers2.length)
+    console.log("resultArr", resultArr.length)
+
+
+    return res.status(200).send({ message: resultArr })
+}

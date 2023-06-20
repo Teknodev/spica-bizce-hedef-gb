@@ -21,7 +21,7 @@ export async function login(req, res) {
     const users_collection = db.collection(`bucket_${USER_BUCKET_ID}`);
 
     const { token, type } = req.body;
-    
+
     // 1-check token is defined
     if (token) {
         // 2-send token to get user information from Turkcell
@@ -195,11 +195,24 @@ async function fastLogin(token) {
 }
 
 async function seamlessTokenValidate(token) {
+    // return {
+    //     resultStatus: {
+    //         resultCode: 0,
+    //         resultName: 'SUCCESS',
+    //         resultMessage: 'İşlem başarılıdır',
+    //         flowType: 'NONE',
+    //         detailResult: 'N/A'
+    //     },
+    //     msisdn: '5530129507',
+    //     email: null,
+    //     accountId: "5530129507"
+    // }
+
     let body = {
         serviceId: FASTLOGIN_SERVICE_ID,
         secretKey: "0c0b8b96-38cb-4791-a2a8-e8470bf5dd4b",
         // secretKey: "e8da3fc8-e876-4b5e-bbf3-e59ed441da2e",
-        loginToken: token
+        token: token
     };
     console.log("Seamless: ", body)
 

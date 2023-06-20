@@ -9,6 +9,13 @@ triggers:
     options:
       timezone: UTC
       frequency: 0 * * * *
+  getLast3MonthsPlayUser1:
+    options:
+      method: Get
+      path: /getLast3MonthsPlayUser1
+      preflight: true
+    type: http
+    active: true
 env:
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
   USER_BUCKET: "{USER_BUCKET}"

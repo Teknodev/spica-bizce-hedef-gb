@@ -8,7 +8,7 @@ triggers:
       collection: bucket_61e03400833dac002d229730
       type: INSERT
     type: database
-    active: true
+    active: false
 env:
   DRAW_LOGS_BUCKET: "{DRAW_LOGS_BUCKET}"
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"

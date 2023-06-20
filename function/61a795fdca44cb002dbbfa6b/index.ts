@@ -14,12 +14,12 @@ const TCELL_USERNAME = 400026758;
 const TCELL_PASSWORD = 400026758;
 
 const SMS_VARIANT_ID = 130524;
-// 7 TL charging bilgileri: CPCM offer id: 457412, Variant id: 132985
-// 5 TL charging bilgileri: CPCM offer id: 453036, Variant id: 130522
+// 16 TL charging bilgileri: CPCM offer id: 457412, Variant id: 132985
+// 7 TL charging bilgileri: CPCM offer id: 453036, Variant id: 130522
 const PRODUCT_DAILY_FIRST = 457412;
 const PRODUCT_DAILY_SECOND = 453036;
 
-const CHARGE_AMOUNT_FIRST = 9;
+const CHARGE_AMOUNT_FIRST = 16;
 const CHARGE_AMOUNT_SECOND = 7;
 
 const VARIANT_ID_FIRST = 132985;
