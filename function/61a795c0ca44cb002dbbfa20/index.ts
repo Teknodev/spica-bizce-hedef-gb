@@ -9,7 +9,7 @@ export async function register(req, res) {
     console.log("@observer::register");
     let { mobile_number, name, avatar_id } = req.body;
 
-    // mobile_number = '5354513344';
+    // mobile_number = '5317828001';
 
      await createIdentity(mobile_number, createPassword(mobile_number))
         .then(async dataIdentity => {
@@ -37,7 +37,7 @@ export async function register(req, res) {
 export async function login(req, res) {
     console.log("@observer::login");
     let { mobile_number } = req.body;
-    // mobile_number = '5354513344';
+    // mobile_number = '5317828001';
 
     await getIdentityToken(mobile_number, createPassword(mobile_number))
         .then(data => {
@@ -66,7 +66,7 @@ async function getIdentityToken(mobile_number, password) {
 // -identity operation
 async function createIdentity(mobile_number, password) {
     let msisdn = msisdnGenerate(10);
-    // msisdn = '5354513344';
+    // msisdn = '5317828001';
     Identity.initialize({ apikey: `${SECRET_API_KEY}` });
 
     return new Promise(async (resolve, reject) => {
@@ -112,7 +112,8 @@ async function addToUserBucket(identity_id, name, avatar_id) {
                 lose_count: 0,
                 total_award: 0,
                 weekly_award: 0,
-                available_play_count: 100
+                available_play_count: 0,
+                free_play: true
             })
             .then(data => {
                 resolve(data);

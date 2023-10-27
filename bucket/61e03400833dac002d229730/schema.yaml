@@ -50,6 +50,25 @@ properties:
     description: Description of the type input
     options:
       position: bottom
+  is_success:
+    type: boolean
+    title: is_success
+    description: Description of the is_success input
+    options:
+      position: bottom
+    default: false
+  marketing_request:
+    type: string
+    title: marketing_request
+    description: Description of the marketing_request input
+    options:
+      position: bottom
+  marketing_response:
+    type: string
+    title: marketing_response
+    description: Description of the marketing_response input
+    options:
+      position: bottom
 acl:
   write: |-
     auth.attributes.role == "admin" ||

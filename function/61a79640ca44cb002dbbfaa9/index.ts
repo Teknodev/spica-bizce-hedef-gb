@@ -36,7 +36,7 @@ export async function checkPastMatch() {
         ) {
             await alertCollection
                 .insertOne({
-                    title: "GNC Snake: WARNING!",
+                    title: "Turkcell App Snake: WARNING!",
                     message: "There have been no matches in 25 minutes!",
                     date: new Date()
                 })

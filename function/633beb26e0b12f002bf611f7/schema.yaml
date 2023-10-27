@@ -16,8 +16,37 @@ triggers:
       preflight: true
     type: http
     active: true
+  botInsert:
+    options:
+      method: Post
+      path: /botInsert
+      preflight: true
+    type: http
+    active: false
+  tesxxx:
+    options:
+      method: Get
+      path: /tesxxx
+      preflight: true
+    type: http
+    active: false
+  deleteBuggedBots:
+    options:
+      method: Get
+      path: /deleteBuggedBots
+      preflight: true
+    type: http
+    active: false
+  checkUserFreePlay:
+    options:
+      method: Post
+      path: /checkUserFreePlay
+      preflight: true
+    type: http
+    active: true
 env:
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
   USER_BUCKET: "{USER_BUCKET}"
+  PAST_MATCHES_BUCKET: "{PAST_MATCHES_BUCKET}"
 memoryLimit: 100
 order: 14

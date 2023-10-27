@@ -1,0 +1,24 @@
+_id: 653b7450dcded8002c15c526
+name: Leader Users
+language: javascript
+timeout: 60
+triggers:
+  setLeaderUsers:
+    options:
+      timezone: Turkey
+      frequency: 59 23 * * 0
+    type: schedule
+    active: true
+  getTopUsers:
+    options:
+      path: /getTopUsers
+      method: Get
+      preflight: true
+    type: http
+    active: true
+env:
+  SECRET_APIKEY: "{SECRET_APIKEY}"
+  USER_BUCKET: "{USER_BUCKET}"
+  LEADER_USERS_BUCKET: "{LEADER_USERS_BUCKET}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+memoryLimit: 100

@@ -404,7 +404,7 @@ export async function userDashboardCharges(req, res) {
 
                 charges = charges.map(data => {
                     let date = new Date(data.date);
-                    let amount = data.type == 'first' ? '9TL' : '7TL'
+                    let amount = '15TL' //data.type == 'first' ? '9TL' : '7TL'
                     date.setHours(date.getHours() + 3);
                     return {
                         _id: data._id,

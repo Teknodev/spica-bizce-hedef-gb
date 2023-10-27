@@ -63,6 +63,12 @@ properties:
     description: Description of the result input
     options:
       position: bottom
+  type:
+    type: string
+    title: type
+    description: Description of the type input
+    options:
+      position: bottom
 acl:
   write: true==true
   read: true==true

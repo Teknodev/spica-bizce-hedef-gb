@@ -34,6 +34,30 @@ properties:
     options:
       position: bottom
     default: 0
+  win_paid:
+    type: number
+    title: win_paid
+    description: Description of the win_paid input
+    options:
+      position: bottom
+  win_free:
+    type: number
+    title: win_free
+    description: Description of the win_free input
+    options:
+      position: bottom
+  lose_paid:
+    type: number
+    title: lose_paid
+    description: Description of the lose_paid input
+    options:
+      position: bottom
+  lose_free:
+    type: number
+    title: lose_free
+    description: Description of the lose_free input
+    options:
+      position: bottom
 acl:
   write: true==true
   read: true==true

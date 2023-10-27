@@ -158,6 +158,18 @@ properties:
     options:
       position: bottom
     default: false
+  marketing_request:
+    type: string
+    title: marketing_request
+    description: Description of the marketing_request input
+    options:
+      position: bottom
+  marketing_response:
+    type: string
+    title: marketing_response
+    description: Description of the marketing_response input
+    options:
+      position: bottom
 acl:
   write: true == true
   read: true == true

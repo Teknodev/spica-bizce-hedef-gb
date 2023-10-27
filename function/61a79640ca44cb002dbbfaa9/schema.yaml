@@ -9,7 +9,7 @@ triggers:
       timezone: Europe/Istanbul
       frequency: "*/5 * * * *"
     type: schedule
-    active: true
+    active: false
 env:
   ALERT_BUCKET_ID: "{ALERT_BUCKET_ID}"
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"

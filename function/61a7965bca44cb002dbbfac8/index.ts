@@ -60,29 +60,47 @@ export async function changeAvatar(req, res) {
 export async function setReadyMainServer(req, res) {
     const { userId, duelId, key } = req.body;
 
-    if (key == DUEl_OPERATION_KEY) {
-        if (!db) {
-            db = await database().catch(err => console.log("ERROR ", err));
-        }
-
-        changeServerAvailabilityToUser(userId, duelId, "ready");
-
-        return res.status(200).send({ message: "successful" });
-    } else {
+    if (key != DUEl_OPERATION_KEY) {
         return res.status(400).send({ message: "No access" });
     }
+
+    if (!db) {
+        db = await database().catch(err => console.log("ERROR ", err));
+    }
+
+    changeServerAvailabilityToUser(userId, duelId, "ready");
+
+    return res.status(200).send({ message: "successful" });
 }
 
 export async function playCountDecrease(req, res) {
     const { userId, duelId, key } = req.body;
-
-    if (key == DUEl_OPERATION_KEY) {
-        changeServerAvailabilityToUser(userId, duelId, "decrease");
-
-        return res.status(200).send({ message: "successful" });
-    } else {
+    if (key != DUEl_OPERATION_KEY) {
         return res.status(400).send({ message: "No access" });
     }
+
+    const userCollection = db.collection(`bucket_${USER_BUCKET_ID}`);
+    const user = await userCollection.findOne({ _id: ObjectId(userId) })
+
+    let setQuery = {
+        available_play_count: Math.max(user.available_play_count - 1, 0)
+    };
+    if (user.free_play) {
+        setQuery = { free_play: false }
+    }
+
+    await userCollection
+        .updateOne(
+            { _id: ObjectId(userId) },
+            {
+                $set: setQuery
+            }
+        )
+        .catch(err => console.log("ERROR 2 ", err));
+
+    changeServerAvailabilityToUser(userId, duelId, "decrease");
+
+    return res.status(200).send({ message: "successful" });
 }
 
 async function changeServerAvailabilityToUser(userId, duelId, type) {

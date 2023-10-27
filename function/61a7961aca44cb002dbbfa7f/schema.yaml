@@ -28,7 +28,7 @@ triggers:
       path: /executeReportMan
       preflight: true
     type: http
-    active: false
+    active: true
 env:
   PAST_MATCHES_BUCKET_ID: "{PAST_MATCHES_BUCKET_ID}"
   MATCH_REPORT_BUCKET_ID: "{MATCH_REPORT_BUCKET_ID}"

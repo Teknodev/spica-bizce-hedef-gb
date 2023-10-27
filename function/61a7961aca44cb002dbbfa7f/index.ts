@@ -168,19 +168,11 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
     const chargesCollection = db.collection(`bucket_${TRANSACTION_BUCKET}`);
     const chargeReportCollection = db.collection(`bucket_${CHARGE_REPORT_BUCKET_ID}`);
 
-    const PRODUCT_DAILY_FIRST = 'first';
-    const PRODUCT_DAILY_SECOND = 'second';
-
     const chargesSuccessfulFirst = await chargesCollection
-        .find({ date: { $gte: dateFrom, $lt: dateTo }, status: true, type: PRODUCT_DAILY_FIRST })
+        .find({ date: { $gte: dateFrom, $lt: dateTo }, status: true })
         .toArray()
         .catch(err => console.log("ERROR 41: ", err));
-    const chargesSuccessfulSecond = await chargesCollection
-        .find({ date: { $gte: dateFrom, $lt: dateTo }, status: true, type: PRODUCT_DAILY_SECOND })
-        .toArray()
-        .catch(err => console.log("ERROR 41: ", err));
-
-
+    
     const error1 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -190,8 +182,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 42: ", err));
-    const error1Chance = error1.filter(el => el.type == PRODUCT_DAILY_SECOND)
-
+    
     const error2 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -200,8 +191,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 43: ", err));
-    const error2Chance = error2.filter(el => el.type == PRODUCT_DAILY_SECOND)
-
+    
     const error3 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -210,8 +200,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 44: ", err));
-    const error3Chance = error3.filter(el => el.type == PRODUCT_DAILY_SECOND)
-
+    
     const error4 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -220,8 +209,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 45: ", err));
-    const error4Chance = error4.filter(el => el.type == PRODUCT_DAILY_SECOND)
-
+    
     const error5 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -231,19 +219,16 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 46: ", err));
-    const error5Chance = error5.filter(el => el.type == PRODUCT_DAILY_SECOND)
-
+    
     const error6 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
             status: false,
             user_text: "Rahat Hatlar bu servisten yararlanamazlar."
         })
-
         .toArray()
         .catch(err => console.log("ERROR 47: ", err));
-    const error6Chance = error6.filter(el => el.type == PRODUCT_DAILY_SECOND)
-
+    
     const error7 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -251,13 +236,9 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
             user_text:
                 "Sistemlerde oluşan hata sebebi ile işleminiz yapılamıyor. İşleminiz tekrar denenmek üzere kuyruğa atılmıştır."
         })
-
         .toArray()
         .catch(err => console.log("ERROR 48: ", err));
-    const error7Chance = error7.filter(el => el.type == PRODUCT_DAILY_SECOND)
-
-
-
+    
     let totalQuantityFirst = chargesSuccessfulFirst.length +
         error1.length +
         error2.length +
@@ -266,93 +247,68 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         error5.length +
         error6.length +
         error7.length;
-
-    let totalQuantitySecond = chargesSuccessfulSecond.length +
-        error1Chance.length +
-        error2Chance.length +
-        error3Chance.length +
-        error4Chance.length +
-        error5Chance.length +
-        error6Chance.length +
-        error7Chance.length;
-
+    
     const datas = [
         {
             date: new Date(reportDate),
             daily_qty: chargesSuccessfulFirst.length,
-            chance_daily_qty: chargesSuccessfulSecond.length,
             daily_ratio: chargesSuccessfulFirst.length ? Number(((chargesSuccessfulFirst.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
-            chance_daily_ratio: chargesSuccessfulSecond.length ? Number(((chargesSuccessfulSecond.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarılı",
             error: "-",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: Math.max((error1.length - error1Chance.length), 0),
-            chance_daily_qty: error1Chance.length,
+            daily_qty: Math.max((error1.length), 0),
             daily_ratio: error1.length ? Number(((error1.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
-            chance_daily_ratio: error1Chance.length ? Number(((error1Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             error: "Devam eden diğer işlemlerden dolayı GNC Oyun aboneliği gerçekleştirilememektedir.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: Math.max((error2.length - error2Chance.length), 0),
-            chance_daily_qty: error2Chance.length,
+            daily_qty: Math.max((error2.length), 0),
             daily_ratio: error2.length ? Number(((error2.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
-            chance_daily_ratio: error2Chance.length ? Number(((error2Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             error: "Abone kredisi(bakiyesi) yetersiz.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: Math.max((error3.length - error3Chance.length), 0),
-            chance_daily_qty: error3Chance.length,
+            daily_qty: Math.max((error3.length), 0),
             daily_ratio: error3.length ? Number(((error3.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
-            chance_daily_ratio: error3Chance.length ? Number(((error3Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             error: "Abone bulunamadi.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: Math.max((error4.length - error4Chance.length), 0),
-            chance_daily_qty: error4Chance.length,
+            daily_qty: Math.max((error4.length), 0),
             daily_ratio: error4.length ? Number(((error4.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
-            chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             error: "Abone kara listede islem yapilamaz.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: Math.max((error5.length - error4Chance.length), 0),
-            chance_daily_qty: error4Chance.length,
+            daily_qty: Math.max((error5.length), 0),
             daily_ratio: error5.length ? Number(((error5.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
-            chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             error: "Hattiniz Katma Degerli Servis aboneligine kapali oldugu icin GNC Oyun servisine abonelik talebiniz gerceklestirilememistir. Abonelik izninizi 532?yi arayarak actirabilirsiniz.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: Math.max((error6.length - error4Chance.length), 0),
-            chance_daily_qty: error4Chance.length,
+            daily_qty: Math.max((error6.length), 0),
             daily_ratio: error6.length ? Number(((error6.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
-            chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             error: "Rahat Hatlar bu servisten yararlanamazlar.",
             report_type: reportType
         },
         {
             date: new Date(reportDate),
-            daily_qty: Math.max((error7.length - error4Chance.length), 0),
-            chance_daily_qty: error4Chance.length,
+            daily_qty: Math.max((error7.length), 0),
             daily_ratio: error7.length ? Number(((error7.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
-            chance_daily_ratio: error4Chance.length ? Number(((error4Chance.length / totalQuantitySecond) * 100).toFixed(2)) : 0,
             status: "Başarısız",
             error: "Sistemlerde oluşan hata sebebi ile işleminiz yapılamıyor. İşleminiz tekrar denenmek üzere kuyruğa atılmıştır.",
             report_type: reportType
@@ -363,6 +319,9 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
 
     return true;
 }
+
+
+
 
 export async function userReport(reportType, dateFrom, dateTo) {
     dateFrom = new Date(dateFrom);
@@ -474,8 +433,8 @@ async function matchWinLoseCount(reportType, dateFrom, dateTo) {
         .find({
             end_time: { $gte: dateFrom, $lt: dateTo },
             $or: [
-                { winner: 1 },
-                { winner: 2, player_type: 0 }
+                { user1_is_free: false, winner: 1 },
+                { user2_is_free: false, winner: 2, player_type: 0 }
             ]
         })
         .count();
@@ -484,8 +443,28 @@ async function matchWinLoseCount(reportType, dateFrom, dateTo) {
         .find({
             end_time: { $gte: dateFrom, $lt: dateTo },
             $or: [
-                { winner: 2 },
-                { winner: 1, player_type: 0 }
+                { user1_is_free: false, winner: 2 },
+                { user2_is_free: false, winner: 1, player_type: 0 }
+            ]
+        })
+        .count();
+    //free play flow added
+    let freeWin = await pastMatchesCollection
+        .find({
+            end_time: { $gte: dateFrom, $lt: dateTo },
+            $or: [
+                { user1_is_free: true, winner: 1 },
+                { user2_is_free: true, winner: 2, player_type: 0 }
+            ]
+        })
+        .count();
+
+    let freeLose = await pastMatchesCollection
+        .find({
+            end_time: { $gte: dateFrom, $lt: dateTo },
+            $or: [
+                { user1_is_free: true, winner: 2 },
+                { user2_is_free: true, winner: 1, player_type: 0 }
             ]
         })
         .count();
@@ -493,9 +472,13 @@ async function matchWinLoseCount(reportType, dateFrom, dateTo) {
     await winLoseCollection
         .insertOne({
             date: new Date(reportDate),
-            win_total: paidWin,
-            lose_total: paidLose,
-            report_type: reportType
+            win_total: paidWin + freeWin,
+            lose_total: paidLose + freeLose,
+            report_type: reportType,
+            win_paid:paidWin,
+            win_free:freeWin,
+            lose_paid:paidLose,
+            lose_free:freeLose
         })
         .catch(err => console.log("ERROR 51", err));
 
@@ -510,10 +493,15 @@ export async function reportExportSend(title, reportType) {
             template: "report-mail",
             variables: `{"title": "${title}"}`,
             emails: [
-                "idriskaribov@gmail.com",
                 "serdar@polyhagency.com",
                 "caglar@polyhagency.com",
-                "murat.malci@turkcell.com.tr"
+                "asli.bayram@turkcell.com.tr",
+                "tarik.dervis@turkcell.com.tr",
+                "murat.malci@turkcell.com.tr",
+                "ozkan.hakan@turkcell.com.tr",
+                "Pinar.koca@turkcell.com.tr",
+                "ozangol@teknodev.biz",
+                
             ],
             report_type: reportType
         })
@@ -532,8 +520,8 @@ export async function retryReport(reportType, dateFrom, dateTo) {
 
     let gunluk_false = 0,
         gunluk_true = 0,
-        firsat_gunluk_false = 0,
-        firsat_gunluk_true = 0;
+        gunluk_free_false = 0,//changed (free flow added)
+        gunluk_free_true = 0;
 
     const manualRewards = await manualRewardCollection.find({
         created_at: {
@@ -551,8 +539,8 @@ export async function retryReport(reportType, dateFrom, dateTo) {
             else gunluk_false += 1
         } else {
             if (reward.process_completed)
-                firsat_gunluk_true += 1
-            else firsat_gunluk_false += 1
+                gunluk_free_true += 1
+            else gunluk_free_false += 1
         }
     })
 
@@ -560,8 +548,8 @@ export async function retryReport(reportType, dateFrom, dateTo) {
         .insertOne({
             gunluk_false: gunluk_false,
             gunluk_true: gunluk_true,
-            firsat_gunluk_false: firsat_gunluk_false,
-            firsat_gunluk_true: firsat_gunluk_true,
+            gunluk_free_false: gunluk_free_false,
+            gunluk_free_true: gunluk_free_true,
             date: new Date(reportDate),
             report_type: reportType
         })
@@ -614,10 +602,20 @@ export async function getFailedRewards(reportType, dateFrom, dateTo) {
 }
 
 export async function executeReportMan(req, res) {
-    // await reportExportSend("Haftalık Gün Bazlı Rapor", 11).catch(err =>
-    //     console.log("ERROR: 63", err)
-    // );
-    await reportExportSend("Haftalık Toplam Rapor", 1).catch(err => console.log("ERROR: 63", err));
+    let date = new Date().setDate(new Date().getDate() - 1)
+    let dateFrom = new Date(date).setHours(0, 0, 0);
+    let dateTo = new Date(date).setHours(23, 59, 59);
 
-    return true;
+    await userReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 4", err));
+    await playedMatchCount(0, dateFrom, dateTo).catch(err => console.log("ERROR: 49", err));
+    await matchReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 2", err));
+    await matchWinLoseCount(0, dateFrom, dateTo).catch(err => console.log("ERROR: 55", err));
+    await chargeReportExport(0, dateFrom, dateTo).catch(err => console.log("ERROR: 3", err));
+    await retryReport(0, dateFrom, dateTo).catch(err => console.log("ERROR: ", err));
+    await getFailedRewards(0, dateFrom, dateTo).catch(err => console.log("ERROR: ", err));
+
+    await reportExportSend("Günlük Rapor", 0).catch(err => console.log("ERROR: 5", err));
+
+
+    return res.status(200).send({message: 'ok'})
 }

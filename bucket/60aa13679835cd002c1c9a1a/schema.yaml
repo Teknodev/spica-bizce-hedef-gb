@@ -20,6 +20,7 @@ properties:
       position: bottom
     enum:
       - daily_1
+      - hourly_1
   created_at:
     type: date
     title: created_at

@@ -7,7 +7,7 @@ const SERVERS_INFO_BUCKET = process.env.SERVERS_INFO_BUCKET;
 const BOT_BUCKET_ID = process.env.BOT_BUCKET_ID;
 
 const MATCH_SERVERS = [
-    { title: 'snake-tcell-8f7ad', api_key: '406bus18l2yiufdq' },
+    { title: 'turkcellapp-snake-631f5', api_key: '406bus18l2yiufdq' }, //TITLE CHANGED
 ]
 
 let db;
@@ -20,7 +20,7 @@ export async function matchmaker() {
     const matchmaking_collection = db.collection(`bucket_${MATCHMAKING_BUCKET_ID}`);
     const users_collection = db.collection(`bucket_${USER_BUCKET_ID}`);
     const bots_collection = db.collection(`bucket_${BOT_BUCKET_ID}`);
-
+    
     let match_making_users = await matchmaking_collection
         .aggregate([
             {
@@ -55,11 +55,11 @@ export async function matchmaker() {
         .toArray()
         .catch(err => console.log("ERROR 1", err));
 
-
+    
     let { matched_with_user, matched_with_bots } = seperateMatchingsUsers([
         ...match_making_users
     ]);
-
+    
     // 1 - add mathced users to ->> duel ->> delete from ->> matchmaking bucket
     let duels_with_user_array = createDuelObjectsWithUser([...matched_with_user]);
     if (duels_with_user_array.length > 0) {
@@ -112,8 +112,8 @@ function createDuelObjectsWithUser(matchmaking_users) {
             user2_playing_duration: 0,
             user1_is_dead: false,
             user2_is_dead: false,
-            user1_is_free: true,
-            user2_is_free: true,
+            user1_is_free: matchmaking_user[0].user.free_play,
+            user2_is_free: matchmaking_user[1].user.free_play,
         });
     }
 
@@ -140,8 +140,8 @@ function createDuelObjectsWithBot(matchmaking_users, bot) {
             user2_playing_duration: 0,
             user1_is_dead: false,
             user2_is_dead: false,
-            user1_is_free: true,
-            user2_is_free: true
+            user1_is_free: matchmaking_user.user.free_play,
+            user2_is_free: false //true
         });
     }
 

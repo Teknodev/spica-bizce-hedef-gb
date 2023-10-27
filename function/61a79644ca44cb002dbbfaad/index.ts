@@ -330,8 +330,8 @@ async function matchGeneralReport(reportType, dateFilter) {
         let dayCounter = 0;
         let p2pFirstMatch = 0;
         let p2mFirstMatch = 0;
-        let p2pSecondMatch = 0;
-        let p2mSecondMatch = 0;
+        // let p2pSecondMatch = 0;
+        // let p2mSecondMatch = 0;
 
         matchData.forEach(data => {
             dayCounter += 1;
@@ -345,8 +345,8 @@ async function matchGeneralReport(reportType, dateFilter) {
             p2mPointAverage += Number(data.p2m_point_average || 0);
             p2pFirstMatch += data.p2p_first_match;
             p2mFirstMatch += data.p2m_first_match;
-            p2pSecondMatch += data.p2p_second_match;
-            p2mSecondMatch += data.p2m_second_match;
+            // p2pSecondMatch += data.p2p_second_match;
+            // p2mSecondMatch += data.p2m_second_match;
         });
         matchData = [
             {
@@ -360,8 +360,8 @@ async function matchGeneralReport(reportType, dateFilter) {
                 p2m_point_average: Number((p2mPointAverage / dayCounter).toFixed(1)),
                 p2p_first_match: p2pFirstMatch,
                 p2m_first_match: p2mFirstMatch,
-                p2p_second_match: p2pSecondMatch,
-                p2m_second_match: p2mSecondMatch
+                // p2p_second_match: p2pSecondMatch,
+                // p2m_second_match: p2mSecondMatch
             }
         ];
     }
@@ -378,13 +378,13 @@ async function matchGeneralReport(reportType, dateFilter) {
              <td style="width: 7.6%;">${data.p2p_duration_average}</td>
              <td style="width: 7.6%;">${data.p2p_point_average}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2p_first_match)}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2p_second_match)}</td>
+             
              <td style="width: 7.6%;">${numberWithDot(data.p2m_play)}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2m_play_points_earned)}</td>
              <td style="width: 7.6%;">${data.p2m_duration_average}</td>
              <td style="width: 7.6%;">${data.p2m_point_average}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2m_first_match)}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2m_second_match)}</td>
+             
             </tr>`;
         });
         html = `
@@ -397,14 +397,14 @@ async function matchGeneralReport(reportType, dateFilter) {
             <th style="width: 9%; text-align:left">P2P Kazanılan Puan</th>
             <th style="width: 9%; text-align:left">P2P Ortalama Oyun Süresi (saniye)</th>
             <th style="width: 9%; text-align:left">P2P Ortalama Puan</th>
-            <th style="width: 9%; text-align:left">P2P Gösterilen Gunluk (9 TL)</th>
-            <th style="width: 9%; text-align:left">P2P Gösterilen Fırsat Gunluk (7 TL)</th>
+            
+            
             <th style="width: 9%; text-align:left">P2M Oyun</th>
             <th style="width: 9%; text-align:left">P2M Kazanılan Puan</th>
             <th style="width: 9%; text-align:left">P2M Ortalama Oyun Süresi (saniye)</th>
             <th style="width: 9%; text-align:left">P2M Ortalama Puan</th>
-            <th style="width: 9%; text-align:left">P2M Gösterilen Gunluk (9 TL)</th>
-            <th style="width: 9%; text-align:left">P2M Gösterilen Fırsat Gunluk (7 TL)</th>
+            
+            
             </tr>
            ${tableBody}
             </tbody>
@@ -420,8 +420,8 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%; font-weight: bold;">Kazanılan Puan</td>
                 <td style="width: 14.2%; font-weight: bold;">Ortalama Oyun Süresi (saniye)</td>
                 <td style="width: 14.2%; font-weight: bold;">Ortalama Puan</td>
-                <td style="width: 14.2%; font-weight: bold;">Gösterilen Gunluk (9 TL)</td>
-                <td style="width: 14.2%; font-weight: bold;">Gösterilen Fırsat Gunluk (7 TL)</td>
+                
+                
             </tr>
              <tr>
                 <td style="width: 14.2%; font-weight: bold;">P2P</td>
@@ -430,7 +430,7 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%;">${matchData[0].p2p_duration_average}</td>
                 <td style="width: 14.2%;">${matchData[0].p2p_point_average}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_first_match)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_second_match)}</td>
+                
             </tr>
             <tr>
                 <td style="width: 14.2%; font-weight: bold;">P2M</td>
@@ -439,7 +439,7 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%;">${matchData[0].p2m_duration_average}</td>
                 <td style="width: 14.2%;">${matchData[0].p2m_point_average}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_first_match)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_second_match)}</td>
+                
             </tr>
            <tr>
                 <td style="width: 14.2%; font-weight: bold;">Toplam</td>
@@ -449,7 +449,7 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%;">-</td>
                 <td style="width: 14.2%;">-</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_first_match + matchData[0].p2m_first_match)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_second_match + matchData[0].p2m_second_match)}</td>
+                
             </tr>
             </tbody>
         </table>`;
@@ -567,7 +567,7 @@ async function chargeReport(reportType, dateFilter) {
                 res[value.error] = {
                     status: value.status,
                     daily_qty: 0,
-                    chance_daily_qty: 0,
+                    //chance_daily_qty: 0,
                     error: value.error
                 };
                 result.push(res[value.error]);
@@ -582,11 +582,11 @@ async function chargeReport(reportType, dateFilter) {
 
     let chargeBody = "";
     let totalDailyQty = 0;
-    let totalChanceDailyQty = 0;
+    //let totalChanceDailyQty = 0;
 
     chargeData.forEach((charge, index) => {
         totalDailyQty += charge.daily_qty;
-        totalChanceDailyQty += charge.chance_daily_qty;
+        //totalChanceDailyQty += charge.chance_daily_qty;
     })
 
     chargeData.forEach((charge, index) => {
@@ -597,14 +597,12 @@ async function chargeReport(reportType, dateFilter) {
         }
 
         let dailyRatio = defaultReportType == 1 ? charge.daily_qty == 0 ? 0 : ((charge.daily_qty / totalDailyQty) * 100).toFixed(2) : charge.daily_ratio;
-        let chanceDailyRatio = defaultReportType == 1 ? charge.chance_daily_qty == 0 ? 0 : ((charge.chance_daily_qty / totalChanceDailyQty) * 100).toFixed(2) : charge.chance_daily_ratio;
+        //let chanceDailyRatio = defaultReportType == 1 ? charge.chance_daily_qty == 0 ? 0 : ((charge.chance_daily_qty / totalChanceDailyQty) * 100).toFixed(2) : charge.chance_daily_ratio;
 
         chargeBody += `<tr>
                     <td style="width: 10%;">${new Date(date).toLocaleDateString()}</td>
                     <td style="width: 10%;">${numberWithDot(charge.daily_qty)}</td>
                     <td style="width: 10%;">${dailyRatio}</td>
-                    <td style="width: 10%;">${numberWithDot(charge.chance_daily_qty)}</td>
-                    <td style="width: 10%;">${chanceDailyRatio}</td>
                     <td style="width: 10%;">${charge.status}</td>
                     <td style="width: 40%;">${charge.error}</td>
                     </tr>
@@ -612,8 +610,6 @@ async function chargeReport(reportType, dateFilter) {
         (index + 1) % 8 == 0
             ? (chargeBody += `
         <tr>
-            <td style="width: 10%;">---</td>
-            <td style="width: 10%;">---</td>
             <td style="width: 10%;">---</td>
             <td style="width: 10%;">---</td>
             <td style="width: 10%;">---</td>
@@ -629,10 +625,8 @@ async function chargeReport(reportType, dateFilter) {
             <tbody>
             <tr>
             <th style="width: 10%; text-align:left">Tarih</th>
-            <th style="width: 10%; text-align:left">Gunluk (9 TL)</th>
+            <th style="width: 10%; text-align:left">Gunluk</th>
             <th style="width: 10%; text-align:left">Gunluk Oran</th>
-            <th style="width: 10%; text-align:left">Fırsat Gunluk (7 TL)</th>
-            <th style="width: 10%; text-align:left">Fırsat Oran</th>
             <th style="width: 10%; text-align:left">Sonu&ccedil;</th>
             <th style="width: 50%; text-align:left">Hata Detayı</th>
             </tr>
@@ -640,8 +634,6 @@ async function chargeReport(reportType, dateFilter) {
              <tr>
                 <th style="width: 10%; text-align:left">Toplam</th>
                 <th style="width: 10%; text-align:left">${numberWithDot(totalDailyQty)}</th>
-                <th style="width: 10%; text-align:left">-</th>
-                <th style="width: 10%; text-align:left">${numberWithDot(totalChanceDailyQty)}</th>
                 <th style="width: 10%; text-align:left">-</th>
                 <th style="width: 10%; text-align:left">-</th>
                 <th style="width: 40%; text-align:left">-</th>

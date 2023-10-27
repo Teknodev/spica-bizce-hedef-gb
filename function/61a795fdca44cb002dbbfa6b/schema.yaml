@@ -31,6 +31,12 @@ triggers:
       preflight: true
     type: http
     active: false
+  getWinner:
+    options:
+      collection: bucket_60742ed3f95e39002c4917ae
+      type: INSERT
+    type: database
+    active: true
 env:
   USER_BUCKET_ID: "{USER_BUCKET_ID}"
   SECRET_API_KEY: "{SECRET_API_KEY}"

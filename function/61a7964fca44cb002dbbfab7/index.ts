@@ -5,6 +5,8 @@ const MANUALLY_REWARD_BUCKET_ID = process.env.MANUALLY_REWARD_BUCKET_ID;
 const SECRET_API_KEY = process.env.SECRET_API_KEY;
 const BUGGED_REWARDS_BUCKET_ID = process.env.BUGGED_REWARDS_BUCKET_ID;
 
+const HOURLY_1GB_OFFER_ID = 451319;
+
 let db;
 
 export async function checkReward() {
@@ -53,15 +55,19 @@ async function retryTcellIssues() {
                 { match_id: reward.match_id }
             ]
         }).toArray();
-        if (retryCount.length < 24) {
+        if (retryCount.length < 24) {//free play added
+            let type = reward.offer_id == HOURLY_1GB_OFFER_ID ? 'hourly_1' : 'daily_1';
             logData.push({
                 msisdn: reward.msisdn.substring(2),
+                type,
+                reward_id: reward._id
             })
             insertReward(
                 reward.msisdn.substring(2),
-                "daily_1",
+                type,
                 reward._id
             );
+            
         }
     }
 

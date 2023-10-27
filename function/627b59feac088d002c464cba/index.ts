@@ -2,7 +2,7 @@ import { database, ObjectId } from "@spica-devkit/database";
 const fetch = require("node-fetch");
 
 const DUEL_BUCKET_ID = process.env.DUEL_BUCKET_ID;
-const MAIN_SERVER_URL = "https://snake-tcell-8f7ad.hq.spicaengine.com/api";
+const MAIN_SERVER_URL = "https://turkcellapp-snake-631f5.hq.spicaengine.com/api";
 const OPERATION_KEY = '6Ww7PajcsGH34PbE';
 
 
@@ -48,10 +48,10 @@ export async function checkFinishedDuels() {
                 end_time: new Date(),
                 user1_is_free: duel.user1_is_free,
                 user2_is_free: duel.user2_is_free,
-                user1_second_match: duel.user1_second_match,
-                user2_second_match: duel.user2_second_match,
-                user1_actions: duel.user1_actions,
-                user2_actions: duel.user2_actions,
+                user1_second_match: duel.user1_second_match ? duel.user1_second_match : false,
+                user2_second_match: duel.user2_second_match ? duel.user2_second_match : false,
+                user1_actions: duel.user1_actions ? duel.user1_actions : [],
+                user2_actions: duel.user2_actions ? duel.user2_actions : [],
                 duel_type: duel.duel_type,
                 user1_playing_duration: duel.user1_playing_duration,
                 user2_playing_duration: duel.user2_playing_duration,

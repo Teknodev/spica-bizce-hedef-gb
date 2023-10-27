@@ -1,0 +1,46 @@
+_id: 653b7517dcded8002c15c647
+title: Leader Users
+description: Describe your new bucket
+icon: account_circle
+primary: msisdn
+readOnly: false
+history: false
+properties:
+  msisdn:
+    type: string
+    title: msisdn
+    description: Description of the msisdn input
+    options:
+      position: bottom
+  point:
+    type: number
+    title: point
+    description: Description of the point input
+    options:
+      position: bottom
+  user:
+    type: relation
+    title: user
+    description: Description of the user input
+    options:
+      position: bottom
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+    primary: name
+  date_from:
+    type: date
+    title: date_from
+    description: Description of the date_from input
+    options:
+      position: bottom
+  date_to:
+    type: date
+    title: date_to
+    description: Description of the date_to input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 26

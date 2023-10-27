@@ -8,7 +8,7 @@ const PASSWORD_SALT = process.env.PASSWORD_SALT;
 const USER_POLICY = process.env.USER_POLICY;
 const SECRET_API_KEY = process.env.SECRET_API_KEY;
 
-const MAIN_SERVER_URL = "https://snake-tcell-8f7ad.hq.spicaengine.com/api";
+const MAIN_SERVER_URL = "https://turkcellapp-snake-631f5.hq.spicaengine.com/api"; //CHANGED
 const OPERATION_KEY = '6Ww7PajcsGH34PbE';
 
 

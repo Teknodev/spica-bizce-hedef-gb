@@ -9,7 +9,7 @@ triggers:
       timezone: Europe/Istanbul
       frequency: 0 0 1 * *
     type: schedule
-    active: true
+    active: false
   clearBotPoint:
     options:
       timezone: UTC
