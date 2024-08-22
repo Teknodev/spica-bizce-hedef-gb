@@ -28,27 +28,26 @@ export async function login(req, res) {
         // 2-send token to get user information from Turkcell
         // let fastlogin_response;
         // if (type == loginType.seamless) {
-            
-        //     fastlogin_response = await seamlessTokenValidate(token).catch(err => console.log("ERROR 1", err));
-            
+
+        let fastlogin_response = await seamlessTokenValidate(token).catch(err => console.log("ERROR 1", err));
+        // console.log("fastlogin_response: ",fastlogin_response);
         // } else {
-        let fastlogin_response = await fastLogin(token).catch(err => console.log("ERROR 1", err));
+        // let fastlogin_response = await fastLogin(token).catch(err => console.log("ERROR 1", err));
         // }
-        
+
         // let fastlogin_response = MOCK_RES;
         // 3-if response is error(node fetch send error as data)
         if (isResponseValid(fastlogin_response)) {
             let identifier = getIdentifier(fastlogin_response);
             let password = getPassword(fastlogin_response);
             let msisdn = fastlogin_response.msisdn;
-            let freePlaydata;
             // 4-get identity
             getIdentityToken(identifier, password)
                 .then(async data => {
                     // 4a-send response object back
                     let identity_token = data.token;
                     const decodedToken = jwt.decode(identity_token);
-
+                    // console.log("decoded",decodedToken)
                     const user = await users_collection
                         .findOne({ identity: String(decodedToken._id) })
                         .catch(err => console.log("ERROR 2", err));
@@ -65,10 +64,11 @@ export async function login(req, res) {
                     // });
 
                     const identity_collection = db.collection(`identity`);
+                    // console.time("Identity")
                     const user_identity = await identity_collection
                         .findOne({ "attributes.msisdn": msisdn })
                         .catch(err => console.log("ERROR 8", err));
-
+                    // console.timeEnd("Identity")
                     if (user_identity) {
                         await identity_collection
                             .updateOne(
@@ -89,8 +89,8 @@ export async function login(req, res) {
                         });
                     } else {
                         // 4-create an identity
-                        const response = await checkOtherGames(msisdn);//check free play
-                        
+                        // const response = await checkOtherGames(msisdn);//check free play
+
                         createIdentity(identifier, password, msisdn)
                             .then(async identity_data => {
                                 // 5-add this identity to user_bucket
@@ -108,7 +108,7 @@ export async function login(req, res) {
                                         weekly_award: 0,
                                         available_play_count: 0,
                                         bot: false,
-                                        free_play: response, //changed
+                                        free_play: true, 
                                         perm_accept: false
                                     })
                                     .catch(error => {
@@ -201,10 +201,10 @@ async function fastLogin(token) {
 async function seamlessTokenValidate(token) {
     let body = {
         serviceId: FASTLOGIN_SERVICE_ID,
-        secretKey: `${FASTLOGIN_SECRET_KEY}`, 
+        secretKey: `${FASTLOGIN_SECRET_KEY}`,
         token: token
     };
-    console.log("Seamless: ", body)
+    // console.log("Seamless: ", body)
 
     return await fetch("https://fastlogin.com.tr/fastlogin_app/secure/validateSeamlessLoginToken.json", {
         method: "post",
@@ -214,15 +214,15 @@ async function seamlessTokenValidate(token) {
         .then(res => res.json())
         .catch(err => console.log("ERROR 5", err));
 }
-export async function testSeamlessTokenValidate(req,res) {
+export async function testSeamlessTokenValidate(req, res) {
     try {
-        let token = "d50b8bb4-929c-4c5c-b048-dac7534a66e2";// change token to test
+        let token = "926077f0-136d-4fca-9d06-aa102cf9f4c8";// change token to test
         let fastlogin_response = await seamlessTokenValidate(token);
         console.log("fastlogin_response:", fastlogin_response);
     } catch (error) {
         console.error("Error while mocking the token:", error);
     }
-    return res.status(200).send({message: 'ok'});
+    return res.status(200).send({ message: 'ok' });
 }
 
 // get identity token(login to spica) with identifier and password
@@ -264,14 +264,14 @@ function createIdentity(identifier, password, msisdn) {
 // helper functions
 function isResponseValid(response) {
     let is_valid = false;
-    if (response.msisdn != null && response.accountId != null) {
+    if (response.msisdn != null) { //&& response.accountId != null old flow
         is_valid = true;
     }
     return is_valid;
 }
 
 function getIdentifier(response) {
-    let identifier = response.accountId;
+    let identifier = response.msisdn; //response.accountId
 
     return identifier;
     // return "abcde";
@@ -285,26 +285,26 @@ function getPassword(response) {
 }
 
 export async function getMyIp(req, res) {
-    console.log("TEST")
-    // const test = await fetch("https://api.ipify.org?format=json", {
-    //     method: "get"
-    // })
-    //     .then(res => res.json())
-    //     .catch(err => console.log("ERROR 5", err));
 
-    // console.log("test", test)
+    const test = await fetch("https://api.ipify.org?format=json", {
+        method: "get"
+    })
+        .then(res => res.json())
+        .catch(err => console.log("ERROR 5", err));
+
+    console.log("test", test)
 
     return res.status(200).send({ message: 'ok' })
 }
 
-async function checkOtherGames(msisdn){
+async function checkOtherGames(msisdn) {
     try {
         const response = await axios.post(` https://tcell-admin-3c220.hq.spicaengine.com/api/fn-execute/checkFreePlay `, {
             msisdn
         }, { headers: { 'Content-Type': 'application/json' } });
-        
-        return response.data; 
-        
+
+        return response.data;
+
     } catch (error) {
         console.error('Error 100:', error);
     }

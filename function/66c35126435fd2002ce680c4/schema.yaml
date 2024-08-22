@@ -1,0 +1,14 @@
+_id: 66c35126435fd2002ce680c4
+name: Api
+language: javascript
+timeout: 64.1
+triggers:
+  default:
+    type: http
+    active: true
+    options:
+      method: Get
+      path: /
+      preflight: true
+env: {}
+memoryLimit: 100

@@ -24,16 +24,15 @@ triggers:
       preflight: true
     type: http
     active: true
-  testManuallyReqard:
-    options:
-      method: Get
-      path: /testManuallyReqard
-      preflight: true
-    type: http
-    active: false
   getWinner:
     options:
       collection: bucket_60742ed3f95e39002c4917ae
+      type: INSERT
+    type: database
+    active: true
+  singlePlayMatchReward:
+    options:
+      collection: bucket_66bc582f4c7291002c304d74
       type: INSERT
     type: database
     active: true

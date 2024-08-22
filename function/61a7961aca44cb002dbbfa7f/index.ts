@@ -172,17 +172,17 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         .find({ date: { $gte: dateFrom, $lt: dateTo }, status: true })
         .toArray()
         .catch(err => console.log("ERROR 41: ", err));
-    
+
     const error1 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
             status: false,
             user_text:
-                "Devam eden diğer işlemlerden dolayı GNC Oyun aboneliği gerçekleştirilememektedir."
+                "Devam eden diğer işlemlerden dolayı Oyun aboneliği gerçekleştirilememektedir."
         })
         .toArray()
         .catch(err => console.log("ERROR 42: ", err));
-    
+
     const error2 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -191,7 +191,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 43: ", err));
-    
+
     const error3 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -200,7 +200,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 44: ", err));
-    
+
     const error4 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -209,17 +209,17 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 45: ", err));
-    
+
     const error5 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
             status: false,
             user_text:
-                "Hattiniz Katma Degerli Servis aboneligine kapali oldugu icin GNC Oyun servisine abonelik talebiniz gerceklestirilememistir. Abonelik izninizi 532?yi arayarak actirabilirsiniz."
+                "Hattiniz Katma Degerli Servis aboneligine kapali oldugu icin Oyun servisine abonelik talebiniz gerceklestirilememistir. Abonelik izninizi 532?yi arayarak actirabilirsiniz."
         })
         .toArray()
         .catch(err => console.log("ERROR 46: ", err));
-    
+
     const error6 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -228,7 +228,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 47: ", err));
-    
+
     const error7 = await chargesCollection
         .find({
             date: { $gte: dateFrom, $lt: dateTo },
@@ -238,7 +238,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         })
         .toArray()
         .catch(err => console.log("ERROR 48: ", err));
-    
+
     let totalQuantityFirst = chargesSuccessfulFirst.length +
         error1.length +
         error2.length +
@@ -247,7 +247,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
         error5.length +
         error6.length +
         error7.length;
-    
+
     const datas = [
         {
             date: new Date(reportDate),
@@ -262,7 +262,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
             daily_qty: Math.max((error1.length), 0),
             daily_ratio: error1.length ? Number(((error1.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
             status: "Başarısız",
-            error: "Devam eden diğer işlemlerden dolayı GNC Oyun aboneliği gerçekleştirilememektedir.",
+            error: "Devam eden diğer işlemlerden dolayı Oyun aboneliği gerçekleştirilememektedir.",
             report_type: reportType
         },
         {
@@ -294,7 +294,7 @@ export async function chargeReportExport(reportType, dateFrom, dateTo) {
             daily_qty: Math.max((error5.length), 0),
             daily_ratio: error5.length ? Number(((error5.length / totalQuantityFirst) * 100).toFixed(2)) : 0,
             status: "Başarısız",
-            error: "Hattiniz Katma Degerli Servis aboneligine kapali oldugu icin GNC Oyun servisine abonelik talebiniz gerceklestirilememistir. Abonelik izninizi 532?yi arayarak actirabilirsiniz.",
+            error: "Hattiniz Katma Degerli Servis aboneligine kapali oldugu icin Oyun servisine abonelik talebiniz gerceklestirilememistir. Abonelik izninizi 532?yi arayarak actirabilirsiniz.",
             report_type: reportType
         },
         {
@@ -475,10 +475,10 @@ async function matchWinLoseCount(reportType, dateFrom, dateTo) {
             win_total: paidWin + freeWin,
             lose_total: paidLose + freeLose,
             report_type: reportType,
-            win_paid:paidWin,
-            win_free:freeWin,
-            lose_paid:paidLose,
-            lose_free:freeLose
+            win_paid: paidWin,
+            win_free: freeWin,
+            lose_paid: paidLose,
+            lose_free: freeLose
         })
         .catch(err => console.log("ERROR 51", err));
 
@@ -493,6 +493,7 @@ export async function reportExportSend(title, reportType) {
             template: "report-mail",
             variables: `{"title": "${title}"}`,
             emails: [
+                "emre.akatin@turkcell.com.tr",
                 "serdar@polyhagency.com",
                 "caglar@polyhagency.com",
                 "asli.bayram@turkcell.com.tr",
@@ -501,7 +502,9 @@ export async function reportExportSend(title, reportType) {
                 "ozkan.hakan@turkcell.com.tr",
                 "Pinar.koca@turkcell.com.tr",
                 "ozangol@teknodev.biz",
-                
+                "serkan@polyhagency.com",
+                "batuhanevirgen@teknodev.biz"
+
             ],
             report_type: reportType
         })
@@ -617,5 +620,28 @@ export async function executeReportMan(req, res) {
     await reportExportSend("Günlük Rapor", 0).catch(err => console.log("ERROR: 5", err));
 
 
-    return res.status(200).send({message: 'ok'})
+    return res.status(200).send({ message: 'ok' })
+}
+
+
+export async function executeReportWeeklyMan(req, res) {
+
+    await reportExportSend("Haftalık Toplam Rapor", 1).catch(err => console.log("ERROR: 63", err));
+    await reportExportSend("Haftalık Gün Bazlı Rapor", 11).catch(err =>
+        console.log("ERROR: 63", err)
+    );
+
+    return res.status(200).send({ message: 'ok' });
+}
+
+export async function executeReportMonthlyMan(req, res) {
+
+    await reportExportSend("Aylık Gün Bazlı Rapor", 22).catch(err =>
+        console.log("ERROR: 163", err)
+    );
+    await reportExportSend("Aylık Toplam Rapor", 2).catch(err =>
+        console.log("ERROR: 163", err)
+    );
+
+    return res.status(200).send({ message: 'ok' });
 }

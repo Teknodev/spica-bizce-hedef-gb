@@ -1,0 +1,22 @@
+_id: 66bc5b114c7291002c308182
+name: Server Check Finish Duels(Single Play)
+language: javascript
+timeout: 8.2
+triggers:
+  default:
+    type: http
+    active: true
+    options:
+      method: Get
+      path: /
+      preflight: true
+  singlePlaycheckFinishedDuels:
+    options:
+      timezone: UTC
+      frequency: "*/10 * * * * *"
+    type: schedule
+    active: true
+env:
+  SINGLE_DUEL_BUCKET: "{SINGLE_DUEL_BUCKET}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+memoryLimit: 100

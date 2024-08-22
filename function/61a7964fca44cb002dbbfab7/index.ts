@@ -77,6 +77,8 @@ async function retryTcellIssues() {
 }
 
 async function insertReward(msisdn, rewardType, retry_id = "") {
+    console.log("insertReward: ",msisdn, rewardType, retry_id);
+    return;
     Bucket.initialize({ apikey: SECRET_API_KEY });
 
     await Bucket.data

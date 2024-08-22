@@ -112,7 +112,7 @@ async function addToUserBucket(identity_id, name, avatar_id) {
                 lose_count: 0,
                 total_award: 0,
                 weekly_award: 0,
-                available_play_count: 0,
+                available_play_count: 50,
                 free_play: true
             })
             .then(data => {

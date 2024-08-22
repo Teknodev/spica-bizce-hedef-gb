@@ -76,6 +76,7 @@ properties:
     description: Description of the created_at input
     options:
       position: bottom
+      index: true
     default: :created_at
   total_award:
     type: number
@@ -119,10 +120,40 @@ properties:
     options:
       position: bottom
     default: false
+  op_note:
+    type: array
+    title: op_note
+    description: Description of the op_note input
+    options:
+      position: bottom
+    items:
+      title: Title of the items
+      type: object
+      properties:
+        sender:
+          type: string
+          title: sender
+          description: Description of the sender input
+          options:
+            position: bottom
+        note:
+          type: textarea
+          title: note
+          description: Description of the note input
+          options:
+            position: bottom
+        date:
+          type: date
+          title: date
+          description: Description of the date input
+          options:
+            position: bottom
+          default: :created_at
 acl:
-  write: |-
+  write: >-
     auth.attributes.role == "admin" ||
-    auth.key == "406bus18l2yiufdq"
+
+    auth.key == "406bus18l2yiufdq" || auth.key == "e5wl18kmw287kr" || auth.key == "259pcb18lpwrw0wu"
   read: true==true
 required: []
-order: 18
+order: 22

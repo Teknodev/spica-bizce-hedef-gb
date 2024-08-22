@@ -1,5 +1,5 @@
 _id: 619608dab1a304002e9fc4f4
-title: Leader Users
+title: Leader Users _Depricated_
 description: Describe your new bucket
 icon: view_stream
 primary: name
@@ -36,4 +36,4 @@ properties:
 acl:
   write: true==true
   read: true==true
-order: 23
+order: 27

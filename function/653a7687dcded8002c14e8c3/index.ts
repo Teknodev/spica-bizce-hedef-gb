@@ -7,11 +7,11 @@ const SECRET_API_KEY = process.env.SECRET_API_KEY;
 const PAST_MATCHES_BUCKET = process.env.PAST_MATCHES_BUCKET;
 const CHARGE_LOGS_BUCKET = process.env.CHARGE_LOGS_BUCKET;
 
-const CHARGE_AMOUNT = "15";
+const CHARGE_AMOUNT = "25";
 
 
 export async function onInsertedMatch(changed) {
-    
+    console.log("PastMatch!")
     Bucket.initialize({ apikey: `${SECRET_API_KEY}` });
     const document = changed.document;
     const usersIds = [document.user1]
@@ -25,15 +25,15 @@ export async function onInsertedMatch(changed) {
     let isSuccess = true;
     let response = '';
     let bodyData = '';
-    for (const [index, userData] of usersData.entries()) {
+    for (const userData of usersData.entries()) {
         bodyData = {
             "submitTime": Date.now(),
             "msisdn": userData.msisdn,
             "action": "played",
             "chargedAmount": "",
             "chargedProduct": "",
-			"game":"retro yilan",
-			"channel":"hediye-havuzu"
+            "game": "zipzip",
+            "channel": "hediye-havuzu"
         }
         response = await sendMarketingServiceData(bodyData);
 
@@ -41,15 +41,114 @@ export async function onInsertedMatch(changed) {
             isSuccess = false;
         }
     }
-    
+
     await Bucket.data.patch(PAST_MATCHES_BUCKET, document._id, { is_success: isSuccess, marketing_response: JSON.stringify(response), marketing_request: JSON.stringify(bodyData) }).catch((e) => { console.log('PAST_MATCH'); console.log(e) })
+}
+export async function kafkaMatchesDataSender(req, res) {
+    try {
+
+        const db = await database().catch(console.error);
+        Bucket.initialize({ apikey: `${SECRET_API_KEY}` });
+        const matchesCollection = db.collection(`bucket_${PAST_MATCHES_BUCKET}`);
+        const currentTime = new Date();
+        currentTime.setHours(currentTime.getHours());
+        const dateFilter = {
+            $gte: new Date(currentTime.getTime() - 5 * 60 * 1000),
+            $lte: new Date(currentTime)
+        }
+        const pastMatches = await matchesCollection.find({
+            end_time: dateFilter
+        }).toArray();
+
+        for (const data of pastMatches) {
+            if (data.user1_is_free || (data.player_type === 0 && data.user2_is_free)) {
+                continue;
+            } else {
+                const usersIds = [data.user1, ...(data.player_type === 0 ? [data.user2] : [])];
+                const usersData = await getMsisdnsByUsersIds(usersIds);
+
+                for (const userData of usersData) {
+                    const bodyData = {
+                        "submitTime": Date.now(),
+                        "msisdn": userData.msisdn,
+                        "action": "played",
+                        "chargedAmount": "",
+                        "chargedProduct": "",
+                        "game": "ZıpZıp",
+                        "channel": "hediye-havuzu"
+                    };
+                    const response = await sendMarketingServiceData(bodyData);
+                    const isSuccess = !!(response && response.body === 'Success');
+
+                    await Bucket.data.patch(PAST_MATCHES_BUCKET, data._id, {
+                        is_success: isSuccess,
+                        marketing_response: JSON.stringify(response),
+                        marketing_request: JSON.stringify(bodyData)
+                    }).catch((e) => {
+                        console.log('PAST_MATCH');
+                        console.log(e);
+                    });
+                }
+            }
+        }
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Internal Server Error');
+    }
+}
+export async function kafkaChargesDataSender(req, res) {
+    try {
+
+        const db = await database().catch(console.error);
+        Bucket.initialize({ apikey: `${SECRET_API_KEY}` });
+        const chargesCollection = db.collection(`bucket_${CHARGE_LOGS_BUCKET}`);
+        const currentTime = new Date();
+        currentTime.setHours(currentTime.getHours());
+        const dateFilter = {
+            $gte: new Date(currentTime.getTime() - 5 * 60 * 1000),
+            $lte: new Date(currentTime)
+        }
+        const pastCharges = await chargesCollection.find({
+            date: dateFilter,
+            status: true
+        }).toArray();
+
+        for (const data of pastCharges) {
+            const bodyData = {
+                "submitTime": Date.now(),
+                "msisdn": data.msisdn.substring(2),
+                "action": "charged",
+                "chargedAmount": CHARGE_AMOUNT,
+                "chargedProduct": "",
+                "game": "ZıpZıp",
+                "channel": "hediye-havuzu"
+            };
+            const response = await sendMarketingServiceData(bodyData);
+            const isSuccess = !!(response && response.body === 'Success');
+
+            await Bucket.data.patch(CHARGE_LOGS_BUCKET, data._id, {
+                is_success: isSuccess,
+                marketing_response: JSON.stringify(response),
+                marketing_request: JSON.stringify(bodyData)
+            }).catch((e) => {
+                console.log('PAST_MATCH');
+                console.log(e);
+            });
+
+        }
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Internal Server Error');
+    }
 }
 
 export async function onInsertedCharge(changed) {
+
     Bucket.initialize({ apikey: `${SECRET_API_KEY}` });
     const document = changed.document;
-    
-
+    console.log("document: ", document._id);
     if (!document.status) {
         return;
     }
@@ -61,12 +160,12 @@ export async function onInsertedCharge(changed) {
         "action": "charged",
         "chargedAmount": CHARGE_AMOUNT,
         "chargedProduct": "",
-		"game":"retro yilan",
-		"channel":"hediye-havuzu"
+        "game": "zipzip",
+        "channel": "hediye-havuzu"
     }
 
     const response = await sendMarketingServiceData(bodyData);
-    
+
     if (!response || response.body != 'Success') {
         isSuccess = false;
     }

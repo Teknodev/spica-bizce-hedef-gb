@@ -1,0 +1,25 @@
+_id: 65db9fa58a0920002cce406d
+title: Unique Users Msisdn Monthly
+description: Describe your new bucket
+icon: view_stream
+primary: msisdn
+readOnly: false
+history: false
+properties:
+  msisdn:
+    type: string
+    title: msisdn
+    description: Description of the msisdn input
+    options:
+      position: bottom
+      index: true
+  count:
+    type: number
+    title: count
+    description: Description of the count input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 19

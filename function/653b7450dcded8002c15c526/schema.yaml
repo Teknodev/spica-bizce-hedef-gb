@@ -6,19 +6,20 @@ triggers:
   setLeaderUsers:
     options:
       timezone: Turkey
-      frequency: 59 23 * * 0
+      frequency: 59 23 * * *
     type: schedule
-    active: true
+    active: false
   getTopUsers:
     options:
       path: /getTopUsers
       method: Get
       preflight: true
     type: http
-    active: true
+    active: false
 env:
   SECRET_APIKEY: "{SECRET_APIKEY}"
   USER_BUCKET: "{USER_BUCKET}"
   LEADER_USERS_BUCKET: "{LEADER_USERS_BUCKET}"
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  PAST_MATCHES_BUCKET: "{PAST_MATCHES_BUCKET}"
 memoryLimit: 100

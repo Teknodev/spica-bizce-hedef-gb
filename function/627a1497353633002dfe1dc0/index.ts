@@ -7,8 +7,9 @@ const CONFIGURATION_BUCKET_ID = process.env.CONFIGURATION_BUCKET_ID;
 const PASSWORD_SALT = process.env.PASSWORD_SALT;
 const USER_POLICY = process.env.USER_POLICY;
 const SECRET_API_KEY = process.env.SECRET_API_KEY;
+const SINGLEPLAY_DUEL_BUCKET = process.env.SINGLEPLAY_DUEL_BUCKET;
 
-const MAIN_SERVER_URL = "https://turkcellapp-snake-631f5.hq.spicaengine.com/api"; //CHANGED
+const MAIN_SERVER_URL = "https://turkcell-doodle-jump-3a662.hq.spicaengine.com/api"; //CHANGED
 const OPERATION_KEY = '6Ww7PajcsGH34PbE';
 
 
@@ -33,6 +34,18 @@ export async function checkAvailability(req, res) {
         .find().count().catch(err => console.log("ERROR ", err))
 
     availableCount = Math.max(duelCapacity.value - duelCount, 0)
+
+    // if (users[0] == '66b5ef5d4c7291002cfd092a') {
+    //     console.log("new flow successfull");
+    //     const duel_id = await createDuelNew(data);
+    //     let newToken = await createIdentity(users[0], duel_id);
+    //     tokens.push(newToken)
+    //     return res.status(200).send({
+    //         message: "Server is available",
+    //         tokens: tokens,
+    //         duel_id: duel_id
+    //     });
+    // }
 
     if ((users.length == 2 && availableCount < 2) || (users.length == 1 && availableCount < 1)) {
         return res.status(200).send({
@@ -65,7 +78,30 @@ export async function checkAvailability(req, res) {
         });
     }
 }
+export async function newCheckAvailability(req, res) {
+    const { data, users } = req.body;
+    console.time("newCheckAvailability")
+    if (!db) {
+        db = await database().catch(err => console.log("ERROR 2", err));
+    }
 
+    const tokens = [];
+
+    // console.log("new flow successfull", users);
+
+    const duel_id = await createDuelNew(data);
+    let newToken = await createIdentity(users[0], duel_id);
+    // console.log("newToken", newToken)
+    tokens.push(newToken)
+    console.timeEnd("newCheckAvailability")
+
+    return res.status(200).send({
+        message: "Server is available",
+        tokens: tokens,
+        duel_id: duel_id
+    });
+
+}
 async function createIdentity(user_id, duel_id) {
     Identity.initialize({ apikey: `${SECRET_API_KEY}` });
     let msisdn = `1111${msisdnGenerate(6)}`;
@@ -92,6 +128,22 @@ async function createDuel(data) {
     const duelData = await db
         .collection(`bucket_${DUEL_BUCKET_ID}`)
         .insertOne(data).catch(err => console.log("ERROR ", err))
+
+    return duelData.ops[0]._id
+}
+
+async function createDuelNew(data) {
+    if (!db) {
+        db = await database().catch(err => console.log("ERROR 2", err));
+    }
+
+    data['created_at'] = new Date(data['created_at']);
+
+    const duelData = await db
+        .collection(`bucket_${SINGLEPLAY_DUEL_BUCKET}`)
+        .insertOne(data).catch(err => console.log("ERROR ", err))
+
+    console.log("duel data: ", duelData.ops[0]);
 
     return duelData.ops[0]._id
 }

@@ -8,12 +8,24 @@ triggers:
       collection: bucket_60742ed3f95e39002c4917ae
       type: INSERT
     type: database
-    active: true
+    active: false
   onInsertedCharge:
     options:
       collection: bucket_61e03400833dac002d229730
       type: INSERT
     type: database
+    active: false
+  kafkaMatchesDataSender:
+    options:
+      timezone: UTC
+      frequency: "*/5 * * * *"
+    type: schedule
+    active: true
+  kafkaChargesDataSender:
+    options:
+      timezone: UTC
+      frequency: "*/5 * * * *"
+    type: schedule
     active: true
 env:
   USER_BUCKET: "{USER_BUCKET}"

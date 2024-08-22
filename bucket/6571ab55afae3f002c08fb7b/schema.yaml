@@ -1,0 +1,86 @@
+_id: 6571ab55afae3f002c08fb7b
+title: Contact Message
+description: Describe your new bucket
+icon: view_stream
+primary: name
+readOnly: false
+history: false
+properties:
+  name:
+    type: string
+    title: name
+    description: Description of the name input
+    options:
+      position: bottom
+  user:
+    type: relation
+    title: user
+    description: Description of the user input
+    options:
+      position: bottom
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+    primary: name
+  msisdn:
+    type: string
+    title: msisdn
+    description: Description of the msisdn input
+    options:
+      position: bottom
+  messages:
+    type: array
+    title: messages
+    description: Description of the messages input
+    options:
+      position: bottom
+    items:
+      title: Title of the items
+      type: object
+      properties:
+        key:
+          type: string
+          title: key
+          description: Description of the key input
+          options:
+            position: bottom
+        value:
+          type: string
+          title: value
+          description: Description of the value input
+          options:
+            position: bottom
+  readed:
+    type: boolean
+    title: readed
+    description: Description of the readed input
+    options:
+      position: bottom
+    default: false
+  fixed:
+    type: boolean
+    title: fixed
+    description: Description of the fixed input
+    options:
+      position: bottom
+      index: true
+    default: false
+  created_at:
+    type: date
+    title: created_at
+    description: Description of the created_at input
+    options:
+      position: bottom
+    default: :created_at
+  take_hold:
+    type: boolean
+    title: take_hold
+    description: Description of the take_hold input
+    options:
+      position: bottom
+      index: true
+    default: false
+acl:
+  write: true==true
+  read: true==true
+order: 31

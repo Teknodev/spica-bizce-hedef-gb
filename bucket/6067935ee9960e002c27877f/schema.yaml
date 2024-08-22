@@ -28,4 +28,4 @@ acl:
     document.key != "dashboard_key"
 required:
   - key
-order: 17
+order: 21

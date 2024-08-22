@@ -3,12 +3,12 @@ name: Past Matches Operations
 language: javascript
 timeout: 53.7
 triggers:
-  insertPastMatchFromServer:
+  insertPastMatchFromServerMultiplayer:
     type: http
     active: true
     options:
       method: Post
-      path: /insertPastMatchFromServer
+      path: /insertPastMatchFromServerMultiplayer
       preflight: true
   insertDeletedMatch:
     options:
@@ -17,10 +17,10 @@ triggers:
       preflight: true
     type: http
     active: true
-  removeServerInfoExternal:
+  removeServerInfoExternalMultiplayer:
     options:
       method: Post
-      path: /removeServerInfoExternal
+      path: /removeServerInfoExternalMultiplayer
       preflight: true
     type: http
     active: true

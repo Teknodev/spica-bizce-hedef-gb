@@ -7,7 +7,7 @@ triggers:
   clearUserPoint:
     options:
       timezone: Europe/Istanbul
-      frequency: 0 0 1 * *
+      frequency: 0 0 * * 1
     type: schedule
     active: false
   clearBotPoint:

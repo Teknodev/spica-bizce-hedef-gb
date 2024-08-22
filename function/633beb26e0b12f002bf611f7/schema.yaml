@@ -1,7 +1,7 @@
 _id: 633beb26e0b12f002bf611f7
 name: Helper
 language: javascript
-timeout: 60
+timeout: 56
 triggers:
   replaceAbusiveName:
     type: schedule
@@ -9,27 +9,6 @@ triggers:
     options:
       timezone: UTC
       frequency: 0 * * * *
-  getLast3MonthsPlayUser1:
-    options:
-      method: Get
-      path: /getLast3MonthsPlayUser1
-      preflight: true
-    type: http
-    active: true
-  botInsert:
-    options:
-      method: Post
-      path: /botInsert
-      preflight: true
-    type: http
-    active: false
-  tesxxx:
-    options:
-      method: Get
-      path: /tesxxx
-      preflight: true
-    type: http
-    active: false
   deleteBuggedBots:
     options:
       method: Get
@@ -43,10 +22,105 @@ triggers:
       path: /checkUserFreePlay
       preflight: true
     type: http
+    active: false
+  botInsertToUser:
+    options:
+      method: Post
+      path: /botInsertToUser
+      preflight: true
+    type: http
+    active: false
+  getGameLeagueUsers:
+    options:
+      method: Get
+      path: /getGameLeagueUsers
+      preflight: true
+    type: http
+    active: false
+  getGameLeagueSendedData:
+    options:
+      method: Get
+      path: /getGameLeagueSendedData
+      preflight: true
+    type: http
+    active: false
+  chargesData:
+    options:
+      method: Get
+      path: /chargesData
+      preflight: true
+    type: http
+    active: false
+  tryLeader:
+    options:
+      method: Get
+      path: /tryLeader
+      preflight: true
+    type: http
+    active: false
+  getUniquePlayer:
+    options:
+      method: Get
+      path: /getUniquePlayer
+      preflight: true
+    type: http
+    active: false
+  getMsisdnsFromBucket:
+    options:
+      method: Get
+      path: /getMsisdnsFromBucket
+      preflight: true
+    type: http
+    active: false
+  deleteSome:
+    options:
+      method: Get
+      path: /deleteSome
+      preflight: true
+    type: http
+    active: false
+  removeSomeIdentity:
+    options:
+      method: Get
+      path: /removeSomeIdentity
+      preflight: true
+    type: http
+    active: false
+  patchUsers:
+    options:
+      method: Get
+      path: /patchUsers
+      preflight: true
+    type: http
+    active: false
+  deleteManyTest:
+    options:
+      method: Get
+      path: /deleteManyTest
+      preflight: true
+    type: http
     active: true
+  getUniqueCharge:
+    options:
+      method: Get
+      path: /getUniqueCharge
+      preflight: true
+    type: http
+    active: true
+  getMyIp:
+    options:
+      method: Get
+      path: /getMyIp
+      preflight: true
+    type: http
+    active: false
 env:
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
   USER_BUCKET: "{USER_BUCKET}"
   PAST_MATCHES_BUCKET: "{PAST_MATCHES_BUCKET}"
+  GAME_LEAGUE_PARTICIPANTS: "{GAME_LEAGUE_PARTICIPANTS}"
+  DRAW_LOGS: "{DRAW_LOGS}"
+  CHARGE_BUCKET: "{CHARGE_BUCKET}"
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
 memoryLimit: 100
 order: 14

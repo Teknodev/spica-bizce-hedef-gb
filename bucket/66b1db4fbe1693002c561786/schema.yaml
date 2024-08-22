@@ -1,0 +1,53 @@
+_id: 66b1db4fbe1693002c561786
+title: Singleplay Servers Info
+description: Describe your new bucket
+icon: important_devices
+primary: duel_id
+readOnly: false
+history: false
+properties:
+  duel_id:
+    type: string
+    title: duel_id
+    description: Description of the duel_id input
+    options:
+      position: bottom
+  match_server:
+    type: string
+    title: match_server
+    description: Description of the match_server input
+    options:
+      position: bottom
+  user:
+    type: relation
+    title: user
+    description: Description of the user input
+    options:
+      position: bottom
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+    primary: name
+  user_token:
+    type: string
+    title: user_token
+    description: Description of the user_token input
+    options:
+      position: bottom
+  created_at:
+    type: date
+    title: created_at
+    description: Description of the created_at input
+    options:
+      position: bottom
+  reference_no:
+    type: string
+    title: reference_no
+    description: Description of the reference_no input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 18
+category: Singleplay

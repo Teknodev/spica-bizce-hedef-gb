@@ -1,0 +1,62 @@
+_id: 66b0ba7cbe1693002c4d8192
+title: Singleplay Duel
+description: Describe your new bucket
+icon: gamepad
+primary: user_points
+readOnly: false
+history: false
+properties:
+  user:
+    type: relation
+    title: user
+    description: Description of the user input
+    options:
+      position: bottom
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+    primary: name
+  created_at:
+    type: date
+    title: created_at
+    description: Description of the created_at input
+    options:
+      position: bottom
+  user_ingame:
+    type: boolean
+    title: user_ingame
+    description: Description of the user_ingame input
+    options:
+      position: bottom
+    default: false
+  user_points:
+    type: number
+    title: user_points
+    description: Description of the user_points input
+    options:
+      position: bottom
+  user_playing_duration:
+    type: number
+    title: user_playing_duration
+    description: Description of the user_playing_duration input
+    options:
+      position: bottom
+  user_is_dead:
+    type: boolean
+    title: user_is_dead
+    description: Description of the user_is_dead input
+    options:
+      position: bottom
+    default: false
+  user_is_free:
+    type: boolean
+    title: user_is_free
+    description: Description of the user_is_free input
+    options:
+      position: bottom
+    default: false
+acl:
+  write: true==true
+  read: true==true
+order: 16
+category: Singleplay

@@ -12,6 +12,7 @@ properties:
     description: Description of the msisdn input
     options:
       position: bottom
+      index: true
   reward:
     type: string
     title: reward

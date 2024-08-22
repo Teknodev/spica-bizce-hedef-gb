@@ -376,14 +376,12 @@ async function matchGeneralReport(reportType, dateFilter) {
              <td style="width: 7.6%;">${numberWithDot(data.p2p_play)}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2p_play_points_earned)}</td>
              <td style="width: 7.6%;">${data.p2p_duration_average}</td>
-             <td style="width: 7.6%;">${data.p2p_point_average}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2p_first_match)}</td>
+             
              
              <td style="width: 7.6%;">${numberWithDot(data.p2m_play)}</td>
              <td style="width: 7.6%;">${numberWithDot(data.p2m_play_points_earned)}</td>
              <td style="width: 7.6%;">${data.p2m_duration_average}</td>
-             <td style="width: 7.6%;">${data.p2m_point_average}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2m_first_match)}</td>
+             
              
             </tr>`;
         });
@@ -396,13 +394,13 @@ async function matchGeneralReport(reportType, dateFilter) {
             <th style="width: 9%; text-align:left">P2P Oyun</th>
             <th style="width: 9%; text-align:left">P2P Kazanılan Puan</th>
             <th style="width: 9%; text-align:left">P2P Ortalama Oyun Süresi (saniye)</th>
-            <th style="width: 9%; text-align:left">P2P Ortalama Puan</th>
+            
             
             
             <th style="width: 9%; text-align:left">P2M Oyun</th>
             <th style="width: 9%; text-align:left">P2M Kazanılan Puan</th>
             <th style="width: 9%; text-align:left">P2M Ortalama Oyun Süresi (saniye)</th>
-            <th style="width: 9%; text-align:left">P2M Ortalama Puan</th>
+            
             
             
             </tr>
@@ -419,7 +417,7 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%; font-weight: bold;">Oyun Sayısı</td>
                 <td style="width: 14.2%; font-weight: bold;">Kazanılan Puan</td>
                 <td style="width: 14.2%; font-weight: bold;">Ortalama Oyun Süresi (saniye)</td>
-                <td style="width: 14.2%; font-weight: bold;">Ortalama Puan</td>
+                
                 
                 
             </tr>
@@ -428,8 +426,7 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_play)}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_play_points_earned)}</td>
                 <td style="width: 14.2%;">${matchData[0].p2p_duration_average}</td>
-                <td style="width: 14.2%;">${matchData[0].p2p_point_average}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_first_match)}</td>
+                
                 
             </tr>
             <tr>
@@ -437,8 +434,7 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_play)}</td>
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_play_points_earned)}</td>
                 <td style="width: 14.2%;">${matchData[0].p2m_duration_average}</td>
-                <td style="width: 14.2%;">${matchData[0].p2m_point_average}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_first_match)}</td>
+              
                 
             </tr>
            <tr>
@@ -447,8 +443,7 @@ async function matchGeneralReport(reportType, dateFilter) {
                 <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_play_points_earned +
             matchData[0].p2m_play_points_earned)}</td>
                 <td style="width: 14.2%;">-</td>
-                <td style="width: 14.2%;">-</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_first_match + matchData[0].p2m_first_match)}</td>
+                
                 
             </tr>
             </tbody>

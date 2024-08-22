@@ -1,5 +1,5 @@
 _id: 6343c73de0b12f002b09a726
-name: Marketing Services
+name: _Deprecated_ Marketing Services
 language: javascript
 timeout: 30.5
 triggers:
@@ -7,12 +7,6 @@ triggers:
     options:
       collection: bucket_60742ed3f95e39002c4917ae
       type: INSERT
-    type: database
-    active: false
-  onChargeUpdated:
-    options:
-      collection: bucket_61e03400833dac002d229730
-      type: UPDATE
     type: database
     active: false
   sendMarketingServiceData:

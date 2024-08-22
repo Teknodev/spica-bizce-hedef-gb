@@ -12,7 +12,7 @@ let db,
     pastDuelsCollection,
     deletedMatchesCollection;
 
-export async function insertPastMatchFromServer(req, res) {
+export async function insertPastMatchFromServerMultiplayer(req, res) {
     if (!db) {
         db = await database().catch(err => console.log("ERROR 2", err));
     }
@@ -21,10 +21,11 @@ export async function insertPastMatchFromServer(req, res) {
     pastDuelsCollection = db.collection(`bucket_${PAST_DUELS_BUCKET_ID}`);
 
     const { duel, key } = req.body;
-
+    
     if (key == OPERATION_KEY) {
         removeServerInfo(duel._id);
-
+        let user1EarnedAward = 0;
+        let user2EarnedAward = 0;
         const user1 = await usersCollection
             .findOne({ _id: ObjectId(duel.user1) })
             .catch(err => console.log("ERROR 15", err));
@@ -33,6 +34,7 @@ export async function insertPastMatchFromServer(req, res) {
             .catch(err => console.log("ERROR 16", err));
 
         // if both are winner
+        
         if (duel.user1_points == duel.user2_points) {
             if (duel.user1_second_match > duel.user2_second_match) {
                 duel.winner = 1;
@@ -48,15 +50,20 @@ export async function insertPastMatchFromServer(req, res) {
         else if (duel.user1_points > duel.user2_points) {
             duel.winner = 1;
             user1.win_count += 1;
+            user1EarnedAward += duel.user1_is_free ? 0 : 2;
+            if (!duel.user2.bot) {
+                user2EarnedAward += duel.user2_is_free ? 0 : 1;
+            }
         }
         // if user2 is winner
         else if (duel.user1_points < duel.user2_points) {
             duel.winner = 2;
-
             if (!user2.bot) {
                 user2.win_count += 1;
+                user2EarnedAward += duel.user2_is_free ? 0 : 2;
             }
             user1.lose_count += 1;
+            user1EarnedAward += duel.user1_is_free ? 0 : 1;
         }
 
         await pastDuelsCollection
@@ -94,6 +101,8 @@ export async function insertPastMatchFromServer(req, res) {
                     weekly_point: user1.weekly_point + duel.user1_points,
                     win_count: user1.win_count,
                     lose_count: user1.lose_count,
+                    total_award: parseInt(user1.total_award) + user1EarnedAward,
+                    weekly_award: (user1.weekly_award || 0) + user1EarnedAward,
                 }
             }
         );
@@ -107,6 +116,8 @@ export async function insertPastMatchFromServer(req, res) {
                     weekly_point: user2.weekly_point + duel.user2_points,
                     win_count: user2.win_count,
                     lose_count: user2.lose_count,
+                    total_award: parseInt(user2.total_award) + user2EarnedAward,
+                    weekly_award: (user2.weekly_award || 0) + user2EarnedAward,
                 }
             }
         );
@@ -150,7 +161,7 @@ async function removeServerInfo(duel_id) {
         .catch(err => console.log("ERROR ", err));
 }
 
-export async function removeServerInfoExternal(req, res) {
+export async function removeServerInfoExternalMultiplayer(req, res) {
     const { duel, key } = req.body;
     if (key == OPERATION_KEY) {
         removeServerInfo(String(duel._id));

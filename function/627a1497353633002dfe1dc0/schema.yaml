@@ -30,6 +30,13 @@ triggers:
       frequency: "*/5 * * * *"
     type: schedule
     active: true
+  newCheckAvailability:
+    options:
+      method: Post
+      path: /newCheckAvailability
+      preflight: true
+    type: http
+    active: true
 env:
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
   CONFIGURATION_BUCKET_ID: "{CONFIGURATION_BUCKET_ID}"
@@ -37,5 +44,6 @@ env:
   PASSWORD_SALT: "{PASSWORD_SALT}"
   USER_POLICY: "{USER_POLICY}"
   SECRET_API_KEY: "{SECRET_API_KEY}"
+  SINGLEPLAY_DUEL_BUCKET: "{SINGLEPLAY_DUEL_BUCKET}"
 memoryLimit: 100
 order: 1

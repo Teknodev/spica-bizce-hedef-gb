@@ -40,6 +40,7 @@ properties:
     description: Description of the winner input
     options:
       position: bottom
+      index: true
   start_time:
     type: date
     title: start_time
@@ -67,6 +68,7 @@ properties:
     description: This field indicates the type of players. (0 - P2P / 1 - P2M)
     options:
       position: bottom
+      index: true
     default: 0
     minimum: 0
     maximum: 1
@@ -97,6 +99,7 @@ properties:
     description: Description of the user1_is_free input
     options:
       position: bottom
+      index: true
     default: false
   user2_is_free:
     type: boolean
@@ -104,6 +107,7 @@ properties:
     description: Description of the user2_is_free input
     options:
       position: bottom
+      index: true
     default: false
   user1_second_match:
     type: boolean

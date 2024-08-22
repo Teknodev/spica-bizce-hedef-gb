@@ -3,13 +3,20 @@ name: Matchmaker
 description: This function is working every 5 seconds to match users who are
   looking for a new match.
 language: javascript
-timeout: 51.4
+timeout: 53.7
 triggers:
   matchmaker:
     options:
       timezone: UTC
-      frequency: "*/5 * * * * *"
+      frequency: "* * * * *"
     type: schedule
+    active: true
+  newMatchmaker:
+    options:
+      method: Post
+      path: /newMatchmaker
+      preflight: true
+    type: http
     active: true
 env:
   MATCHMAKING_BUCKET_ID: "{MATCHMAKING_BUCKET_ID}"
@@ -17,5 +24,6 @@ env:
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
   BOT_BUCKET_ID: "{BOT_BUCKET_ID}"
   SERVERS_INFO_BUCKET: "{SERVERS_INFO_BUCKET}"
+  SINGLEPLAY_SERVERS_INFO_BUCKET: "{SINGLEPLAY_SERVERS_INFO_BUCKET}"
 memoryLimit: 100
 order: 3

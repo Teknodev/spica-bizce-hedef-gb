@@ -1,0 +1,23 @@
+_id: 66c3607f435fd2002ce700f2
+name: Assign Duel
+language: javascript
+timeout: 68.4
+triggers:
+  default:
+    type: http
+    active: true
+    options:
+      method: Get
+      path: /
+      preflight: true
+  assignDuel:
+    options:
+      method: Post
+      path: /assign-duel
+      preflight: true
+    type: http
+    active: true
+env:
+  SINGLEPLAY_SERVERS_INFO_BUCKET: "{SINGLEPLAY_SERVERS_INFO_BUCKET}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+memoryLimit: 100

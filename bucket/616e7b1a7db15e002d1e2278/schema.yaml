@@ -24,6 +24,7 @@ properties:
     description: Description of the msisdn input
     options:
       position: bottom
+      index: true
   error_id:
     type: string
     title: error_id

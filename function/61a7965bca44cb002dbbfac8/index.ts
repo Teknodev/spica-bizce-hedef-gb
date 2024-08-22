@@ -78,16 +78,18 @@ export async function playCountDecrease(req, res) {
     if (key != DUEl_OPERATION_KEY) {
         return res.status(400).send({ message: "No access" });
     }
-
+    if (!db) {
+        db = await database().catch(err => console.log("ERROR ", err));
+    }
     const userCollection = db.collection(`bucket_${USER_BUCKET_ID}`);
     const user = await userCollection.findOne({ _id: ObjectId(userId) })
 
     let setQuery = {
         available_play_count: Math.max(user.available_play_count - 1, 0)
     };
-    if (user.free_play) {
-        setQuery = { free_play: false }
-    }
+    // if (user.free_play) {
+    //     // setQuery = { free_play: false }
+    // }
 
     await userCollection
         .updateOne(

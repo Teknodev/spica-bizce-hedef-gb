@@ -2,7 +2,7 @@ import { database, ObjectId } from "@spica-devkit/database";
 const fetch = require("node-fetch");
 
 const DUEL_BUCKET_ID = process.env.DUEL_BUCKET_ID;
-const MAIN_SERVER_URL = "https://turkcellapp-snake-631f5.hq.spicaengine.com/api";
+const MAIN_SERVER_URL = "https://turkcell-doodle-jump-3a662.hq.spicaengine.com/api";
 const OPERATION_KEY = '6Ww7PajcsGH34PbE';
 
 
@@ -58,12 +58,12 @@ export async function checkFinishedDuels() {
             }
 
             if (duel.winner == 0) {
-                fetchOperation('insertPastMatchFromServer', duelData)
+                fetchOperation('insertPastMatchFromServerMultiplayer', duelData)
             } else {
                 fetchOperation('insertDeletedMatch', duelData)
             }
 
-            fetchOperation('removeServerInfoExternal', duel)
+            fetchOperation('removeServerInfoExternalMultiplayer', duel)
 
             removeIndetity(duelId)
 
@@ -110,7 +110,6 @@ async function removeIndetity(duel_id) {
     if (!db) {
         db = await database().catch(err => console.log("ERROR ", err));
     }
-
     await db.collection('identity').deleteMany({ "attributes.duel_id": duel_id })
         .catch(err => console.log("ERROR ", err))
 }

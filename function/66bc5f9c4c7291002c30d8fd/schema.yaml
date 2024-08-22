@@ -1,0 +1,32 @@
+_id: 66bc5f9c4c7291002c30d8fd
+name: Single Play Check Finish Duels
+language: javascript
+timeout: 64.1
+triggers:
+  default:
+    type: http
+    active: true
+    options:
+      method: Get
+      path: /
+      preflight: true
+  singlePlayinsertPastMatch:
+    options:
+      method: Post
+      path: /insertPastMatchFromServer
+      preflight: true
+    type: http
+    active: true
+  singlePlayremoveServerInfoExternal:
+    options:
+      method: Post
+      path: /removeServerInfoExternal
+      preflight: true
+    type: http
+    active: true
+env:
+  SINGLE_SERVER_INFO_BUCKET: "{SINGLE_SERVER_INFO_BUCKET}"
+  SINGLE_PAST_MATCH_BUCKET: "{SINGLE_PAST_MATCH_BUCKET}"
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+  USER_BUCKET_ID: "{USER_BUCKET_ID}"
+memoryLimit: 100

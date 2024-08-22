@@ -1,0 +1,102 @@
+_id: 66bc582f4c7291002c304d74
+title: Past Match
+description: Describe your new bucket
+icon: line_style
+primary: name
+readOnly: false
+history: false
+properties:
+  name:
+    type: string
+    title: name
+    description: Description of the name input
+    options:
+      position: bottom
+  user:
+    type: relation
+    title: user
+    description: Description of the user input
+    options:
+      position: bottom
+      index: true
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+    primary: name
+  start_time:
+    type: date
+    title: start_time
+    description: Description of the start_time input
+    options:
+      position: bottom
+      index: true
+  end_time:
+    type: date
+    title: end_time
+    description: Description of the end_time input
+    options:
+      position: bottom
+      index: true
+  duel_id:
+    type: string
+    title: duel_id
+    description: Description of the duel_id input
+    options:
+      position: bottom
+      index: true
+      unique: true
+  user_points:
+    type: number
+    title: user_points
+    description: Description of the user_points input
+    options:
+      position: bottom
+    default: 0
+  user_is_free:
+    type: boolean
+    title: user_is_free
+    description: Description of the user_is_free input
+    options:
+      position: bottom
+      index: true
+    default: false
+  user_actions:
+    type: array
+    title: user_actions
+    description: Description of the user_actions input
+    options:
+      position: bottom
+    items:
+      title: Title of the items
+      type: string
+  user_playing_duration:
+    type: number
+    title: user_playing_duration
+    description: Description of the user_playing_duration input
+    options:
+      position: bottom
+    default: 0
+  is_success:
+    type: boolean
+    title: is_success
+    description: Description of the is_success input
+    options:
+      position: bottom
+    default: false
+  marketing_request:
+    type: string
+    title: marketing_request
+    description: Description of the marketing_request input
+    options:
+      position: bottom
+  marketing_response:
+    type: string
+    title: marketing_response
+    description: Description of the marketing_response input
+    options:
+      position: bottom
+acl:
+  write: true == true
+  read: true == true
+order: 17
+category: Singleplay

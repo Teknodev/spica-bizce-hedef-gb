@@ -18,6 +18,7 @@ properties:
     description: Description of the msisdn input
     options:
       position: bottom
+      index: true
   user_text:
     type: string
     title: user_text
@@ -30,6 +31,7 @@ properties:
     description: Description of the date input
     options:
       position: bottom
+      index: true
     default: :created_at
   status:
     type: boolean
@@ -37,6 +39,7 @@ properties:
     description: Description of the status input
     options:
       position: bottom
+      index: true
     default: false
   result:
     type: textarea
@@ -75,6 +78,6 @@ acl:
     auth.key == "406bus18l2yiufdq"
   read: |-
     auth._id==document.identity || 
-    auth.attributes.role == "admin"
+    auth.attributes.role == "admin" || auth.key == "259pcb18lpwrw0wu"
 order: 5
 category: Logs
