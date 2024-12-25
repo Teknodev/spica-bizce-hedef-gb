@@ -1,11 +1,18 @@
 import { database, ObjectId } from "@spica-devkit/database";
 import * as Identity from "@spica-devkit/identity";
+import * as SetAward from "../../61a795fdca44cb002dbbfa6b/.build";
 
 const SECRET_API_KEY = process.env.SECRET_API_KEY;
 const USER_BUCKET_ID = process.env.USER_BUCKET_ID;
 const SERVER_INFO_BUCKET_ID = process.env.SERVER_INFO_BUCKET_ID;
+const CHARGE_VARIANT = 158964;
+const DAILY_1GB_OFFER_ID = 501399;
+const DAILY_CAMPAIGN_ID = 1236;
+
 
 const DUEl_OPERATION_KEY = '6Ww7PajcsGH34PbE';
+
+const FREE_PLAY_CONTROL_DAYS = [3, 4, 5, 6];
 
 let db;
 
@@ -83,13 +90,14 @@ export async function playCountDecrease(req, res) {
     }
     const userCollection = db.collection(`bucket_${USER_BUCKET_ID}`);
     const user = await userCollection.findOne({ _id: ObjectId(userId) })
-
     let setQuery = {
         available_play_count: Math.max(user.available_play_count - 1, 0)
     };
-    // if (user.free_play) {
-    //     // setQuery = { free_play: false }
-    // }
+
+    if (user.free_play) {
+        freePlaySetAward(user.identity);
+        setQuery = { free_play: false }
+    }
 
     await userCollection
         .updateOne(
@@ -100,9 +108,37 @@ export async function playCountDecrease(req, res) {
         )
         .catch(err => console.log("ERROR 2 ", err));
 
-    changeServerAvailabilityToUser(userId, duelId, "decrease");
+    // changeServerAvailabilityToUser(userId, duelId, "decrease");
 
     return res.status(200).send({ message: "successful" });
+}
+async function freePlaySetAward(userId) {
+
+    try {
+        const msisdn = await getMsisdn(userId);
+
+        const sessionId = await SetAward.sessionSOAP(CHARGE_VARIANT);
+
+        SetAward.setAwardSOAP(sessionId, msisdn, DAILY_1GB_OFFER_ID, DAILY_CAMPAIGN_ID, '', 'freeMatch');
+
+    } catch (error) {
+        console.log("ERROR freePlaySetAward! ", error);
+    }
+}
+
+async function getMsisdn(userId) {
+    if (!db) {
+        db = await database().catch(err => console.log("ERROR ", err));
+    }
+    const identityCollection = db.collection(`identity`);
+
+    const identity = await identityCollection.find({
+        _id: ObjectId(userId)
+    }).toArray();
+
+    const [msisdn] = identity.map(user => user.attributes.msisdn);
+
+    return msisdn;
 }
 
 async function changeServerAvailabilityToUser(userId, duelId, type) {
@@ -158,4 +194,27 @@ async function tokenVerified(token) {
     response_object.decoded_token = decoded;
 
     return response_object;
+}
+
+export async function updateFreePlayForUsers() {
+    console.log("@updateFreePlayForUsers");
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 3);
+    const currentDay = currentDate.getDay(); // getDay() returns 0 (Sunday) to 6 (Saturday)
+
+    let isFreePlay = true;
+
+    if (!FREE_PLAY_CONTROL_DAYS.includes(currentDay)) return;
+    //Set free play to false after free play days (wednesday & friday are free play days)
+    if (currentDay === 4 || currentDay === 6) {
+        isFreePlay = false;
+    }
+
+    const db = await database();
+    const userCollection = db.collection(`bucket_${USER_BUCKET_ID}`);
+
+    await userCollection.updateMany(
+        { bot: false },
+        { $set: { free_play: isFreePlay } }
+    );
 }

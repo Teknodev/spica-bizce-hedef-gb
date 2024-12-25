@@ -106,13 +106,6 @@ properties:
     options:
       position: bottom
     default: 0
-  elo:
-    type: number
-    title: elo
-    description: Description of the elo input
-    options:
-      position: bottom
-    default: 0
   free_play:
     type: boolean
     title: free_play
@@ -153,7 +146,7 @@ acl:
   write: >-
     auth.attributes.role == "admin" ||
 
-    auth.key == "406bus18l2yiufdq" || auth.key == "e5wl18kmw287kr" || auth.key == "259pcb18lpwrw0wu"
+    auth.key == "406bus18l2yiufdq" || auth.key == "e5wl18kmw287kr" || auth.key == "22j218m0chwl0n"
   read: true==true
 required: []
 order: 22

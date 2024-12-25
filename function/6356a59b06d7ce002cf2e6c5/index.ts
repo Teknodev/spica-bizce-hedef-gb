@@ -14,26 +14,21 @@ const USER_BUCKET_ID = process.env.USER_BUCKET_ID;
 
 let db;
 
-const loginType = {
-    seamless: "seamless"
-}
 export async function login(req, res) {
     if (!db) db = await database().catch(err => console.log("ERROR 1", err));
     const users_collection = db.collection(`bucket_${USER_BUCKET_ID}`);
 
     // const { token, type } = req.body;
     const { token } = req.body;
+    // console.log("token: ",token);
     // 1-check token is defined
     if (token) {
         // 2-send token to get user information from Turkcell
         // let fastlogin_response;
-        // if (type == loginType.seamless) {
 
-        let fastlogin_response = await seamlessTokenValidate(token).catch(err => console.log("ERROR 1", err));
-        // console.log("fastlogin_response: ",fastlogin_response);
-        // } else {
-        // let fastlogin_response = await fastLogin(token).catch(err => console.log("ERROR 1", err));
-        // }
+        // let fastlogin_response = await seamlessTokenValidate(token).catch(err => console.log("ERROR 1", err));
+        let fastlogin_response = await fastLogin(token).catch(err => console.log("ERROR 1", err));
+        // console.log("fastlogin_response: ", fastlogin_response);
 
         // let fastlogin_response = MOCK_RES;
         // 3-if response is error(node fetch send error as data)
@@ -90,7 +85,8 @@ export async function login(req, res) {
                     } else {
                         // 4-create an identity
                         // const response = await checkOtherGames(msisdn);//check free play
-
+                        const freePlay = updateFreePlayForUsers();
+                        // console.log("freePlay: ",freePlay);
                         createIdentity(identifier, password, msisdn)
                             .then(async identity_data => {
                                 // 5-add this identity to user_bucket
@@ -98,7 +94,6 @@ export async function login(req, res) {
                                     .insertOne({
                                         identity: identity_data.identity_id,
                                         avatar_id: 0,
-                                        elo: 0,
                                         created_at: new Date(),
                                         total_point: 0,
                                         weekly_point: 0,
@@ -108,7 +103,7 @@ export async function login(req, res) {
                                         weekly_award: 0,
                                         available_play_count: 0,
                                         bot: false,
-                                        free_play: true, 
+                                        free_play: freePlay,
                                         perm_accept: false
                                     })
                                     .catch(error => {
@@ -188,7 +183,7 @@ async function fastLogin(token) {
         secretKey: `${FASTLOGIN_SECRET_KEY}`,
         loginToken: token
     };
-
+    // console.log("fastLogin: ",body);
     return await fetch("https://fastlogin.com.tr/fastlogin_app/secure/validate.json", {
         method: "post",
         body: JSON.stringify(body),
@@ -204,7 +199,7 @@ async function seamlessTokenValidate(token) {
         secretKey: `${FASTLOGIN_SECRET_KEY}`,
         token: token
     };
-    // console.log("Seamless: ", body)
+    console.log("Seamless: ", body)
 
     return await fetch("https://fastlogin.com.tr/fastlogin_app/secure/validateSeamlessLoginToken.json", {
         method: "post",
@@ -308,4 +303,14 @@ async function checkOtherGames(msisdn) {
     } catch (error) {
         console.error('Error 100:', error);
     }
+}
+
+export function updateFreePlayForUsers() {
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 3);
+    const currentDay = currentDate.getDay();
+
+    if (currentDay === 3 || currentDay === 5) return true
+
+    return false
 }

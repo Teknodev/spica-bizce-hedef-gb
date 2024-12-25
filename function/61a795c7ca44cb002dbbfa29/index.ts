@@ -10,7 +10,7 @@ const BOT_BUCKET_ID = process.env.BOT_BUCKET_ID;
 const SINGLEPLAY_SERVERS_INFO_BUCKET = process.env.SINGLEPLAY_SERVERS_INFO_BUCKET;
 
 const MATCH_SERVERS = [
-    { title: 'turkcell-doodle-jump-3a662', api_key: '406bus18l2yiufdq' },
+    { title: 'bizce-hedef-gb-23d20', api_key: '406bus18l2yiufdq' },
 ]
 
 let db;
@@ -333,11 +333,11 @@ function createDuelObject(userID, userFree) {
     const duelArray = {
         user: ObjectId(userID),
         created_at: new Date(),
-        user_points: 0,
         user_ingame: false,
         user_playing_duration: 0,
         user_is_dead: false,
         user_is_free: userFree,
+        user_arrows: 0,
     }
     return duelArray;
 }
@@ -432,9 +432,9 @@ async function requestForANewGameS1(data) {
     //     "users": users
     // })
     // console.log(users, data)
-    await Api.httpRequest('post', 'https://vodafone-s1-6b082.hq.spicaengine.com/api/fn-execute/new-game-listener', {
+    await Api.httpRequest('post', 'https://vodafone.queue.spicaengine.com/message?topic_id=657310d3f1bac9002c940b22', {
         "referenceNo": String(Date.now()),
-        "service": "tcell_doodle_jump",
+        "service": "bizce_hedef_gb",
         "data": data,
         "users": users
     }, {}).catch(err => console.error("ERR:HATAHATAHATAHATAHATAHATAHATA ", err));

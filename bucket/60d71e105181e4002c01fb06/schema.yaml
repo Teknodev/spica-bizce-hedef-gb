@@ -34,6 +34,18 @@ properties:
     options:
       position: bottom
     default: 0
+  free_play:
+    type: number
+    title: free_play
+    description: Description of the free_play input
+    options:
+      position: bottom
+  paid_play:
+    type: number
+    title: paid_play
+    description: Description of the paid_play input
+    options:
+      position: bottom
 acl:
   write: true==true
   read: true==true

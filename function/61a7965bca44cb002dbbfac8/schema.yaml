@@ -31,6 +31,12 @@ triggers:
       preflight: true
     type: http
     active: true
+  updateFreePlayForUsers:
+    options:
+      timezone: Turkey
+      frequency: 1 0 * * *
+    type: schedule
+    active: true
 env:
   SECRET_API_KEY: "{SECRET_API_KEY}"
   USER_BUCKET_ID: "{USER_BUCKET_ID}"

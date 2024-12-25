@@ -15,7 +15,7 @@ triggers:
       timezone: UTC
       frequency: "*/10 * * * * *"
     type: schedule
-    active: true
+    active: false
 env:
   SINGLE_DUEL_BUCKET: "{SINGLE_DUEL_BUCKET}"
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"

@@ -76,25 +76,13 @@ properties:
     options:
       position: bottom
     default: 0
-  is_success:
-    type: boolean
-    title: is_success
-    description: Description of the is_success input
+  arrow_count:
+    type: number
+    title: arrow_count
+    description: Description of the arrow_count input
     options:
       position: bottom
-    default: false
-  marketing_request:
-    type: string
-    title: marketing_request
-    description: Description of the marketing_request input
-    options:
-      position: bottom
-  marketing_response:
-    type: string
-    title: marketing_response
-    description: Description of the marketing_response input
-    options:
-      position: bottom
+      index: true
 acl:
   write: true == true
   read: true == true

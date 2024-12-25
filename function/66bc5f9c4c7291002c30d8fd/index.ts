@@ -20,64 +20,48 @@ export async function singlePlayinsertPastMatch(req, res) {
 	pastDuelsCollection = db.collection(`bucket_${SINGLE_PAST_MATCH_BUCKET}`);
 
 	const { duel, key } = req.body;
-
+	console.log("duel: ", duel)
 	if (key == OPERATION_KEY) {
 		removeServerInfo(duel._id);
 		let userEarnedAward = 0;
 		const user = await usersCollection
 			.findOne({ _id: ObjectId(duel.user) })
-			.catch(err => console.log("ERROR 15", err));;
-		// if user1 is winner
-		if (duel.user_points >= 400) {
+			.catch(err => console.log("ERROR 15", err));
+
+		if (duel.user_arrows >= 10 && duel.user_arrows <20) {
 			user.win_count += 1;
 			userEarnedAward += duel.user_is_free ? 0 : 2;
 		}
-		else if (duel.user_points < 400) {
+		else if (duel.user_arrows >= 20) {
+			user.win_count += 1;
+			userEarnedAward += duel.user_is_free ? 0 : 3;
+		}
+		else if (duel.user_arrows < 10) {
 			user.lose_count += 1;
 			userEarnedAward += duel.user_is_free ? 0 : 1;
 		}
-		// if (duel.user == "66c23d80435fd2002cde2e74") {
 		await pastDuelsCollection
 			.insertOne({
 				duel_id: duel._id,
 				name: user.name,
 				user: duel.user,
-				user_points: duel.user_points,
 				start_time: new Date(ObjectId(duel._id).getTimestamp()),
 				end_time: new Date(),
 				user_is_free: duel.user_is_free,
 				user_actions: duel.user_actions || [],
 				user_playing_duration: duel.user_playing_duration,
+				arrow_count: duel.user_arrows
 			})
 			.catch(err => console.log("ERROR 17", err));
 
-		// } else {
-		// 	await pastDuelsCollection
-		// 		.insertOne({
-		// 			duel_id: duel.duel_id,
-		// 			name: user.name,
-		// 			user: duel.user,
-		// 			user_points: duel.user_points,
-		// 			start_time: new Date(duel.start_time),
-		// 			end_time: duel.end_time,
-		// 			user_is_free: duel.user_is_free,
-		// 			user_actions: duel.user_actions,
-		// 			user_playing_duration: duel.user_playing_duration,
-		// 		})
-		// 		.catch(err => console.log("ERROR 17", err));
-		// }
-
-
-
-		// Update users point --->
 		usersCollection.findOneAndUpdate(
 			{
 				_id: ObjectId(duel.user)
 			},
 			{
 				$set: {
-					total_point: parseInt(user.total_point) + duel.user_points,
-					weekly_point: user.weekly_point + duel.user_points,
+					total_point: parseInt(user.total_point) + duel.user_arrows,
+					weekly_point: user.weekly_point + duel.user_arrows,
 					win_count: user.win_count,
 					lose_count: user.lose_count,
 					total_award: parseInt(user.total_award) + userEarnedAward,

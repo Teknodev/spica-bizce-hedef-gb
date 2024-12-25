@@ -1,12 +1,12 @@
 import { database, ObjectId } from "@spica-devkit/database";
 import * as Identity from "@spica-devkit/identity";
-const axios = require("axios");
-const jsdom = require("jsdom");
-var convert = require("xml-js");
+import axios from "axios";
+import convert from "xml-js";
+import { DOMParser } from "xmldom";
 
 const SECRET_API_KEY = process.env.SECRET_API_KEY;
-const REWARDS_BUCKET_ID = process.env.REWARDS_BUCKET_ID;
-const BUGGED_REWARDS_BUCKET_ID = process.env.BUGGED_REWARDS_BUCKET_ID;
+const REWARDS_BUCKET_ID = '609669f805b0df002ceb2517';
+const BUGGED_REWARDS_BUCKET_ID = '616e7b1a7db15e002d1e2278';
 const TRANSACTIONS_BUCKET = process.env.TRANSACTIONS_BUCKET;
 const CONFIRMATION_CODE_BUCKET_ID = process.env.CONFIRMATION_CODE_BUCKET_ID;
 const USER_BUCKET_ID = process.env.USER_BUCKET_ID;
@@ -14,19 +14,17 @@ const USER_BUCKET_ID = process.env.USER_BUCKET_ID;
 const TCELL_USERNAME = 400026758;
 const TCELL_PASSWORD = 400026758;
 
-const CHARGE_AMOUNT = 25; //todo!
+const CHARGE_AMOUNT = 24;
 
 const MT_VARIANT = 130524;
-//Variant ID: 181764
-//CPCM Offer ID: 559052
 
-const CHARGE_VARIANT = 182108; //182108 todo!
-const CHARGE_OFFER_ID = 559635;//559635 todo!
+const CHARGE_VARIANT = 158964;
+const CHARGE_OFFER_ID = 501423;
 
-const HOURLY_1GB_OFFER_ID = 451319;
-const HOURLY_CAMPAIGN_ID = "871137.947568.966245";
+// const HOURLY_1GB_OFFER_ID = 451319;
+// const HOURLY_CAMPAIGN_ID = "871137.947568.966245";
 
-const DAILY_1GB_OFFER_ID = 481642;
+const DAILY_1GB_OFFER_ID = 501399;
 const DAILY_CAMPAIGN_ID = 1236;
 
 let db;
@@ -52,6 +50,7 @@ export async function chargeRequest(req, res) {
     }
 
     sendSms(msisdn, generatedCode)
+    // sendSms("5317828001",generatedCode);
 
     return res.status(200).send({ message: 'Charge request success' });
 }
@@ -67,7 +66,7 @@ function codeGenerate(length) {
 }
 
 export async function sendSms(receiverMsisdn, code) {
-    let message = `Sifreniz: ${code}. Kodu ekrana girerek vergiler dahil ${CHARGE_AMOUNT} TL karsiliginda ZipZip oyunundan Gunluk 1 GB kazanacaksiniz. Oyunu kazanirsaniz ek olarak Gunluk 1 GB daha kazanacaksiniz. Basarilar! `;
+    let message = `Sifreniz: ${code}. Kodu ekrana girerek vergiler dahil ${CHARGE_AMOUNT} TL karsiliginda Hedef GB oyunundan Gunluk 1 GB kazanacaksiniz. Oyundaki ilerlemenize göre ek olarak Gunluk 2 GB'a kadar ekstra ödül kazanabilirsiniz. Basarilar! `;
     let shortNumber = 3757;
 
     const sessionId = await sessionSOAP(MT_VARIANT).catch(err =>
@@ -165,7 +164,7 @@ export async function checkSMSCode(req, res) {
     );
 
     const chargeRes = await charge(msisdn);
-
+    // console.log("chargeRes: ", chargeRes);
     if (!chargeRes.status) {
         return res.status(400).send({ status: false, message: chargeRes.message });
     }
@@ -183,7 +182,8 @@ async function charge(msisdn) {
     const sessionId = await sessionSOAP(CHARGE_VARIANT).catch(err =>
         console.log("ERROR 32", err)
     );
-    return offerTransactionSOAP(sessionId, msisdn)
+
+    return offerTransactionSOAP(sessionId, msisdn);
 }
 
 async function getConfirmationCodeByMsisdn(msisdn) {
@@ -227,7 +227,7 @@ async function updateConfirmationCode(result, msisdn, code) {
         .catch(err => console.log("ERROR UPDATE CODE", err));
 }
 
-async function sessionSOAP(variantId) {
+export async function sessionSOAP(variantId) {
     let soapEnv = `<?xml version="1.0" encoding="UTF-8"?>
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:SPGW">
         <soapenv:Header/>
@@ -250,14 +250,14 @@ async function sessionSOAP(variantId) {
         .catch(err => {
             console.log("ERROR 8", err);
         });
-
     if (!response) {
         return false;
     }
 
-    let dom = new jsdom.JSDOM(response.data);
-    let sessionId = dom.window.document.querySelector("sessionId").textContent;
-
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(response.data, "text/xml");
+    const sessionIdElement = xmlDoc.getElementsByTagName("sessionId")[0];
+    let sessionId = sessionIdElement.textContent;
 
     if (!sessionId) {
         return false;
@@ -288,7 +288,7 @@ async function successTransaction(msisdn) {
         });
 }
 
-async function setAwardSOAP(sessionID, msisdn, offerId, campaignId, matchId = "", type) {
+export async function setAwardSOAP(sessionID, msisdn, offerId, campaignId, matchId = "", type) {
     // console.log(sessionID, msisdn, offerId, campaignId, matchId ,type);
     if (!db) {
         db = await database().catch(err => console.log("ERROR 27", err));
@@ -456,7 +456,7 @@ async function offerTransactionSOAP(sessionID, msisdn) {
 
             if (!content["S:Envelope"]["S:Body"]["ns1:DisposableServiceCreateOrderResponse"]) {
                 console.log("ERROR CONTENT", content["S:Envelope"]["S:Body"]["S:Fault"]);
-                return { status: false, message: "Hata oluştu, daha sonra dene " };
+                return { status: false, message: "Hata oluştu, daha sonra dene1 " };
             }
 
             let isContinue =
@@ -479,7 +479,7 @@ async function offerTransactionSOAP(sessionID, msisdn) {
                             ]["line"]["businessInteraction"]["error"]["userText"]["_text"]
                     };
                 } else {
-                    return { status: false, message: "Hata oluştu, daha sonra dene " };
+                    return { status: false, message: "Hata oluştu, daha sonra dene2 " };
                 }
             }
         })
@@ -521,16 +521,17 @@ export async function applyRewardManually(change) {
             matchID,
             'manual'
         ).catch(err => console.log("ERROR 36", err));
-    } else if (change.current.reward == "hourly_1") {
-        result = await setAwardSOAP(
-            sessionId,
-            change.current.msisdn,
-            HOURLY_1GB_OFFER_ID,
-            HOURLY_CAMPAIGN_ID,
-            matchID,
-            'manual'
-        ).catch(err => console.log("ERROR 37", err));
     }
+    // else if (change.current.reward == "hourly_1") {
+    //     result = await setAwardSOAP(
+    //         sessionId,
+    //         change.current.msisdn,
+    //         HOURLY_1GB_OFFER_ID,
+    //         HOURLY_CAMPAIGN_ID,
+    //         matchID,
+    //         'manual'
+    //     ).catch(err => console.log("ERROR 37", err));
+    // }
 
     let manuallyRewardsCollection = db.collection("bucket_" + change.bucket);
     await manuallyRewardsCollection
@@ -579,43 +580,7 @@ async function increaseAvailablePlay(msisdn) {
         });
 }
 
-export async function getWinner(change) {
-    let user1 = change.document.user1;
-    let user2 = change.document.user2;
-    let bot_id = "";
-    let msisdns = [];
-    let winners = [];
-    let users = [user1, user2];
-    let usersPlayType = [
-        change.document.user1_is_free || false,
-        change.document.user2_is_free || false
-    ];
-
-    const resUsers = await getUsersData(users).catch(err => console.log("ERROR 14", err));
-    msisdns = resUsers.msisdns;
-    bot_id = resUsers.bot_id;
-    if (change.document.winner == 1) {
-        if (user1 != bot_id) winners = [user1];
-    } else if (change.document.winner == 2) {
-        if (user2 != bot_id) winners = [user2];
-    } else if (change.document.winner == 3) {
-        winners = [user1];
-        if (user2 != bot_id) winners = [user1, user2];
-    }
-
-    if (winners.length == 1) {
-        if (users[0] == winners[0]) {
-            setAward(msisdns, 0, usersPlayType, change.document._id);
-        } else {
-            setAward(msisdns, 1, usersPlayType, change.document._id);
-        }
-    } else if (winners.length == 2) {
-        setAward(msisdns, 0, usersPlayType, change.document._id);
-        setAward(msisdns, 1, usersPlayType, change.document._id);
-    }
-}
-
-async function getUsersData(users) {
+async function getUserMsisdn(user) {
     if (!db) {
         db = await database().catch(err => console.log("ERROR 22", err));
     }
@@ -624,68 +589,45 @@ async function getUsersData(users) {
     const usersCollection = db.collection(`bucket_${USER_BUCKET_ID}`);
     const identityCollection = db.collection(`identity`);
 
-    let bot_id = "";
-    let msisdns = [];
-
-    const user1 = await usersCollection
-        .findOne({ _id: ObjectId(users[0]) })
+    const userData = await usersCollection
+        .findOne({ _id: ObjectId(user) })
         .catch(err => console.log("ERROR 23: ", err));
 
-    const user2 = await usersCollection
-        .findOne({ _id: ObjectId(users[1]) })
-        .catch(err => console.log("ERROR 24: ", err));
 
-    if (user1.bot == false) {
-        const user1Identity = await identityCollection
-            .findOne({ _id: ObjectId(user1.identity) })
-            .catch(err => console.log("ERROR 25 ", err));
+    const userIdentity = await identityCollection
+        .findOne({ _id: ObjectId(userData.identity) })
+        .catch(err => console.log("ERROR 25 ", err));
 
-        msisdns.push(user1Identity.attributes.msisdn);
-    } else {
-        bot_id = user1._id;
-    }
+    const msisdn = userIdentity.attributes.msisdn
 
-    if (user2.bot == false) {
-        const user2Identity = await identityCollection
-            .findOne({ _id: ObjectId(user2.identity) })
-            .catch(err => console.log("ERROR 26 ", err));
-
-        msisdns.push(user2Identity.attributes.msisdn);
-    } else {
-        bot_id = user2._id;
-    }
-
-    return { msisdns: msisdns, bot_id: bot_id };
+    return msisdn;
 }
-async function setAward(msisdns, winnerIndex, usersPlayType, matchId) {
+async function setAward(msisdn, userFree, matchId) {
     const sessionId = await sessionSOAP(CHARGE_VARIANT).catch(err =>
         console.log("ERROR 15", err)
     );
     if (sessionId) {
-        // at the beginning of the game
-        if (msisdns[winnerIndex]) {
-            if (usersPlayType[winnerIndex]) { // Free gameplay flow
-                return;
-                // await setAwardSOAP(
-                //     sessionId,
-                //     msisdns[winnerIndex],
-                //     HOURLY_1GB_OFFER_ID,
-                //     HOURLY_CAMPAIGN_ID,
-                //     matchId,
-                //     'match'
-                // ).catch(err => console.log("ERROR 16", err));
-            }
-            // winner award
-            else {
-                await setAwardSOAP(
-                    sessionId,
-                    msisdns[winnerIndex],
-                    DAILY_1GB_OFFER_ID,
-                    DAILY_CAMPAIGN_ID,
-                    matchId,
-                    'match'
-                ).catch(err => console.log("ERROR 17", err));
-            }
+        if (userFree) { // Free gameplay flow
+            console.log("@FreeUserReward");
+            await setAwardSOAP(
+                sessionId,
+                msisdn,
+                DAILY_1GB_OFFER_ID,
+                DAILY_CAMPAIGN_ID,
+                matchId,
+                'freeMatchPlay'
+            ).catch(err => console.log("ERROR 16", err));
+        }
+        // winner award
+        else {
+            await setAwardSOAP(
+                sessionId,
+                msisdn,
+                DAILY_1GB_OFFER_ID,
+                DAILY_CAMPAIGN_ID,
+                matchId,
+                'match'
+            ).catch(err => console.log("ERROR 17", err));
         }
         return true;
     } else return false;
@@ -709,8 +651,28 @@ async function tokenVerified(token) {
 
 export async function singlePlayMatchReward(change) {
     const match = change.document;
-    console.log(match)
-    if (match.user_is_free || match.user_points < 400) return;
-    console.log("SINGLE PLAY SET AWARD ", match);
+    if (match.arrow_count < 10) return;
+    const msisdn = await getUserMsisdn(match.user);
+
+    const number = match.arrow_count >= 20 ? 2 : 1;
+
+    awardHandler(msisdn, match.user_is_free, match.duel_id, number);
     return;
 }
+
+async function awardHandler(msisdn, userFree, duelId, number) {
+    // const mockMsisdn = '5317828001'
+    // for (let i = 0; i < number; i++) {
+    //     console.log("setAward!");
+    //     await setAward(mockMsisdn, userFree, duelId);
+    //     await new Promise(resolve => setTimeout(resolve, 1000));
+    // }
+    await setAward(msisdn, userFree, duelId);
+    if (number == 1) return;
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await setAward(msisdn, userFree, duelId);
+
+    return;
+}
+

@@ -5,7 +5,7 @@ timeout: 6
 triggers:
   checkFinishedDuels:
     type: schedule
-    active: true
+    active: false
     options:
       timezone: Europe/Istanbul
       frequency: "*/10 * * * * *"

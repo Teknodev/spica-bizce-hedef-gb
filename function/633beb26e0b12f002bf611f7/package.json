@@ -1,1 +1,1 @@
-{"dependencies":{"@spica-devkit/database":"^0.9.25","adm-zip":"^0.5.9","axios":"^1.7.2","json2csv":"^5.0.7"}}
+{"dependencies":{"@spica-devkit/database":"^0.9.29","axios":"^1.7.5"}}

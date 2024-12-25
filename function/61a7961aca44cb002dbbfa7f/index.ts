@@ -16,6 +16,7 @@ const RETRY_REPORT_BUCKET_ID = process.env.RETRY_REPORT_BUCKET_ID;
 const REWARD_REPORT_BUCKET_ID = process.env.REWARD_REPORT_BUCKET_ID;
 const BUGGED_REWARD_BUCKET_ID = process.env.BUGGED_REWARD_BUCKET_ID;
 const TRANSACTION_BUCKET = process.env.TRANSACTION_BUCKET;
+const SINGLE_PAST_MATCHES_BUCKET_ID = process.env.SINGLE_PAST_MATCHES_BUCKET_ID;
 
 
 export async function executeReportDaily() {
@@ -57,28 +58,17 @@ export async function executeReportMonthly() {
 export async function matchReport(reportType, dateFrom, dateTo) {
     dateFrom = new Date(dateFrom);
     dateTo = new Date(dateTo);
-    let reportDate = new Date().setDate(new Date().getDate() - 1)
+    let reportDate = new Date().setDate(new Date().getDate() - 1);
 
     const db = await database().catch(err => console.log("ERROR: 21", err));
-    const pastMatchesCollection = db.collection(`bucket_${PAST_MATCHES_BUCKET_ID}`);
+    const singlePastMatchesCollection = db.collection(`bucket_${SINGLE_PAST_MATCHES_BUCKET_ID}`);
     const matchReportCollection = db.collection(`bucket_${MATCH_REPORT_BUCKET_ID}`);
 
-    let p2pMatchCount = 0,
-        p2pMatchPointsEarned = 0,
-        p2mMatchCount = 0,
-        p2mMatchPointsEarned = 0,
-        p2pDuration = 0,
-        p2mDuration = 0,
-        p2pFirstMatch = 0,
-        p2mFirstMatch = 0,
-        p2pSecondMatch = 0,
-        p2mSecondMatch = 0,
-        p2pAveragePoint = 0,
-        p2mAveragePoint = 0;
+    let totalPlayCount = 0,
+        totalArrows = 0;
 
-    const p2pMatches = await pastMatchesCollection
+    const singlePlayerMatches = await singlePastMatchesCollection
         .find({
-            player_type: 0,
             end_time: {
                 $gte: dateFrom,
                 $lt: dateTo
@@ -87,77 +77,24 @@ export async function matchReport(reportType, dateFrom, dateTo) {
         .toArray()
         .catch(err => console.log("ERROR: 23", err));
 
-    const p2mMatches = await pastMatchesCollection
-        .find({
-            player_type: 1,
-            end_time: {
-                $gte: dateFrom,
-                $lt: dateTo
-            }
-        })
-        .toArray()
-        .catch(err => console.log("ERROR: 24", err));
-
-    p2pMatches.forEach(match => {
-        if (match.winner == 1) {
-            if (match.user1_second_match) {
-                p2pSecondMatch += 1;
-            } else {
-                p2pFirstMatch += 1;
-            }
-        }
-
-        if (match.winner == 2) {
-            if (match.user2_second_match) {
-                p2pSecondMatch += 1;
-            } else {
-                p2pFirstMatch += 1;
-            }
-        }
-
-        p2pAveragePoint += ((match.user1_points || 0) + (match.user2_points || 0)) / 2;
-        p2pDuration += ((match.user1_playing_duration || 0) + (match.user2_playing_duration || 0)) / 2;
-        p2pMatchPointsEarned += match.points_earned;
+    singlePlayerMatches.forEach(match => {
+        totalArrows += match.arrow_count || 0;
     });
 
-    p2mMatches.forEach(match => {
-        if (match.winner == 1) {
-            if (match.user1_second_match) {
-                p2mSecondMatch += 1;
-            } else {
-                p2mFirstMatch += 1;
-            }
-        }
-
-        p2mAveragePoint += (match.user1_points || 0);
-        p2mDuration += (match.user1_playing_duration || 0);
-        p2mMatchPointsEarned += match.points_earned;
-    });
-
-    p2pMatchCount = p2pMatches.length;
-    p2mMatchCount = p2mMatches.length;
+    totalPlayCount = singlePlayerMatches.length;
 
     await matchReportCollection
         .insertOne({
             date: new Date(reportDate),
-            p2p_play: p2pMatchCount,
-            p2p_play_points_earned: p2pMatchPointsEarned,
-            p2m_play: p2mMatchCount,
-            p2m_play_points_earned: p2mMatchPointsEarned,
-            p2p_duration_average: Math.floor(p2pDuration / p2pMatchCount),
-            p2m_duration_average: Math.floor(p2mDuration / p2mMatchCount),
-            p2p_point_average: Math.floor(p2pAveragePoint / p2pMatchCount),
-            p2m_point_average: Math.floor(p2mAveragePoint / p2mMatchCount),
-            p2p_first_match: p2pFirstMatch,
-            p2m_first_match: p2mFirstMatch,
-            p2p_second_match: p2pSecondMatch,
-            p2m_second_match: p2mSecondMatch,
-            report_type: reportType
+            play_count: totalPlayCount,
+            arrows_average: totalPlayCount > 0 ? Math.floor(totalArrows / totalPlayCount) : 0,
+            report_type: reportType,
         })
         .catch(err => console.log("ERROR: 27", err));
 
     return true;
 }
+
 
 export async function chargeReportExport(reportType, dateFrom, dateTo) {
     const db = await database().catch(err => console.log("ERROR 40: ", err));
@@ -362,57 +299,67 @@ async function playedMatchCount(reportType, dateFrom, dateTo) {
     let reportDate = new Date().setDate(new Date().getDate() - 1)
 
     const db = await database().catch(err => console.log("ERROR 38", err));
-    const pastMatchesCollection = db.collection(`bucket_${PAST_MATCHES_BUCKET_ID}`);
+    const pastMatchesCollection = db.collection(`bucket_${SINGLE_PAST_MATCHES_BUCKET_ID}`);
     const userMatchCollection = db.collection(`bucket_${USERS_MATCH_REPORT_BUCKET_ID}`);
 
-    let user1 = await pastMatchesCollection
-        .aggregate([
-            { $match: { end_time: { $gte: dateFrom, $lt: dateTo } } },
-            { $group: { _id: "$user1" } }
-        ])
-        .toArray()
-        .catch(err => console.log("ERROR 39", err));
+    // let user1 = await pastMatchesCollection
+    //     .aggregate([
+    //         { $match: { end_time: { $gte: dateFrom, $lt: dateTo } } },
+    //         { $group: { _id: "$user1" } }
+    //     ])
+    //     .toArray()
+    //     .catch(err => console.log("ERROR 39", err));
+    let userPaid = await pastMatchesCollection.countDocuments({
+        end_time: { $gte: dateFrom, $lt: dateTo },
+        user_is_free: false
+    }).catch(err => console.error("userPaid", err))
 
-    let user2 = await pastMatchesCollection
-        .aggregate([
-            {
-                $match: {
-                    end_time: { $gte: dateFrom, $lt: dateTo },
-                    player_type: 0,
-                }
-            },
-            { $group: { _id: "$user2" } }
-        ])
-        .toArray()
-        .catch(err => console.log("ERROR 40", err));
+    let userFree = await pastMatchesCollection.countDocuments({
+        end_time: { $gte: dateFrom, $lt: dateTo },
+        user_is_free: true
+    }).catch(err => console.error("userFree", err))
+    // let user2 = await pastMatchesCollection
+    //     .aggregate([
+    //         {
+    //             $match: {
+    //                 end_time: { $gte: dateFrom, $lt: dateTo },
+    //                 player_type: 0,
+    //             }
+    //         },
+    //         { $group: { _id: "$user2" } }
+    //     ])
+    //     .toArray()
+    //     .catch(err => console.log("ERROR 40", err));
 
-    const userVsUser = await pastMatchesCollection
-        .find({
-            player_type: 0,
-            end_time: { $gte: dateFrom, $lt: dateTo }
-        })
-        .count()
-        .catch(err => console.log("ERROR 43", err));
+    // const userVsUser = await pastMatchesCollection
+    //     .find({
+    //         player_type: 0,
+    //         end_time: { $gte: dateFrom, $lt: dateTo }
+    //     })
+    //     .count()
+    //     .catch(err => console.log("ERROR 43", err));
 
-    const userVsBot = await pastMatchesCollection
-        .find({
-            player_type: 1,
-            end_time: { $gte: dateFrom, $lt: dateTo }
-        })
-        .count()
-        .catch(err => console.log("ERROR 45", err));
+    // const userVsBot = await pastMatchesCollection
+    //     .find({
+    //         player_type: 1,
+    //         end_time: { $gte: dateFrom, $lt: dateTo }
+    //     })
+    //     .count()
+    //     .catch(err => console.log("ERROR 45", err));
 
 
-    user1 = user1.map(el => el._id);
-    user2 = user2.map(el => el._id);
+    // user1 = user1.map(el => el._id);
+    // user2 = user2.map(el => el._id);
 
-    let player = [...new Set([...user1, ...user2])];
+    // let player = [...new Set([...user1, ...user2])];
 
     await userMatchCollection
         .insertOne({
             date: new Date(reportDate),
-            player: player.length,
-            play_total: userVsUser * 2 + userVsBot,
+            player: userFree + userPaid,
+            free_play: userFree,
+            paid_play: userPaid,
+            play_total: userFree + userPaid,
             report_type: reportType
         })
         .catch(err => console.log("ERROR 48", err));
@@ -426,48 +373,69 @@ async function matchWinLoseCount(reportType, dateFrom, dateTo) {
     let reportDate = new Date().setDate(new Date().getDate() - 1)
 
     const db = await database().catch(err => console.log("ERROR 50", err));
-    const pastMatchesCollection = db.collection(`bucket_${PAST_MATCHES_BUCKET_ID}`);
+    const pastMatchesCollection = db.collection(`bucket_${SINGLE_PAST_MATCHES_BUCKET_ID}`);
     const winLoseCollection = db.collection(`bucket_${WIN_LOSE_MATCHES_BUCKET_ID}`);
 
-    let paidWin = await pastMatchesCollection
-        .find({
-            end_time: { $gte: dateFrom, $lt: dateTo },
-            $or: [
-                { user1_is_free: false, winner: 1 },
-                { user2_is_free: false, winner: 2, player_type: 0 }
-            ]
-        })
-        .count();
+    const freeWin = await pastMatchesCollection.countDocuments({
+        end_time: { $gte: dateFrom, $lt: dateTo },
+        user_is_free: true,
+        arrow_count: { $gte: 10 }
+    })
+    const freeLose = await pastMatchesCollection.countDocuments({
+        end_time: { $gte: dateFrom, $lt: dateTo },
+        user_is_free: true,
+        arrow_count: { $lt: 10 }
+    })
+    const paidWin = await pastMatchesCollection.countDocuments({
+        end_time: { $gte: dateFrom, $lt: dateTo },
+        user_is_free: false,
+        arrow_count: { $gte: 10 },
+    })
+    const paidLose = await pastMatchesCollection.countDocuments({
+        end_time: { $gte: dateFrom, $lt: dateTo },
+        user_is_free: false,
+        arrow_count: { $lt: 10 },
+    })
 
-    let paidLose = await pastMatchesCollection
-        .find({
-            end_time: { $gte: dateFrom, $lt: dateTo },
-            $or: [
-                { user1_is_free: false, winner: 2 },
-                { user2_is_free: false, winner: 1, player_type: 0 }
-            ]
-        })
-        .count();
-    //free play flow added
-    let freeWin = await pastMatchesCollection
-        .find({
-            end_time: { $gte: dateFrom, $lt: dateTo },
-            $or: [
-                { user1_is_free: true, winner: 1 },
-                { user2_is_free: true, winner: 2, player_type: 0 }
-            ]
-        })
-        .count();
+    // let paidWin = await pastMatchesCollection
+    //     .find({
+    //         end_time: { $gte: dateFrom, $lt: dateTo },
+    //         $or: [
+    //             { user1_is_free: false, winner: 1 },
+    //             { user2_is_free: false, winner: 2, player_type: 0 }
+    //         ]
+    //     })
+    //     .count();
 
-    let freeLose = await pastMatchesCollection
-        .find({
-            end_time: { $gte: dateFrom, $lt: dateTo },
-            $or: [
-                { user1_is_free: true, winner: 2 },
-                { user2_is_free: true, winner: 1, player_type: 0 }
-            ]
-        })
-        .count();
+    // let paidLose = await pastMatchesCollection
+    //     .find({
+    //         end_time: { $gte: dateFrom, $lt: dateTo },
+    //         $or: [
+    //             { user1_is_free: false, winner: 2 },
+    //             { user2_is_free: false, winner: 1, player_type: 0 }
+    //         ]
+    //     })
+    //     .count();
+    // //free play flow added
+    // let freeWin = await pastMatchesCollection
+    //     .find({
+    //         end_time: { $gte: dateFrom, $lt: dateTo },
+    //         $or: [
+    //             { user1_is_free: true, winner: 1 },
+    //             { user2_is_free: true, winner: 2, player_type: 0 }
+    //         ]
+    //     })
+    //     .count();
+
+    // let freeLose = await pastMatchesCollection
+    //     .find({
+    //         end_time: { $gte: dateFrom, $lt: dateTo },
+    //         $or: [
+    //             { user1_is_free: true, winner: 2 },
+    //             { user2_is_free: true, winner: 1, player_type: 0 }
+    //         ]
+    //     })
+    //     .count();
 
     await winLoseCollection
         .insertOne({
@@ -493,18 +461,11 @@ export async function reportExportSend(title, reportType) {
             template: "report-mail",
             variables: `{"title": "${title}"}`,
             emails: [
-                "emre.akatin@turkcell.com.tr",
+                "ayse.sahin@turkcell.com.tr",
                 "serdar@polyhagency.com",
-                "caglar@polyhagency.com",
-                "asli.bayram@turkcell.com.tr",
-                "tarik.dervis@turkcell.com.tr",
-                "murat.malci@turkcell.com.tr",
-                "ozkan.hakan@turkcell.com.tr",
-                "Pinar.koca@turkcell.com.tr",
                 "ozangol@teknodev.biz",
                 "serkan@polyhagency.com",
                 "batuhanevirgen@teknodev.biz"
-
             ],
             report_type: reportType
         })

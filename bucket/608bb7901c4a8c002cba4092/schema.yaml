@@ -2,7 +2,7 @@ _id: 608bb7901c4a8c002cba4092
 title: Match Report
 description: Describe your new bucket
 icon: receipt
-primary: p2p_play
+primary: play_count
 readOnly: false
 history: false
 properties:
@@ -13,28 +13,16 @@ properties:
     options:
       position: bottom
     default: :created_at
-  p2p_play:
+  play_count:
     type: number
-    title: p2p_play
-    description: Description of the p2p_play input
+    title: play_count
+    description: Description of the play_count input
     options:
       position: bottom
-  p2p_play_points_earned:
+  arrows_average:
     type: number
-    title: p2p_play_points_earned
-    description: Description of the p2p_play_points_earned input
-    options:
-      position: bottom
-  p2m_play:
-    type: number
-    title: p2m_play
-    description: Description of the p2m_play input
-    options:
-      position: bottom
-  p2m_play_points_earned:
-    type: number
-    title: p2m_play_points_earned
-    description: Description of the p2m_play_points_earned input
+    title: arrows_average
+    description: Description of the arrows_average input
     options:
       position: bottom
   report_type:
@@ -43,63 +31,6 @@ properties:
     description: Description of the report_type input
     options:
       position: bottom
-    default: 0
-  p2p_duration_average:
-    type: number
-    title: p2p_duration_average
-    description: Description of the p2p_duration_average input
-    options:
-      position: bottom
-    default: 0
-  p2m_duration_average:
-    type: number
-    title: p2m_duration_average
-    description: Description of the p2m_duration_average input
-    options:
-      position: bottom
-    default: 0
-  p2p_first_match:
-    type: number
-    title: p2p_first_match
-    description: Description of the p2p_first_match input
-    options:
-      position: bottom
-    default: 0
-  p2m_first_match:
-    type: number
-    title: p2m_first_match
-    description: Description of the p2m_first_match input
-    options:
-      position: bottom
-    default: -2
-  p2p_second_match:
-    type: number
-    title: p2p_second_match
-    description: Description of the p2p_second_match input
-    options:
-      position: bottom
-    default: 0
-  p2m_second_match:
-    type: number
-    title: p2m_second_match
-    description: Description of the p2m_second_match input
-    options:
-      position: bottom
-    default: 0
-  p2p_point_average:
-    type: number
-    title: p2p_point_average
-    description: Description of the p2p_point_average input
-    options:
-      position: bottom
-    default: 0
-  p2m_point_average:
-    type: number
-    title: p2m_point_average
-    description: Description of the p2m_point_average input
-    options:
-      position: bottom
-    default: 0
 acl:
   write: true==true
   read: true==true

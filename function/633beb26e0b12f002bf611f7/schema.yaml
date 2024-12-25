@@ -1,7 +1,7 @@
 _id: 633beb26e0b12f002bf611f7
 name: Helper
 language: javascript
-timeout: 56
+timeout: 34.6
 triggers:
   replaceAbusiveName:
     type: schedule
@@ -9,111 +9,20 @@ triggers:
     options:
       timezone: UTC
       frequency: 0 * * * *
-  deleteBuggedBots:
-    options:
-      method: Get
-      path: /deleteBuggedBots
-      preflight: true
-    type: http
-    active: false
-  checkUserFreePlay:
-    options:
-      method: Post
-      path: /checkUserFreePlay
-      preflight: true
-    type: http
-    active: false
-  botInsertToUser:
-    options:
-      method: Post
-      path: /botInsertToUser
-      preflight: true
-    type: http
-    active: false
-  getGameLeagueUsers:
-    options:
-      method: Get
-      path: /getGameLeagueUsers
-      preflight: true
-    type: http
-    active: false
-  getGameLeagueSendedData:
-    options:
-      method: Get
-      path: /getGameLeagueSendedData
-      preflight: true
-    type: http
-    active: false
-  chargesData:
-    options:
-      method: Get
-      path: /chargesData
-      preflight: true
-    type: http
-    active: false
-  tryLeader:
-    options:
-      method: Get
-      path: /tryLeader
-      preflight: true
-    type: http
-    active: false
-  getUniquePlayer:
-    options:
-      method: Get
-      path: /getUniquePlayer
-      preflight: true
-    type: http
-    active: false
-  getMsisdnsFromBucket:
-    options:
-      method: Get
-      path: /getMsisdnsFromBucket
-      preflight: true
-    type: http
-    active: false
-  deleteSome:
-    options:
-      method: Get
-      path: /deleteSome
-      preflight: true
-    type: http
-    active: false
-  removeSomeIdentity:
-    options:
-      method: Get
-      path: /removeSomeIdentity
-      preflight: true
-    type: http
-    active: false
-  patchUsers:
-    options:
-      method: Get
-      path: /patchUsers
-      preflight: true
-    type: http
-    active: false
-  deleteManyTest:
-    options:
-      method: Get
-      path: /deleteManyTest
-      preflight: true
-    type: http
-    active: true
-  getUniqueCharge:
-    options:
-      method: Get
-      path: /getUniqueCharge
-      preflight: true
-    type: http
-    active: true
   getMyIp:
     options:
       method: Get
       path: /getMyIp
       preflight: true
     type: http
-    active: false
+    active: true
+  buggedUserReward:
+    options:
+      method: Get
+      path: /buggedUserReward
+      preflight: true
+    type: http
+    active: true
 env:
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
   USER_BUCKET: "{USER_BUCKET}"

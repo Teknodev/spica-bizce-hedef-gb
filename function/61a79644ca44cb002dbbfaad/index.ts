@@ -233,15 +233,21 @@ async function playedMatchCount(reportType, dateFilter) {
     if (defaultReportType == 1 || defaultReportType == 2) {
         let player = 0;
         let play_total = 0;
-
+        let paid_play = 0;
+        let free_play = 0;
         userMatches.forEach(data => {
             player += data.player;
             play_total += data.play_total;
+            paid_play += data.paid_play;
+            free_play += data.free_play;
+
         });
         userMatches = [
             {
                 player: player,
                 play_total: play_total,
+                paid_play: paid_play,
+                free_play: free_play,
             }
         ];
     }
@@ -252,9 +258,11 @@ async function playedMatchCount(reportType, dateFilter) {
         userMatches.forEach(data => {
             tableBody += `
             <tr>
-             <td style="width: 33.3%;">${new Date(data.date).toLocaleDateString()}</td>
-             <td style="width: 33.3%;">${numberWithDot(data.player)}</td>
-            <td style="width: 33.3%;">${numberWithDot(data.play_total)}</td>
+             <td style="width: 20%;">${new Date(data.date).toLocaleDateString()}</td>
+             <td style="width: 20%;">${numberWithDot(data.player)}</td>
+             <td style="width: 20%;">${numberWithDot(data.play_total)}</td>
+             <td style="width: 20%;">${numberWithDot(data.free_play)}</td>
+             <td style="width: 20%;">${numberWithDot(data.paid_play)}</td>
             </tr>`;
         });
         html = `
@@ -262,9 +270,11 @@ async function playedMatchCount(reportType, dateFilter) {
          <table style="width: 100%; border-collapse: collapse;">
             <tbody>
             <tr>
-            <th style="width: 33.3%; text-align:left">Tarih</th>
-            <th style="width: 33.3%; text-align:left">Oynayan Kullanıcı</th>
-            <th style="width: 33.3%; text-align:left">Oyun Sayısı</th>
+            <th style="width: 20%; text-align:left">Tarih</th>
+            <th style="width: 20%; text-align:left">Oynayan Kullanıcı</th>
+            <th style="width: 20%; text-align:left">Oyun Sayısı</th>
+            <th style="width: 20%; text-align:left">Ücretsiz Oyun Sayısı</th>
+            <th style="width: 20%; text-align:left">Ücretli Oyun Sayısı</th>
             </tr>
            ${tableBody}
             </tbody>
@@ -275,18 +285,18 @@ async function playedMatchCount(reportType, dateFilter) {
         <table style="width: 100%; border-collapse: collapse;">
             <tbody>
                 <tr>
-                    <th style="width: 33.3%;"></th>
-                    <th style="width: 33.3%;">Oynayan Kullanıcı</th>
-                    <th style="width: 33.3%;"> Toplam Oyun</th>
+                    <th style="width: 20%; text-align:left;">Toplam</th>
+                    <th style="width: 20%; text-align:left;">Oynayan Kullanıcı</th>
+                    <th style="width: 20%; text-align:left;">Toplam Oyun</th>
+                    <th style="width: 20%; text-align:left">Ücretsiz Oyun Sayısı</th>
+                    <th style="width: 20%; text-align:left">Ücretli Oyun Sayısı</th>
                 </tr>
                  <tr>
-                    <td style="width: 33.3%;">Toplam</td>
-                    <td style="width: 33.3%;">${numberWithDot(
-            userMatches[0].player
-        )}</td>
-                    <td style="width: 33.3%;">${numberWithDot(
-            userMatches[0].play_total
-        )}</td>
+                    <td style="width: 20%;">Toplam</td>
+                    <td style="width: 20%;">${numberWithDot(userMatches[0].player)}</td>
+                    <td style="width: 20%;">${numberWithDot(userMatches[0].play_total)}</td>
+                    <td style="width: 20%;">${numberWithDot(userMatches[0].free_play)}</td>
+                    <td style="width: 20%;">${numberWithDot(userMatches[0].paid_play)}</td
                 </tr>
             </tbody>
         </table>`;
@@ -319,49 +329,20 @@ async function matchGeneralReport(reportType, dateFilter) {
         });
 
     if (defaultReportType == 1 || defaultReportType == 2) {
-        let p2pPlay = 0;
-        let p2pPlayPointsEarned = 0;
-        let p2mPlay = 0;
-        let p2mPlayPointsEarned = 0;
-        let p2pDurationAverage = 0;
-        let p2mDurationAverage = 0;
-        let p2pPointAverage = 0;
-        let p2mPointAverage = 0;
+        let totalPlay = 0;
+        let totalArrowsAverage = 0;
         let dayCounter = 0;
-        let p2pFirstMatch = 0;
-        let p2mFirstMatch = 0;
-        // let p2pSecondMatch = 0;
-        // let p2mSecondMatch = 0;
 
         matchData.forEach(data => {
             dayCounter += 1;
-            p2pPlay += data.p2p_play;
-            p2pPlayPointsEarned += data.p2p_play_points_earned;
-            p2mPlay += data.p2m_play;
-            p2mPlayPointsEarned += data.p2m_play_points_earned;
-            p2pDurationAverage += Number(data.p2p_duration_average || 0);
-            p2mDurationAverage += Number(data.p2m_duration_average || 0);
-            p2pPointAverage += Number(data.p2p_point_average || 0);
-            p2mPointAverage += Number(data.p2m_point_average || 0);
-            p2pFirstMatch += data.p2p_first_match;
-            p2mFirstMatch += data.p2m_first_match;
-            // p2pSecondMatch += data.p2p_second_match;
-            // p2mSecondMatch += data.p2m_second_match;
+            totalPlay += data.play_count;
+            totalArrowsAverage += Number(data.arrows_average || 0);
         });
+
         matchData = [
             {
-                p2p_play: p2pPlay,
-                p2p_play_points_earned: p2pPlayPointsEarned,
-                p2m_play: p2mPlay,
-                p2m_play_points_earned: p2mPlayPointsEarned,
-                p2p_duration_average: Number((p2pDurationAverage / dayCounter).toFixed(1)),
-                p2m_duration_average: Number((p2mDurationAverage / dayCounter).toFixed(1)),
-                p2p_point_average: Number((p2pPointAverage / dayCounter).toFixed(1)),
-                p2m_point_average: Number((p2mPointAverage / dayCounter).toFixed(1)),
-                p2p_first_match: p2pFirstMatch,
-                p2m_first_match: p2mFirstMatch,
-                // p2p_second_match: p2pSecondMatch,
-                // p2m_second_match: p2mSecondMatch
+                play_count: totalPlay,
+                arrows_average: Number((totalArrowsAverage / dayCounter).toFixed(1))
             }
         ];
     }
@@ -373,16 +354,8 @@ async function matchGeneralReport(reportType, dateFilter) {
             tableBody += `
             <tr>
              <td style="width: 7.6%;">${new Date(data.date).toLocaleDateString()}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2p_play)}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2p_play_points_earned)}</td>
-             <td style="width: 7.6%;">${data.p2p_duration_average}</td>
-             
-             
-             <td style="width: 7.6%;">${numberWithDot(data.p2m_play)}</td>
-             <td style="width: 7.6%;">${numberWithDot(data.p2m_play_points_earned)}</td>
-             <td style="width: 7.6%;">${data.p2m_duration_average}</td>
-             
-             
+             <td style="width: 7.6%;">${numberWithDot(data.play_count)}</td>
+             <td style="width: 7.6%;">${data.arrows_average}</td>
             </tr>`;
         });
         html = `
@@ -391,18 +364,8 @@ async function matchGeneralReport(reportType, dateFilter) {
             <tbody>
             <tr>
             <th style="width: 9%; text-align:left">Tarih</th>
-            <th style="width: 9%; text-align:left">P2P Oyun</th>
-            <th style="width: 9%; text-align:left">P2P Kazanılan Puan</th>
-            <th style="width: 9%; text-align:left">P2P Ortalama Oyun Süresi (saniye)</th>
-            
-            
-            
-            <th style="width: 9%; text-align:left">P2M Oyun</th>
-            <th style="width: 9%; text-align:left">P2M Kazanılan Puan</th>
-            <th style="width: 9%; text-align:left">P2M Ortalama Oyun Süresi (saniye)</th>
-            
-            
-            
+            <th style="width: 9%; text-align:left">Oyun Sayısı</th>
+            <th style="width: 9%; text-align:left">Ortalama Atılan Ok Sayısı</th>
             </tr>
            ${tableBody}
             </tbody>
@@ -415,36 +378,12 @@ async function matchGeneralReport(reportType, dateFilter) {
              <tr>
                 <td style="width: 14.2%;"></td>
                 <td style="width: 14.2%; font-weight: bold;">Oyun Sayısı</td>
-                <td style="width: 14.2%; font-weight: bold;">Kazanılan Puan</td>
-                <td style="width: 14.2%; font-weight: bold;">Ortalama Oyun Süresi (saniye)</td>
-                
-                
-                
+                <td style="width: 14.2%; font-weight: bold;">Ortalama Atılan Ok Sayısı</td>
             </tr>
              <tr>
-                <td style="width: 14.2%; font-weight: bold;">P2P</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_play)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_play_points_earned)}</td>
-                <td style="width: 14.2%;">${matchData[0].p2p_duration_average}</td>
-                
-                
-            </tr>
-            <tr>
-                <td style="width: 14.2%; font-weight: bold;">P2M</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_play)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2m_play_points_earned)}</td>
-                <td style="width: 14.2%;">${matchData[0].p2m_duration_average}</td>
-              
-                
-            </tr>
-           <tr>
                 <td style="width: 14.2%; font-weight: bold;">Toplam</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_play + matchData[0].p2m_play)}</td>
-                <td style="width: 14.2%;">${numberWithDot(matchData[0].p2p_play_points_earned +
-            matchData[0].p2m_play_points_earned)}</td>
-                <td style="width: 14.2%;">-</td>
-                
-                
+                <td style="width: 14.2%;">${numberWithDot(matchData[0].play_count)}</td>
+                <td style="width: 14.2%;">${matchData[0].arrows_average}</td>
             </tr>
             </tbody>
         </table>`;
@@ -452,6 +391,7 @@ async function matchGeneralReport(reportType, dateFilter) {
 
     return html;
 }
+
 
 async function matchWinLoseCount(reportType, dateFilter) {
     let htmlType = 0;
@@ -479,15 +419,28 @@ async function matchWinLoseCount(reportType, dateFilter) {
     if (defaultReportType == 1 || defaultReportType == 2) {
         let winTotal = 0;
         let loseTotal = 0;
+        let winFree = 0;
+        let loseFree = 0;
+        let winPaid = 0;
+        let losePaid = 0;
 
         winLoseData.forEach(data => {
             winTotal += data.win_total;
             loseTotal += data.lose_total;
+            winFree += data.win_free;
+            loseFree += data.lose_free;
+            winPaid += data.win_paid;
+            losePaid += data.lose_paid;
+
         });
         winLoseData = [
             {
                 win_total: winTotal,
-                lose_total: loseTotal
+                lose_total: loseTotal,
+                win_free: winFree,
+                lose_free: loseFree,
+                win_paid: winPaid,
+                lose_paid: losePaid
             }
         ];
     }
@@ -498,9 +451,13 @@ async function matchWinLoseCount(reportType, dateFilter) {
         winLoseData.forEach(data => {
             tableBody += `
             <tr>
-             <td style="width: 33.3%;">${new Date(data.date).toLocaleDateString()}</td>
-             <td style="width: 33.3%;">${numberWithDot(data.win_paid)}</td>
-            <td style="width: 33.3%;">${numberWithDot(data.lose_paid)}</td>
+             <td style="width: 14.2%;">${new Date(data.date).toLocaleDateString()}</td>
+             <td style="width: 14.2%;">${numberWithDot(data.win_total)}</td>
+             <td style="width: 14.2%;">${numberWithDot(data.lose_total)}</td>
+             <td style="width: 14.2%;">${numberWithDot(data.win_free)}</td>
+             <td style="width: 14.2%;">${numberWithDot(data.lose_free)}</td>
+             <td style="width: 14.2%;">${numberWithDot(data.win_paid)}</td>
+             <td style="width: 14.2%;">${numberWithDot(data.lose_paid)}</td>
             </tr>`;
         });
         html = `
@@ -508,9 +465,13 @@ async function matchWinLoseCount(reportType, dateFilter) {
          <table style="width: 100%; border-collapse: collapse;">
             <tbody>
             <tr>
-            <th style="width: 33.3%; text-align:left">Tarih</th>
-            <th style="width: 33.3%; text-align:left">Kazanılan Maç</th>
-            <th style="width: 33.3%; text-align:left">Kaybedilen Maç</th>
+            <th style="width: 14.2%; text-align:left">Tarih</th>
+            <th style="width: 14.2%; text-align:left">Kazanılan Maç</th>
+            <th style="width: 14.2%; text-align:left">Kaybedilen Maç</th>
+            <th style="width: 14.2%; text-align:left">Ücretsiz Kazanılan Maç</th>
+            <th style="width: 14.2%; text-align:left">Ücretsiz Kaybedilen Maç</th>
+            <th style="width: 14.2%; text-align:left">Ücretli Kazanılan Maç</th>
+            <th style="width: 14.2%; text-align:left">Ücretli Kaybedilen Maç</th>
             </tr>
            ${tableBody}
             </tbody>
@@ -521,14 +482,22 @@ async function matchWinLoseCount(reportType, dateFilter) {
         <table style="width: 100%; border-collapse: collapse;">
             <tbody>
                 <tr>
-                    <td style="width: 33.3%;"></td>
-                    <td style="width: 33.3%; font-weight: bold;">Kazanılan Maç</td>
-                    <td style="width: 33.3%; font-weight: bold;">Kaybedilen Maç</td>
+                    <td style="width: 14.2%;"></td>
+                    <td style="width: 14.2%; font-weight: bold;">Kazanılan Maç</td>
+                    <td style="width: 14.2%; font-weight: bold;">Kaybedilen Maç</td>
+                    <th style="width: 14.2%; font-weight: bold;">Ücretsiz Kazanılan Maç</th>
+                    <th style="width: 14.2%; font-weight: bold;">Ücretsiz Kaybedilen Maç</th>
+                    <th style="width: 14.2%; font-weight: bold;">Ücretli Kazanılan Maç</th>
+                    <th style="width: 14.2%; font-weight: bold;">Ücretli Kaybedilen Maç</th>
                 </tr>
-                 <tr>
-                    <td style="width: 33.3%; font-weight: bold;">Toplam</td>
-                    <td style="width: 33.3%;">${numberWithDot(winLoseData[0].win_total)}</td>
-                    <td style="width: 33.3%;">${numberWithDot(winLoseData[0].lose_total)}</td>
+                <tr>
+                    <td style="width: 14.2%; font-weight: bold;">Toplam</td>
+                    <td style="width: 14.2%;">${numberWithDot(winLoseData[0].win_total)}</td>
+                    <td style="width: 14.2%;">${numberWithDot(winLoseData[0].lose_total)}</td>
+                    <td style="width: 14.2%;">${numberWithDot(winLoseData[0].win_free)}</td>
+                    <td style="width: 14.2%;">${numberWithDot(winLoseData[0].lose_free)}</td>
+                    <td style="width: 14.2%;">${numberWithDot(winLoseData[0].win_paid)}</td>
+                    <td style="width: 14.2%;">${numberWithDot(winLoseData[0].lose_paid)}</td>
                 </tr>
             </tbody>
         </table>`;

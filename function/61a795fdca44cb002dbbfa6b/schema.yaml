@@ -2,7 +2,7 @@ _id: 61a795fdca44cb002dbbfa6b
 name: Charge & Reward
 description: Adds new available play for the user
 language: javascript
-timeout: 56.5
+timeout: 56
 triggers:
   applyRewardManually:
     options:
@@ -23,12 +23,6 @@ triggers:
       path: /checkSMSCode
       preflight: true
     type: http
-    active: true
-  getWinner:
-    options:
-      collection: bucket_60742ed3f95e39002c4917ae
-      type: INSERT
-    type: database
     active: true
   singlePlayMatchReward:
     options:

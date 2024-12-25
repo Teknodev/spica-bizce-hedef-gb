@@ -2,7 +2,7 @@ import { database, ObjectId } from "@spica-devkit/database";
 const fetch = require("node-fetch");
 
 const DUEL_BUCKET_ID = process.env.DUEL_BUCKET_ID;
-const MAIN_SERVER_URL = "https://turkcell-doodle-jump-3a662.hq.spicaengine.com/api";
+const MAIN_SERVER_URL = "https://bizce-hedef-gb-23d20.hq.spicaengine.com/api";
 const OPERATION_KEY = '6Ww7PajcsGH34PbE';
 
 

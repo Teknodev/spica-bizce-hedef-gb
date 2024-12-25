@@ -22,10 +22,10 @@ properties:
 acl:
   write: |-
     auth.attributes.role == "admin" ||
-    auth.key == "406bus18l2yiufdq"
+    auth.key == "406bus18l2yiufdq" || auth.key == "22j218m0nzyeka"
   read: |-
     auth.attributes.role == "admin" ||
-    document.key != "dashboard_key"
+    document.key != "dashboard_key" || auth.key == "22j218m0nzyeka"
 required:
   - key
 order: 21

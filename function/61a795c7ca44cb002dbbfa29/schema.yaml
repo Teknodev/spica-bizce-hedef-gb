@@ -10,7 +10,7 @@ triggers:
       timezone: UTC
       frequency: "* * * * *"
     type: schedule
-    active: true
+    active: false
   newMatchmaker:
     options:
       method: Post

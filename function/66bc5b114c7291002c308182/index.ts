@@ -2,7 +2,7 @@ import { database, ObjectId } from "@spica-devkit/database";
 import axios from "axios"
 
 const SINGLE_DUEL_BUCKET = process.env.SINGLE_DUEL_BUCKET;
-const MAIN_SERVER_URL = "https://turkcell-doodle-jump-3a662.hq.spicaengine.com/api";
+const MAIN_SERVER_URL = "https://bizce-hedef-gb-23d20.hq.spicaengine.com/api";
 const OPERATION_KEY = '6Ww7PajcsGH34PbE';
 let db;
 export async function singlePlaycheckFinishedDuels() {
