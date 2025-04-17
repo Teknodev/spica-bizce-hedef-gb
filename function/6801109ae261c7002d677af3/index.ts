@@ -12,11 +12,11 @@ export async function saveProgress() {
     if (addRes?.data?.message != "") return;
     const commitRes = await Api.httpRequest('post', `https://bizce-hedef-gb-23d20.hq.spicaengine.com/api/versioncontrol/commands/commit`,
         { args: ["-m", "\"Auto save progress\""] }, headers)
-    console.log("Commit res", commitRes.data)
+    if (!commitRes?.data?.commit) return;
+
     const pushRes = await Api.httpRequest('post', `https://bizce-hedef-gb-23d20.hq.spicaengine.com/api/versioncontrol/commands/push`,
         { args: ["origin", "main"] }, headers)
-
-    console.log("Push res", pushRes)
+    console.debug(`Commit: ${commitRes.data.commit} , Summary: ${commitRes.data.summary} , Repo: ${pushRes?.data?.repo || "CHECK IT"}`)
     return "ok"
 }
 
