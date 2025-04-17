@@ -14,3 +14,4 @@ env:
   CONTACT_MESSAGE_ID: "{CONTACT_MESSAGE_ID}"
   API_KEY: "{API_KEY}"
 memoryLimit: 100
+order: 16

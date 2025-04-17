@@ -1,15 +1,14 @@
-_id: 66c35126435fd2002ce680c4
-name: Api
+_id: 6801109ae261c7002d677af3
+name: Auto Save Progress
 language: javascript
-timeout: 64.1
+timeout: 195.6
 triggers:
-  default:
+  saveProgress:
     type: http
     active: true
     options:
       method: Get
-      path: /
+      path: /saveProgress
       preflight: true
 env: {}
 memoryLimit: 100
-order: 20

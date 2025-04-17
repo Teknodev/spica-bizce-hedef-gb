@@ -99,6 +99,13 @@ export async function insertOne(bucketId, data) {
         .insertOne(data)
         .catch(err => console.log("ERROR 1", err));
 }
+export async function insertOneAssignDuel(bucketId, data) {
+    if (!db) {
+        db = await useDatabase();
+    }
+    return db.collection(`bucket_${bucketId}`)
+        .insertOne(data)
+}
 
 export async function insertMany(bucketId, data) {
     if (!db) {

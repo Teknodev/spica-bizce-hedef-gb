@@ -209,12 +209,13 @@ export async function updateFreePlayForUsers() {
     if (currentDay === 4 || currentDay === 6) {
         isFreePlay = false;
     }
-
+    //1 0 * * *
     const db = await database();
     const userCollection = db.collection(`bucket_${USER_BUCKET_ID}`);
-
-    await userCollection.updateMany(
+    console.log("updateFreePlayForUsers", isFreePlay)
+    userCollection.updateMany(
         { bot: false },
         { $set: { free_play: isFreePlay } }
     );
+    return "ok"
 }

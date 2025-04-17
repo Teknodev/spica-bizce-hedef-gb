@@ -142,6 +142,13 @@ properties:
           options:
             position: bottom
           default: :created_at
+  charge_count:
+    type: number
+    title: charge_count
+    description: Description of the charge_count input
+    options:
+      position: bottom
+    default: 0
 acl:
   write: >-
     auth.attributes.role == "admin" ||
@@ -149,4 +156,4 @@ acl:
     auth.key == "406bus18l2yiufdq" || auth.key == "e5wl18kmw287kr" || auth.key == "22j218m0chwl0n"
   read: true==true
 required: []
-order: 22
+order: 23

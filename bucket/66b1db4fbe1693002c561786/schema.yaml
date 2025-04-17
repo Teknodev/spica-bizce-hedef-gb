@@ -46,8 +46,10 @@ properties:
     description: Description of the reference_no input
     options:
       position: bottom
+      index: true
+      unique: true
 acl:
   write: true==true
   read: true==true
-order: 18
+order: 19
 category: Singleplay

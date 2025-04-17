@@ -1,0 +1,23 @@
+_id: 67bdd555a35582002be8a5f0
+name: Fast Register
+language: javascript
+timeout: 53.7
+triggers:
+  default:
+    type: http
+    active: true
+    options:
+      method: Get
+      path: /
+      preflight: true
+  registerV2:
+    options:
+      method: Post
+      path: /fast-register
+      preflight: true
+    type: http
+    active: true
+env:
+  NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
+memoryLimit: 100
+order: 22

@@ -14,12 +14,13 @@ const USER_BUCKET_ID = process.env.USER_BUCKET_ID;
 const TCELL_USERNAME = 400026758;
 const TCELL_PASSWORD = 400026758;
 
-const CHARGE_AMOUNT = 24;
+const CHARGE_AMOUNT = 39;
 
 const MT_VARIANT = 130524;
-
-const CHARGE_VARIANT = 158964;
-const CHARGE_OFFER_ID = 501423;
+const CHARGE_VARIANT = 215921;
+const CHARGE_OFFER_ID = 643073;
+const CHARGE_VARIANT_OLD = 158964;
+const CHARGE_OFFER_ID_OLD = 501423;
 
 // const HOURLY_1GB_OFFER_ID = 451319;
 // const HOURLY_CAMPAIGN_ID = "871137.947568.966245";
@@ -40,6 +41,16 @@ export async function chargeRequest(req, res) {
 
     let msisdn = token_object.attributes.msisdn;
 
+    const isGameLimitReached = await checkUserChargeCount(msisdn);
+
+    if (isGameLimitReached) {
+        console.log('isGameLimitReached')
+        return res.status(400).send({
+            playStatus: false,
+            message: "Oyun limitiniz dolmuştur. <br> Daha fazla oyun oynayamazsınız."
+        });
+    }
+
     let generatedCode = codeGenerate(4);
     const codeData = await getConfirmationCodeByMsisdn(msisdn);
 
@@ -50,9 +61,40 @@ export async function chargeRequest(req, res) {
     }
 
     sendSms(msisdn, generatedCode)
-    // sendSms("5317828001",generatedCode);
-
     return res.status(200).send({ message: 'Charge request success' });
+
+}
+
+
+async function checkUserChargeCount(msisdn) {
+    const [identity] = await getIdentityByMsisdn(msisdn);
+
+    const user = await getUserByIdentityId(identity._id)
+
+    const result = user.charge_count >= 150 ? true : false;
+
+    return result;
+}
+
+async function getIdentityByMsisdn(msisdn) {
+    Identity.initialize({ apikey: `${SECRET_API_KEY}` });
+
+    const identity = await Identity.getAll({
+        filter: { "attributes.msisdn": String(msisdn) }
+    }).catch(err => console.log("ERROR 12", err));
+
+    return identity
+}
+
+async function getUserByIdentityId(identity_id) {
+    if (!db) {
+        db = await database().catch(err => console.log("ERROR 13", err));
+    }
+    const usersCollection = db.collection(`bucket_${USER_BUCKET_ID}`);
+
+    const user = await usersCollection.findOne({ identity: identity_id });
+
+    return user
 }
 
 function codeGenerate(length) {
@@ -170,7 +212,6 @@ export async function checkSMSCode(req, res) {
     }
 
     const flowResult = await successTransaction(msisdn);
-
     if (!flowResult.status) {
         return res.status(400).send({ status: false, message: flowResult.message });
     }
@@ -552,18 +593,25 @@ async function increaseAvailablePlay(msisdn) {
         db = await database().catch(err => console.log("ERROR 13", err));
     }
     const usersCollection = db.collection(`bucket_${USER_BUCKET_ID}`);
-
     return usersCollection
         .findOne({ identity: identity[0]._id })
         .then(user => {
             let available_play = user.available_play_count
                 ? Number(user.available_play_count) + 1
                 : 1;
+
+            let charge_count = user.charge_count
+                ? Number(user.charge_count) + 1
+                : 1;
+            console.log('user---user', user);
             return usersCollection
                 .findOneAndUpdate(
                     { _id: ObjectId(user._id) },
                     {
-                        $set: { available_play_count: available_play }
+                        $set: {
+                            available_play_count: available_play,
+                            charge_count: charge_count
+                        }
                     }
                 )
                 .then(res => {
@@ -603,12 +651,13 @@ async function getUserMsisdn(user) {
     return msisdn;
 }
 async function setAward(msisdn, userFree, matchId) {
+    // console.log("setAward")
     const sessionId = await sessionSOAP(CHARGE_VARIANT).catch(err =>
         console.log("ERROR 15", err)
     );
     if (sessionId) {
         if (userFree) { // Free gameplay flow
-            console.log("@FreeUserReward");
+            // console.log("setAward free : true", msisdn)
             await setAwardSOAP(
                 sessionId,
                 msisdn,
@@ -620,6 +669,7 @@ async function setAward(msisdn, userFree, matchId) {
         }
         // winner award
         else {
+            // console.log("setAward free : false", msisdn)
             await setAwardSOAP(
                 sessionId,
                 msisdn,
@@ -651,6 +701,7 @@ async function tokenVerified(token) {
 
 export async function singlePlayMatchReward(change) {
     const match = change.document;
+    // console.log("match", match)
     if (match.arrow_count < 10) return;
     const msisdn = await getUserMsisdn(match.user);
 
@@ -667,7 +718,9 @@ async function awardHandler(msisdn, userFree, duelId, number) {
     //     await setAward(mockMsisdn, userFree, duelId);
     //     await new Promise(resolve => setTimeout(resolve, 1000));
     // }
+    // console.log("awardHandler", msisdn)
     await setAward(msisdn, userFree, duelId);
+    // console.log("awardSuccess : sessionId", awardSuccess)
     if (number == 1) return;
 
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -676,3 +729,155 @@ async function awardHandler(msisdn, userFree, duelId, number) {
     return;
 }
 
+
+export async function getChargeCount() {
+    const db = await Api.useDatabase();
+
+    const date = {
+        $lte: new Date("2025-02-28T21:00:00.855Z"),
+        $gte: new Date("2025-01-31T21:00:00.855Z"),
+    };
+
+    const chargeCollection = db.collection(`bucket_${CHARGE_LOGS_BUCKET}`);
+
+    const charge_count = await chargeCollection.countDocuments({ date, status: true });
+
+    console.log(`Şubat Ayı charge_count : ${charge_count} charge_price : ${charge_count * 24} `);
+
+    return 'ok';
+}
+
+
+export async function testNewChargeInfo(){
+    const test = await testCharge("5317828001")
+    console.log("testNewChargeInfo :",test)
+    return "ok"
+}
+
+async function testCharge(msisdn) {
+    const sessionId = await sessionSOAP(215921).catch(err =>
+        console.log("ERROR 32", err)
+    );
+    console.log("TEST sessionId",sessionId)
+    return testOfferTransactionSOAP(sessionId, msisdn);
+}
+
+async function testOfferTransactionSOAP(sessionID, msisdn) {
+    if (!db) {
+        db = await database().catch(err => console.log("ERROR 9", err));
+    }
+    let date = new Date();
+    let transactionDate = `${date.getFullYear()}${("0" + (date.getMonth() + 1)).slice(-2)}${(
+        "0" + date.getDate()
+    ).slice(-2)}`;
+
+    let soapEnv = `<?xml version="1.0" encoding="UTF-8"?>
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:gen="http://sdp.turkcell.com.tr/mapping/generated" xmlns:par="http://extranet.turkcell.com/ordermanagement/processes/partnerdisposableservicecharge/PartnerDisposableServiceChargeTypes">
+    <soapenv:Header>
+        <gen:token>
+            <sessionId>${sessionID}</sessionId>
+        </gen:token>
+    </soapenv:Header>
+    <soapenv:Body>
+        <par:DisposableServiceCreateOrderRequest>
+            <par:header>
+                <par:user>
+                <par:userName>${TCELL_USERNAME}</par:userName>
+                <par:ipAddress>104.197.250.30</par:ipAddress>
+                <par:dealer>
+                    <par:dealerCode>TTB34.00009</par:dealerCode>
+                    <par:subDealerCode>?</par:subDealerCode>
+                </par:dealer>
+                </par:user>
+                <par:channel>
+                <par:channelId>23</par:channelId>
+                <par:applicationId>514</par:applicationId>
+                </par:channel>
+                <par:transactionId>7890${transactionDate}0${CHARGE_OFFER_ID_39}</par:transactionId>
+            </par:header>
+            <par:customer>
+                <par:crmCustomerId>${TCELL_USERNAME}</par:crmCustomerId>
+            </par:customer>
+            <!--1 or more repetitions:-->
+            <par:lineItem>
+                <par:msisdn>${msisdn}</par:msisdn>
+                <par:offerId>${CHARGE_OFFER_ID_39}</par:offerId>
+            </par:lineItem>
+            <par:synchronize>true</par:synchronize>
+        </par:DisposableServiceCreateOrderRequest>
+    </soapenv:Body>
+    </soapenv:Envelope>`;
+
+    return axios
+        .post(
+            "https://sdp.turkcell.com.tr/proxy/external/partnerdisposableservicecharge",
+            soapEnv,
+            {
+                headers: {
+                    "Content-Type": "text/xml",
+                    soapAction:
+                        "http://sdp.turkcell.com.tr/services/action/PartnerChargeService/createOrder"
+                }
+            }
+        )
+        .then(async res => {
+            let content = JSON.parse(convert.xml2json(res.data, { compact: true, spaces: 4 }));
+
+            if (content["S:Envelope"]["S:Body"]["ns1:DisposableServiceCreateOrderResponse"]) {
+                let result =
+                    content["S:Envelope"]["S:Body"]["ns1:DisposableServiceCreateOrderResponse"];
+                let status = result["line"]["businessInteraction"];
+
+                let chargeData = {
+                    order_id: parseInt(result["ns1:orderId"]["_text"]),
+                    date: new Date(),
+                    user_text: status ? status["error"]["userText"]["_text"] : "",
+                    status: status ? false : true,
+                    result: res.data,
+                    msisdn: result["line"]["msisdn"]["_text"],
+                };
+
+                await db
+                    .collection(`bucket_${TRANSACTIONS_BUCKET}`)
+                    .insertOne(chargeData)
+                    .catch(err => console.log("ERROR 10", err));
+
+            }
+
+            if (!content["S:Envelope"]["S:Body"]["ns1:DisposableServiceCreateOrderResponse"]) {
+                console.log("ERROR CONTENT", content["S:Envelope"]["S:Body"]["S:Fault"]);
+                return { status: false, message: "Hata oluştu, daha sonra dene1 " };
+            }
+
+            let isContinue =
+                content["S:Envelope"]["S:Body"]["ns1:DisposableServiceCreateOrderResponse"]["line"][
+                "continue"
+                ]["_text"];
+            if (isContinue == "true") {
+                return { status: true, message: "OK" };
+            } else {
+                if (
+                    content["S:Envelope"]["S:Body"]["ns1:DisposableServiceCreateOrderResponse"][
+                    "line"
+                    ]["businessInteraction"]["error"]["userText"]["_text"]
+                ) {
+                    return {
+                        status: false,
+                        message:
+                            content["S:Envelope"]["S:Body"][
+                            "ns1:DisposableServiceCreateOrderResponse"
+                            ]["line"]["businessInteraction"]["error"]["userText"]["_text"]
+                    };
+                } else {
+                    return { status: false, message: "Hata oluştu, daha sonra dene2 " };
+                }
+            }
+        })
+        .catch(err => {
+            console.log("ERROR 11", err);
+            return {
+                status: false,
+                message: "Hata oluştu. Ayarlar sayfasından bize ulaşabilirsin"
+            };
+        });
+}

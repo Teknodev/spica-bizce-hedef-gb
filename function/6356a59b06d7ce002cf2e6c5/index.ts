@@ -13,7 +13,120 @@ const PASSWORD_SALT = process.env.PASSWORD_SALT;
 const USER_BUCKET_ID = process.env.USER_BUCKET_ID;
 
 let db;
+export async function loginV2(req, res) {
+    if (!db) db = await database();
+    const { token } = req.body;
+    if (!token) return res.status(400).send({ message: "Fastlogin token is not defined." });
+    const users_collection = db.collection(`bucket_${USER_BUCKET_ID}`);
 
+
+    let fastloginRes = await fastLogin(token).catch(err => console.log("ERROR 1", err));
+    // console.log("fastloginRes",fastloginRes)
+    if (!fastloginRes?.msisdn) return res.status(400).send({ message: "Fastlogin error", error: fastloginRes });
+
+    let identifier = fastloginRes.msisdn;
+    // fastloginRes.msisdn;
+    let password = PASSWORD_SALT;
+    let msisdn = fastloginRes.msisdn;
+    // fastloginRes.msisdn;
+    let freePlaydata;
+    const identity = await db.collection('identity').findOne({ identifier })
+
+    if (identity) {
+        const loginToken = await getIdentityTokenWithJWT(identity._id, identifier)
+        // console.log("token: ", loginToken)
+
+        const decodedToken = jwt.decode(loginToken);
+        // console.log("decodedToken: ", decodedToken)
+
+        if (!decodedToken) return res.status(400).send({ message: "Error while deceoded token" })
+        const user = await users_collection
+            .findOne({ identity: String(decodedToken._id) })
+            .catch(err => console.log("ERROR 2", err));
+        return res.status(200).send({
+            token: loginToken,
+            user: user
+        });
+    }
+
+    // 4-create an identity
+    const identityData = await createIdentity(identifier, password, msisdn).catch(console.error);
+    if (!identityData) return res.status(400).send({ message: "Error while creating identity" });
+
+    const FREE_PLAY_CONTROL_DAYS = [3, 5];
+    let isFreePlay = false
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 3);
+    const currentDay = currentDate.getDay(); // getDay() returns 0 (Sunday) to 6 (Saturday)
+    if (FREE_PLAY_CONTROL_DAYS.includes(currentDay)) isFreePlay = true;
+
+    let insertedObject = await users_collection
+        .insertOne({
+            identity: identityData.identity_id,
+            avatar_id: 0,
+            created_at: new Date(),
+            total_point: 0,
+            weekly_point: 0,
+            win_count: 0,
+            lose_count: 0,
+            total_award: 0,
+            weekly_award: 0,
+            available_play_count: 0,
+            bot: false,
+            free_play: false,//false
+            perm_accept: false
+        })
+        .catch(error => {
+            return res.status(400).send({
+                message:
+                    "Error while adding user to User Bucket (Identity already added).",
+                error: error
+            });
+        });
+    if (!insertedObject) return res.status(400).send({ message: "Error while adding user to User Bucket (Identity already added)." });
+    // console.log("insertedObject", insertedObject)
+
+
+    const tokenData = await getIdentityTokenWithJWT(identityData.identity_id, identifier)
+    // console.log("tokenData: ", tokenData)
+
+    if (!tokenData) return res.status(400).send({ message: 'Error' });
+    const user = insertedObject.ops[0];
+
+
+    return res.status(200).send({
+        token: tokenData,
+        user: user
+    });
+
+}
+async function getIdentityTokenWithJWT(identityId, identifier) {
+    const JWT_SECRET_KEY = "bizce-hedef-gb-23d20-1724327281237-23";
+    const SERVER_URL = "https://bizce-hedef-gb-23d20.hq.spicaengine.com/api"
+    const EXPIRATION_TIME = 3600;
+    const password = PASSWORD_SALT
+    return jwt.sign(
+        {
+            _id: identityId,
+            identifier,
+            password,
+            attributes: { msisdn: identifier },
+            aud: "spica.io",
+            iss: SERVER_URL
+        },
+        `${JWT_SECRET_KEY}`,
+        {
+            algorithm: 'HS256',
+            header: {
+                identifier: identifier,
+                policies: [`${USER_POLICY}`],
+            },
+            expiresIn: EXPIRATION_TIME
+        }
+    );
+
+}
+// !! Deprecated !!
 export async function login(req, res) {
     if (!db) db = await database().catch(err => console.log("ERROR 1", err));
     const users_collection = db.collection(`bucket_${USER_BUCKET_ID}`);
@@ -85,8 +198,15 @@ export async function login(req, res) {
                     } else {
                         // 4-create an identity
                         // const response = await checkOtherGames(msisdn);//check free play
-                        const freePlay = updateFreePlayForUsers();
+                        // const freePlay = updateFreePlayForUsers();
                         // console.log("freePlay: ",freePlay);
+                        const FREE_PLAY_CONTROL_DAYS = [3, 5];
+                        let isFreePlay = false
+                        const currentDate = new Date();
+                        currentDate.setHours(currentDate.getHours() + 3);
+                        const currentDay = currentDate.getDay(); // getDay() returns 0 (Sunday) to 6 (Saturday)
+                        if (FREE_PLAY_CONTROL_DAYS.includes(currentDay)) isFreePlay = true;
+                        // console.log(isFreePlay)
                         createIdentity(identifier, password, msisdn)
                             .then(async identity_data => {
                                 // 5-add this identity to user_bucket
@@ -103,7 +223,7 @@ export async function login(req, res) {
                                         weekly_award: 0,
                                         available_play_count: 0,
                                         bot: false,
-                                        free_play: freePlay,
+                                        free_play: isFreePlay,//false
                                         perm_accept: false
                                     })
                                     .catch(error => {
@@ -141,7 +261,7 @@ export async function login(req, res) {
     }
 }
 
-export async function register(req, res) {
+export async function registerDeprecated(req, res) {
     if (!db) db = await database().catch(err => console.log("ERROR 3", err));
     const { identity, name, avatar_id } = req.body;
     // Bucket.initialize({ apikey: `${SECRET_API_KEY}` });
@@ -149,31 +269,30 @@ export async function register(req, res) {
     // 1-check token && name && url is defined
 
     const users_collection = db.collection(`bucket_${USER_BUCKET_ID}`);
-    if (name) {
-        let user = await users_collection
-            .findOne({ identity: identity })
-            .catch(err => console.log("ERROR 4", err));
 
-        if (user) {
-            let userData = await users_collection
-                .findOneAndUpdate(
-                    { _id: ObjectId(user._id) },
-                    {
-                        $set: {
-                            name: name,
-                            avatar_id: avatar_id
-                        }
-                    }
-                )
-                .catch(err => console.log("ERROR 5", err));
+    if (!name) return res.status(400).send({ message: "Name or url is not defined." });
+    
+    let user = await users_collection
+        .findOne({ identity: identity })
+        .catch(err => console.log("ERROR 4", err));
 
-            return userData.value;
-        } else {
-            return res.status(400).send({ message: "Can't find the user" });
-        }
-    } else {
-        return res.status(400).send({ message: "Name or url is not defined." });
-    }
+    if (!user) return res.status(400).send({ message: "Can't find the user" });
+
+    let userData = await users_collection
+        .findOneAndUpdate(
+            { _id: ObjectId(user._id) },
+            {
+                $set: {
+                    name: name,
+                    avatar_id: avatar_id
+                }
+            }
+        )
+        .catch(err => console.log("ERROR 5", err));
+
+    return userData.value;
+
+
 }
 
 // FASTLOGIN - give token - get all user information

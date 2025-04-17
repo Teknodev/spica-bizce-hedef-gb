@@ -3,27 +3,20 @@ name: Fast Login & Register
 language: javascript
 timeout: 47.4
 triggers:
-  login:
+  loginV2:
     type: http
     active: true
     options:
       method: Post
       path: /fast-login
       preflight: true
-  register:
+  registerDeprecated:
     options:
       method: Post
-      path: /fast-register
+      path: /fast-register-Deprecated
       preflight: true
     type: http
-    active: true
-  changePassword:
-    options:
-      method: Get
-      path: /changePassword
-      preflight: true
-    type: http
-    active: true
+    active: false
   getMyIp:
     options:
       method: Get
@@ -47,4 +40,4 @@ env:
   FASTLOGIN_SECRET_KEY: "{FASTLOGIN_SECRET_KEY}"
   FASTLOGIN_SERVICE_ID: "{FASTLOGIN_SERVICE_ID}"
 memoryLimit: 100
-order: 18
+order: 21

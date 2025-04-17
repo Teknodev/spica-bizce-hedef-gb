@@ -1,7 +1,7 @@
-_id: 66c35126435fd2002ce680c4
-name: Api
+_id: 67bf315da35582002bf2bcb7
+name: SinglePlay
 language: javascript
-timeout: 64.1
+timeout: 53.7
 triggers:
   default:
     type: http
@@ -12,4 +12,3 @@ triggers:
       preflight: true
 env: {}
 memoryLimit: 100
-order: 20

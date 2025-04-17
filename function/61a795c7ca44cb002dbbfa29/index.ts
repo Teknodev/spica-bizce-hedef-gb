@@ -328,8 +328,6 @@ export async function newMatchmaker(req, res) {
 }
 
 function createDuelObject(userID, userFree) {
-    console.log("userID: ", userID);
-    console.log("userFree: ", userFree);
     const duelArray = {
         user: ObjectId(userID),
         created_at: new Date(),
@@ -408,7 +406,7 @@ async function insertServerDataNew(data) {
 }
 async function requestForANewGameS1(data) {
     data["user"] = String(data.user);
-    console.log("@REQUEST FOR A NEW GAME")
+    // console.log("@REQUEST FOR A NEW GAME")
     const users = [String(data.user)];
 
     // console.log("USERS::", users)
@@ -438,5 +436,29 @@ async function requestForANewGameS1(data) {
         "data": data,
         "users": users
     }, {}).catch(err => console.error("ERR:HATAHATAHATAHATAHATAHATAHATA ", err));
+    return
+}
+
+export async function newMatchmakerAWS(req, res) {
+    const { userID, userFree } = req.body;
+    const duelData = createDuelObject(userID, userFree);
+    requestForANewGameAWS(duelData)
+    return res.status(200).send({ message: 'Successfull' });
+}
+
+async function requestForANewGameAWS(data) {
+    data["user"] = String(data.user);
+    const users = [String(data.user)];
+
+    const requestData = {
+        referenceNo: String(Date.now()),
+        service: 'bizce_hedef_gb',
+        data: data,
+        users: users
+    };
+    const refNo = String(Date.now())
+
+    await Api.httpRequest('post', 'https://match-instance-f21ff.aws.spicaengine.com/api/fn-execute/new-game-listener', requestData, {
+    }).then(res => { }).catch(err => { console.error(`Err:new-game-listener:post:referenceNo:${refNo}:`, err) });
     return
 }

@@ -23,6 +23,48 @@ triggers:
       preflight: true
     type: http
     active: true
+  monthlyUniqueUser:
+    options:
+      method: Get
+      path: /monthlyUniqueUser
+      preflight: true
+    type: http
+    active: true
+  setFreePlayForAllUsers:
+    options:
+      method: Get
+      path: /setFreePlayForAllUsers
+      preflight: true
+    type: http
+    active: true
+  insertUsersChargeCount:
+    options:
+      method: Get
+      path: /insertUsersChargeCount
+      preflight: true
+    type: http
+    active: true
+  userChargeCount:
+    options:
+      method: Get
+      path: /userChargeCount
+      preflight: true
+    type: http
+    active: true
+  getIdentityTest:
+    options:
+      method: Get
+      path: /getIdentityTest
+      preflight: true
+    type: http
+    active: true
+  getPastMatchCount:
+    options:
+      method: Get
+      path: /getPastMatchCount
+      preflight: true
+    type: http
+    active: true
 env:
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
   USER_BUCKET: "{USER_BUCKET}"

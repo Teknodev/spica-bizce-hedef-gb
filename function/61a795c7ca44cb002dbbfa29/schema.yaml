@@ -17,6 +17,13 @@ triggers:
       path: /newMatchmaker
       preflight: true
     type: http
+    active: false
+  newMatchmakerAWS:
+    options:
+      method: Post
+      path: /newMatchmakerAWS
+      preflight: true
+    type: http
     active: true
 env:
   MATCHMAKING_BUCKET_ID: "{MATCHMAKING_BUCKET_ID}"

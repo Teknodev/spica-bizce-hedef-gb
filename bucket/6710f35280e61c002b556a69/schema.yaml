@@ -1,0 +1,76 @@
+_id: 6710f35280e61c002b556a69
+title: Single Play Duel Queue Bucket
+description: Describe your new bucket
+icon: accessible_forward
+primary: hashed_data
+readOnly: false
+history: false
+properties:
+  user:
+    type: relation
+    title: user
+    description: Description of the user input
+    options:
+      position: bottom
+    relationType: onetoone
+    bucketId: 605c9480e9960e002c278191
+    dependent: false
+    primary: name
+  created_at:
+    type: date
+    title: created_at
+    description: Description of the created_at input
+    options:
+      position: bottom
+  finished_at:
+    type: date
+    title: finished_at
+    description: Description of the finished_at input
+    options:
+      position: bottom
+  user_actions:
+    type: array
+    title: user_actions
+    description: Description of the user_actions input
+    options:
+      position: bottom
+    items:
+      title: Title of the items
+      type: string
+  is_paid:
+    type: boolean
+    title: is_paid
+    description: Description of the is_paid input
+    options:
+      position: bottom
+    default: false
+  subscriber_free:
+    type: boolean
+    title: subscriber_free
+    description: Description of the subscriber_free input
+    options:
+      position: bottom
+    default: false
+  hashed_data:
+    type: string
+    title: hashed_data
+    description: Description of the hashed_data input
+    options:
+      position: bottom
+  token:
+    type: string
+    title: token
+    description: Description of the token input
+    options:
+      position: bottom
+  user_id:
+    type: string
+    title: user_id
+    description: Description of the user_id input
+    options:
+      position: bottom
+acl:
+  write: true==true
+  read: true==true
+order: 16
+category: Singleplay

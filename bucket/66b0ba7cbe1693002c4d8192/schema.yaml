@@ -58,5 +58,5 @@ properties:
 acl:
   write: true==true
   read: true==true
-order: 16
+order: 17
 category: Singleplay

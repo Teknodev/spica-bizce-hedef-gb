@@ -24,9 +24,17 @@ triggers:
       preflight: true
     type: http
     active: true
+  insertPastMatchFromAWSServer:
+    options:
+      method: Post
+      path: /insertPastMatchFromAWSServer
+      preflight: true
+    type: http
+    active: true
 env:
   SINGLE_SERVER_INFO_BUCKET: "{SINGLE_SERVER_INFO_BUCKET}"
   SINGLE_PAST_MATCH_BUCKET: "{SINGLE_PAST_MATCH_BUCKET}"
   NO_DEVKIT_DATABASE_WARNING: "{NO_DEVKIT_DATABASE_WARNING}"
   USER_BUCKET_ID: "{USER_BUCKET_ID}"
 memoryLimit: 100
+order: 18

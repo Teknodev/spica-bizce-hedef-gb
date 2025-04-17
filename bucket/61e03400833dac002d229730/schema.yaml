@@ -76,8 +76,9 @@ acl:
   write: |-
     auth.attributes.role == "admin" ||
     auth.key == "406bus18l2yiufdq"
-  read: |-
+  read: >-
     auth._id==document.identity || 
-    auth.attributes.role == "admin" || auth.key == "259pcb18lpwrw0wu"
+
+    auth.attributes.role == "admin" || auth.key == "259pcb18lpwrw0wu" || auth.key == "406bus18l2yiufdq"
 order: 5
 category: Logs

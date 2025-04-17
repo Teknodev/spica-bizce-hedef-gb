@@ -30,6 +30,20 @@ triggers:
       type: INSERT
     type: database
     active: true
+  checkUserChargeCount:
+    options:
+      method: Post
+      path: /checkUserChargeCount
+      preflight: true
+    type: http
+    active: true
+  testNewChargeInfo:
+    options:
+      method: Get
+      path: /testNewChargeInfo
+      preflight: true
+    type: http
+    active: false
 env:
   USER_BUCKET_ID: "{USER_BUCKET_ID}"
   SECRET_API_KEY: "{SECRET_API_KEY}"

@@ -36,7 +36,7 @@ triggers:
       timezone: Turkey
       frequency: 1 0 * * *
     type: schedule
-    active: true
+    active: false
 env:
   SECRET_API_KEY: "{SECRET_API_KEY}"
   USER_BUCKET_ID: "{USER_BUCKET_ID}"

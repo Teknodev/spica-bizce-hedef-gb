@@ -309,15 +309,47 @@ async function playedMatchCount(reportType, dateFrom, dateTo) {
     //     ])
     //     .toArray()
     //     .catch(err => console.log("ERROR 39", err));
-    let userPaid = await pastMatchesCollection.countDocuments({
-        end_time: { $gte: dateFrom, $lt: dateTo },
-        user_is_free: false
-    }).catch(err => console.error("userPaid", err))
 
-    let userFree = await pastMatchesCollection.countDocuments({
-        end_time: { $gte: dateFrom, $lt: dateTo },
-        user_is_free: true
-    }).catch(err => console.error("userFree", err))
+    const [userPaid, userFree, uniqueUser] = await Promise.all([
+        pastMatchesCollection.countDocuments({
+            end_time: { $gte: dateFrom, $lt: dateTo },
+            user_is_free: false
+        }),
+        pastMatchesCollection.countDocuments({
+            end_time: { $gte: dateFrom, $lt: dateTo },
+            user_is_free: true
+        }),
+        pastMatchesCollection.distinct("user", { end_time: { $gte: dateFrom, $lt: dateTo } })
+    ])
+    // let userPaid = await pastMatchesCollection.countDocuments({
+    //     end_time: { $gte: dateFrom, $lt: dateTo },
+    //     user_is_free: false
+    // }).catch(err => console.error("userPaid", err))
+
+    // let userFree = await pastMatchesCollection.countDocuments({
+    //     end_time: { $gte: dateFrom, $lt: dateTo },
+    //     user_is_free: true
+    // }).catch(err => console.error("userFree", err))
+
+    // pastMatchesCollection
+    //     .distinct("user", {
+    //         end_time: { $gte: dateFrom, $lt: dateTo },
+    //     })
+    //     .then(users => users.length)
+    //     .catch(err => {
+    //         console.log("ERROR 39 - Paid Users", err);
+    //         return 0;
+    //     }),
+    // pastMatchesCollection
+    //     .distinct("user", {
+    //         end_time: { $gte: dateFrom, $lt: dateTo },
+    //         user_is_free: true
+    //     })
+    //     .then(users => users.length)
+    //     .catch(err => {
+    //         console.log("ERROR 39 - Free Users", err);
+    //         return 0;
+    //     })
     // let user2 = await pastMatchesCollection
     //     .aggregate([
     //         {
@@ -356,7 +388,7 @@ async function playedMatchCount(reportType, dateFrom, dateTo) {
     await userMatchCollection
         .insertOne({
             date: new Date(reportDate),
-            player: userFree + userPaid,
+            player: uniqueUser.length,
             free_play: userFree,
             paid_play: userPaid,
             play_total: userFree + userPaid,
@@ -465,6 +497,7 @@ export async function reportExportSend(title, reportType) {
                 "serdar@polyhagency.com",
                 "ozangol@teknodev.biz",
                 "serkan@polyhagency.com",
+                "emrecandan@teknodev.biz",
                 "batuhanevirgen@teknodev.biz"
             ],
             report_type: reportType
